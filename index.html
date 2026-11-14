@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    .stagger-6 { animation-delay: 0.6s; }
+
+    .toast-show {
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
+      animation-fill-mode: both;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    .collage-card {
+      transition: transform 0.3s ease;
+    }
+
+    .collage-card:hover {
+      transform: scale(1.03);
+    }
+
+    .indicator-card {
+      border: 1px solid #222;
+      transition: border-color 0.3s, transform 0.3s ease;
+    }
+
+    .indicator-card:hover {
+      border-color: #4a7c59;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+
+<body class="w-full min-h-screen bg-black text-gray-100">
+
+  <!-- Menú -->
+  <nav class="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">
+        Universidad de la Comunicación
+      </span>
+
+      <div class="hidden gap-6 text-xs uppercase tracking-wider md:flex">
+        <a href="#portada" class="transition-colors hover:text-green-300">Inicio</a>
+        <a href="#media" class="transition-colors hover:text-green-300">Galería</a>
+        <a href="#indicadores" class="transition-colors hover:text-green-300">Indicadores</a>
+        <a href="#consejos" class="transition-colors hover:text-green-300">Consejos</a>
+        <a href="#participar" class="transition-colors hover:text-green-300">Participar</a>
+        <a href="#collage" class="transition-colors hover:text-green-300">Collage</a>
+      </div>
+
+      <button
+        id="mobile-menu-btn"
+        class="p-1 md:hidden"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <i data-lucide="menu" class="h-5 w-5"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden flex-col gap-3 px-4 pb-4 text-xs uppercase tracking-wider md:hidden">
+      <a href="#portada" class="transition-colors hover:text-green-300">Inicio</a>
+      <a href="#media" class="transition-colors hover:text-green-300">Galería</a>
+      <a href="#indicadores" class="transition-colors hover:text-green-300">Indicadores</a>
+      <a href="#consejos" class="transition-colors hover:text-green-300">Consejos</a>
+      <a href="#participar" class="transition-colors hover:text-green-300">Participar</a>
+      <a href="#collage" class="transition-colors hover:text-green-300">Collage</a>
+    </div>
+  </nav>
+
+  <!-- Portada -->
+  <header
+    id="portada"
+    class="flex min-h-screen w-full items-center justify-center px-6 text-center"
+    style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));"
+  >
+    <div class="fade-in max-w-3xl">
+      <p class="mb-6 text-xs uppercase tracking-[0.3em] text-green-300 opacity-70">
+        Universidad de la Comunicación · Sustentabilidad
+      </p>
+
+      <h1 class="font-display mb-6 text-4xl font-bold leading-tight text-green-50 md:text-5xl">
+        ¿Cómo vives la sustentabilidad en tu universidad?
+      </h1>
+
+      <p class="mx-auto mb-10 max-w-xl text-lg text-gray-300 opacity-80">
+        Movilidad, reutilización y cuidado del entorno: descubre cómo nuestra comunidad construye un campus más sustentable.
+      </p>
+
+      <a
+        href="#media"
+        class="inline-block rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105"
+      >
+        Explorar
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Galería -->
+    <section id="media" class="w-full px-6 py-20">
+      <div class="mx-auto max-w-6xl">
+        <h2 class="font-display mb-4 text-center text-2xl font-bold text-green-50 md:text-3xl">
+          Galería de sustentabilidad
+        </h2>
+
+        <p class="mx-auto mb-10 max-w-xl text-center text-gray-400">
+          Movilidad activa, reutilización y espacios verdes en nuestra comunidad.
+        </p>
+
+        <div class="mb-10 flex flex-wrap items-center justify-center gap-4">
+          <button
+            id="audio-play"
+            class="flex items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10"
+          >
+            <i data-lucide="play" class="h-4 w-4"></i>
+            <span>Música ambiente</span>
+          </button>
+
+          <button
+            id="audio-pause"
+            class="hidden items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10"
+          >
+            <i data-lucide="pause" class="h-4 w-4"></i>
+            <span>Pausar</span>
+          </button>
+
+          <button
+            id="audio-mute"
+            class="hidden rounded-full border border-white/20 px-3 py-2 text-xs transition hover:bg-white/5"
+            aria-label="Silenciar"
+          >
+            <i data-lucide="volume-2" class="h-4 w-4"></i>
+          </button>
+
+          <input
+            id="audio-volume"
+            type="range"
+            min="0"
+            max="100"
+            value="50"
+            class="hidden w-24"
+            aria-label="Volumen"
+          >
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+          <div class="fade-in stagger-2 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Personas en bicicleta en campus universitario"
+            >
+          </div>
+
+          <div class="fade-in stagger-3 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Estudiantes colaborando en espacio verde"
+            >
+          </div>
+
+          <div class="fade-in stagger-4 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/802221/pexels-photo-802221.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Termo reutilizable con café"
+            >
+          </div>
+
+          <div class="fade-in stagger-3 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/1550337/pexels-photo-1550337.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Persona caminando por parque urbano"
+            >
+          </div>
+
+          <div class="fade-in stagger-4 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Contenedores de reciclaje en campus"
+            >
+          </div>
+
+          <div class="fade-in stagger-5 relative aspect-[4/3] overflow-hidden rounded-lg">
+            <img
+              class="h-full w-full object-cover"
+              loading="lazy"
+              src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Equipo trabajando en proyecto sustentable"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Indicadores -->
+    <section id="indicadores" class="w-full px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">
+          Indicadores de sustentabilidad
+        </h2>
+
+        <p class="mx-auto mb-12 max-w-lg text-center text-sm italic text-gray-400">
+          Haz clic en cualquier indicador para conocer más información.
+        </p>
+
+        <div id="indicators-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+          <!-- Indicador 1 -->
+          <div
+            class="indicator-card fade-in stagger-1 cursor-pointer rounded-xl p-5 text-center"
+            data-ind="0"
+            onclick="window.open('transporte-publico.html', '_blank')"
+            role="link"
+            tabindex="0"
+            aria-label="Ver más información sobre transporte público"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('transporte-publico.html','_blank');}"
+          >
+            <div class="ind-value mb-1 text-3xl font-bold text-green-300">67%</div>
+            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
+              Usa transporte público
+            </p>
+
+            <button
+              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
+              aria-label="Editar indicador de transporte público"
+            >
+              <i data-lucide="pencil" class="h-3 w-3"></i>
+              Editar
+            </button>
+          </div>
+
+          <!-- Indicador 2 -->
+          <div
+            class="indicator-card fade-in stagger-2 cursor-pointer rounded-xl p-5 text-center"
+            data-ind="1"
+            onclick="window.open('objetos-reutilizables.html', '_blank')"
+            role="link"
+            tabindex="0"
+            aria-label="Ver más información sobre objetos reutilizables"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('objetos-reutilizables.html','_blank');}"
+          >
+            <div class="ind-value mb-1 text-3xl font-bold text-green-300">42%</div>
+            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
+              Usa objetos reutilizables
+            </p>
+
+            <button
+              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
+              aria-label="Editar indicador de objetos reutilizables"
+            >
+              <i data-lucide="pencil" class="h-3 w-3"></i>
+              Editar
+            </button>
+          </div>
+
+          <!-- Indicador 3 -->
+          <div
+            class="indicator-card fade-in stagger-3 cursor-pointer rounded-xl p-5 text-center"
+            data-ind="2"
+            onclick="window.open('viajes-compartidos.html', '_blank')"
+            role="link"
+            tabindex="0"
+            aria-label="Ver más información sobre viajes compartidos"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('viajes-compartidos.html','_blank');}"
+          >
+            <div class="ind-value mb-1 text-3xl font-bold text-green-300">580</div>
+            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
+              Viajes compartidos al mes
+            </p>
+
+            <button
+              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
+              aria-label="Editar indicador de viajes compartidos"
+            >
+              <i data-lucide="pencil" class="h-3 w-3"></i>
+              Editar
+            </button>
+          </div>
+
+          <!-- Indicador 4 -->
+          <div
+            class="indicator-card fade-in stagger-4 cursor-pointer rounded-xl p-5 text-center"
+            data-ind="3"
+            onclick="window.open('reduccion-residuos.html', '_blank')"
+            role="link"
+            tabindex="0"
+            aria-label="Ver más información sobre reducción de residuos"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('reduccion-residuos.html','_blank');}"
+          >
+            <div class="ind-value mb-1 text-3xl font-bold text-green-300">35%</div>
+            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
+              Reducción de residuos
+            </p>
+
+            <button
+              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
+              aria-label="Editar indicador de reducción de residuos"
+            >
+              <i data-lucide="pencil" class="h-3 w-3"></i>
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consejos -->
+    <section id="consejos" class="w-full px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display mb-10 text-center text-2xl font-bold text-green-50 md:text-3xl">
+          Consejos prácticos
+        </h2>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="fade-in stagger-1 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">🚌</div>
+            <h3 class="mb-2 font-bold text-green-100">Usa el transporte público</h3>
+            <p class="text-sm text-gray-400">
+              El metrobús y el metro son opciones rápidas y de bajo impacto. Planea tu ruta con apps de movilidad.
+            </p>
+          </div>
+
+          <div class="fade-in stagger-2 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">🚶</div>
+            <h3 class="mb-2 font-bold text-green-100">Camina cuando puedas</h3>
+            <p class="text-sm text-gray-400">
+              Si tu trayecto es menor a 20 minutos, caminar es la opción más sustentable y saludable.
+            </p>
+          </div>
+
+          <div class="fade-in stagger-3 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">🚗</div>
+            <h3 class="mb-2 font-bold text-green-100">Comparte el viaje</h3>
+            <p class="text-sm text-gray-400">
+              Coordina con compañeros que vivan cerca. Un auto compartido reduce emisiones y costos.
+            </p>
+          </div>
+
+          <div class="fade-in stagger-4 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">♻️</div>
+            <h3 class="mb-2 font-bold text-green-100">Reduce residuos</h3>
+            <p class="text-sm text-gray-400">
+              Evita empaques de un solo uso. Lleva tus contenedores a la cafetería y separa tu basura.
+            </p>
+          </div>
+
+          <div class="fade-in stagger-5 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">🥤</div>
+            <h3 class="mb-2 font-bold text-green-100">Elige reutilizable</h3>
+            <p class="text-sm text-gray-400">
+              Un termo, una bolsa de tela y cubiertos reutilizables hacen una gran diferencia al año.
+            </p>
+          </div>
+
+          <div class="fade-in stagger-6 rounded-xl bg-green-950/40 p-6">
+            <div class="mb-3 text-2xl">🌱</div>
+            <h3 class="mb-2 font-bold text-green-100">Cuida los espacios verdes</h3>
+            <p class="text-sm text-gray-400">
+              Respeta las áreas verdes del campus. Participa en jornadas de reforestación y limpieza.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Participar -->
+    <section id="participar" class="w-full px-6 py-20">
+      <div class="mx-auto max-w-2xl">
+        <h2 class="font-display mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">
+          Comparte tu visión
+        </h2>
+
+        <p class="mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">
+          Sube un dibujo, carta o foto que muestre cómo vives la sustentabilidad en la universidad.
+        </p>
+
+        <form
+          id="upload-form"
+          class="fade-in stagger-2 rounded-2xl border border-white/10 bg-neutral-950 p-6 md:p-8"
+        >
+          <div class="mb-5">
+            <label for="entry-title" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
+              Título de tu aportación
+            </label>
+
+            <input
+              id="entry-title"
+              type="text"
+              maxlength="60"
+              required
+              class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
+              placeholder="Ej. Mi termo favorito"
+            >
+          </div>
+
+          <div class="mb-5">
+            <label for="entry-author" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
+              Tu nombre (opcional)
+            </label>
+
+            <input
+              id="entry-author"
+              type="text"
+              maxlength="40"
+              class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
+              placeholder="Opcional"
+            >
+          </div>
+
+          <div class="mb-5">
+            <label for="entry-file" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
+              Selecciona una imagen
+            </label>
+
+            <input
+              id="entry-file"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              required
+              class="block w-full cursor-pointer text-sm text-gray-400 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-green-400/10 file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-wider file:text-green-300 hover:file:bg-green-400/20"
+            >
+          </div>
+
+          <div id="preview-area" class="mb-5 hidden">
+            <img
+              id="preview-img"
+              class="max-h-64 w-full rounded-lg bg-black/50 object-contain"
+              alt="Vista previa de la imagen seleccionada"
+            >
+          </div>
+
+          <button
+            type="submit"
+            class="w-full rounded-full bg-green-500 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Agregar al collage
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Collage -->
+    <section id="collage" class="w-full px-6 py-20">
+      <div class="mx-auto max-w-6xl">
+        <h2 class="font-display mb-10 text-center text-2xl font-bold text-green-50 md:text-3xl">
+          Collage colectivo
+        </h2>
+
+        <div id="collage-grid" class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"></div>
+
+        <p id="collage-empty" class="py-16 text-center italic text-gray-500">
+          Aún no hay aportaciones. ¡Sé la primera persona en compartir!
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-500">
+      Universidad de la Comunicación · Proyecto de sustentabilidad · Contenido de muestra
+    </p>
+  </footer>
+
+  <!-- Mensaje flotante -->
+  <div
+    id="toast"
+    class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-green-500 px-6 py-3 text-sm font-medium text-black shadow-lg"
+  ></div>
+
+  <!-- Modal para editar indicadores -->
+  <div
+    id="ind-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="ind-modal-title"
+  >
+    <div class="mx-4 w-80 rounded-2xl border border-white/10 bg-neutral-900 p-6">
+      <h3 id="ind-modal-title" class="mb-4 text-sm uppercase tracking-wider text-gray-400">
+        Actualizar indicador
+      </h3>
+
+      <input
+        id="ind-modal-input"
+        type="text"
+        class="mb-4 w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
+        placeholder="Nuevo valor"
+      >
+
+      <div class="flex gap-3">
+        <button
+          id="ind-modal-save"
+          class="flex-1 rounded-full bg-green-400/20 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/30"
+        >
+          Guardar
+        </button>
+
+        <button
+          id="ind-modal-cancel"
+          class="flex-1 rounded-full border border-white/15 py-2 text-xs uppercase tracking-wider text-gray-300 transition hover:bg-white/5"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Menú móvil
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileBtn.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+
+      mobileMenu.classList.toggle('hidden');
+      mobileBtn.setAttribute('aria-expanded', String(!isOpen));
+      mobileBtn.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileBtn.setAttribute('aria-expanded', 'false');
+        mobileBtn.setAttribute('aria-label', 'Abrir menú');
+      });
+    });
+
+    // Audio ambiente
+    let audioCtx;
+    let gainNode;
+    let isMuted = false;
+
+    const playBtn = document.getElementById('audio-play');
+    const pauseBtn = document.getElementById('audio-pause');
+    const muteBtn = document.getElementById('audio-mute');
+    const volSlider = document.getElementById('audio-volume');
+
+    function createAmbientTone() {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.15;
+      gainNode.connect(audioCtx.destination);
+
+      [174, 220, 277, 330].forEach((frequency, index) => {
+        const oscillator = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        oscillator.type = index % 2 === 0 ? 'sine' : 'triangle';
+        oscillator.frequency.value = frequency;
+        gain.gain.value = 0.04 - index * 0.008;
+
+        oscillator.connect(gain);
+        gain.connect(gainNode);
+        oscillator.start();
+      });
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!audioCtx) {
+        createAmbientTone();
+      } else {
+        audioCtx.resume();
+      }
+
+      playBtn.classList.add('hidden');
+      pauseBtn.classList.remove('hidden');
+      pauseBtn.classList.add('flex');
+      muteBtn.classList.remove('hidden');
+      volSlider.classList.remove('hidden');
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (audioCtx) {
+        audioCtx.suspend();
+      }
+
+      pauseBtn.classList.add('hidden');
+      pauseBtn.classList.remove('flex');
+      playBtn.classList.remove('hidden');
+    });
+
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+
+      if (gainNode) {
+        gainNode.gain.value = isMuted ? 0 : (volSlider.value / 100) * 0.3;
+      }
+
+      muteBtn.querySelector('i')?.remove();
+
+      const icon = document.createElement('i');
+      icon.setAttribute('data-lucide', isMuted ? 'volume-x' : 'volume-2');
+      icon.className = 'h-4 w-4';
+
+      muteBtn.appendChild(icon);
+      lucide.createIcons();
+    });
+
+    volSlider.addEventListener('input', () => {
+      if (gainNode && !isMuted) {
+        gainNode.gain.value = (volSlider.value / 100) * 0.3;
+      }
+    });
+
+    // Editar indicadores
+    const indValues = document.querySelectorAll('.ind-value');
+    const indModal = document.getElementById('ind-modal');
+    const indInput = document.getElementById('ind-modal-input');
+    const indSave = document.getElementById('ind-modal-save');
+    const indCancel = document.getElementById('ind-modal-cancel');
+
+    let editingInd = null;
+
+    document.querySelectorAll('.ind-edit').forEach((button, index) => {
+      button.addEventListener('click', event => {
+        event.stopPropagation();
+
+        editingInd = index;
+        indInput.value = indValues[index].textContent.trim();
+
+        indModal.classList.remove('hidden');
+        indModal.classList.add('flex');
+        indInput.focus();
+      });
+    });
+
+    function closeIndicatorModal() {
+      indModal.classList.add('hidden');
+      indModal.classList.remove('flex');
+      editingInd = null;
+    }
+
+    indSave.addEventListener('click', () => {
+      const newValue = indInput.value.trim();
+
+      if (editingInd !== null && newValue) {
+        indValues[editingInd].textContent = newValue;
+      }
+
+      closeIndicatorModal();
+    });
+
+    indCancel.addEventListener('click', closeIndicatorModal);
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !indModal.classList.contains('hidden')) {
+        closeIndicatorModal();
+      }
+    });
+
+    // Mensajes flotantes
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      toast.classList.add('toast-show');
+
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('toast-show');
+      }, 3000);
+    }
+
+    // Vista previa y validación de imagen
+    const fileInput = document.getElementById('entry-file');
+    const previewArea = document.getElementById('preview-area');
+    const previewImg = document.getElementById('preview-img');
+
+    let fileDataUrl = null;
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+
+      if (!file) {
+        previewArea.classList.add('hidden');
+        fileDataUrl = null;
+        return;
+      }
+
+      if (!validImageTypes.includes(file.type)) {
+        showToast('Solo se aceptan imágenes JPG, PNG o WebP');
+        fileInput.value = '';
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('La imagen debe pesar menos de 2 MB');
+        fileInput.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = event => {
+        fileDataUrl = event.target.result;
+        previewImg.src = fileDataUrl;
+        previewArea.classList.remove('hidden');
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+    // Collage guardado en el navegador
+    const collageGrid = document.getElementById('collage-grid');
+    const collageEmpty = document.getElementById('collage-empty');
+    const storageKey = 'sustentabilidad-universitaria-aportaciones';
+
+    function getSavedEntries() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveEntries(entries) {
+      localStorage.setItem(storageKey, JSON.stringify(entries));
+    }
+
+    function renderCollage(entries) {
+      collageGrid.innerHTML = '';
+
+      entries.forEach(entry => {
+        const card = document.createElement('article');
+        card.className = 'collage-card overflow-hidden rounded-xl border border-white/5 bg-neutral-900';
+
+        if (entry.image) {
+          const image = document.createElement('img');
+          image.src = entry.image;
+          image.alt = entry.title || 'Aportación';
+          image.loading = 'lazy';
+          image.className = 'aspect-square w-full object-cover';
+
+          card.appendChild(image);
+        }
+
+        const info = document.createElement('div');
+        info.className = 'p-3';
+
+        const title = document.createElement('p');
+        title.className = 'truncate text-sm font-medium text-gray-100';
+        title.textContent = entry.title || 'Sin título';
+        info.appendChild(title);
+
+        if (entry.author) {
+          const author = document.createElement('p');
+          author.className = 'mt-1 text-[10px] text-gray-500';
+          author.textContent = entry.author;
+          info.appendChild(author);
+        }
+
+        card.appendChild(info);
+        collageGrid.appendChild(card);
+      });
+
+      collageEmpty.classList.toggle('hidden', entries.length > 0);
+    }
+
+    renderCollage(getSavedEntries());
+
+    // Formulario
+    const uploadForm = document.getElementById('upload-form');
+    const uploadButton = uploadForm.querySelector('button[type="submit"]');
+
+    uploadForm.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const title = document.getElementById('entry-title').value.trim();
+      const author = document.getElementById('entry-author').value.trim();
+
+      if (!fileDataUrl) {
+        showToast('Selecciona una imagen');
+        return;
+      }
+
+      if (!title) {
+        showToast('Agrega un título');
+        return;
+      }
+
+      const entries = getSavedEntries();
+
+      if (entries.length >= 99) {
+        showToast('Se alcanzó el límite de aportaciones');
+        return;
+      }
+
+      uploadButton.disabled = true;
+
+      const newEntry = {
+        id: Date.now().toString(),
+        title,
+        author,
+        image: fileDataUrl,
+        createdAt: new Date().toISOString()
+      };
+
+      entries.unshift(newEntry);
+      saveEntries(entries);
+      renderCollage(entries);
+
+      showToast('¡Aportación agregada al collage!');
+
+      document.getElementById('entry-title').value = '';
+      document.getElementById('entry-author').value = '';
+      fileInput.value = '';
+      fileDataUrl = null;
+      previewArea.classList.add('hidden');
+
+      uploadButton.disabled = false;
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
