@@ -169,42 +169,6 @@
           Movilidad activa, reutilización y espacios verdes en nuestra comunidad.
         </p>
 
-        <div class="mb-10 flex flex-wrap items-center justify-center gap-4">
-          <button
-            id="audio-play"
-            class="flex items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10"
-          >
-            <i data-lucide="play" class="h-4 w-4"></i>
-            <span>Música ambiente</span>
-          </button>
-
-          <button
-            id="audio-pause"
-            class="hidden items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10"
-          >
-            <i data-lucide="pause" class="h-4 w-4"></i>
-            <span>Pausar</span>
-          </button>
-
-          <button
-            id="audio-mute"
-            class="hidden rounded-full border border-white/20 px-3 py-2 text-xs transition hover:bg-white/5"
-            aria-label="Silenciar"
-          >
-            <i data-lucide="volume-2" class="h-4 w-4"></i>
-          </button>
-
-          <input
-            id="audio-volume"
-            type="range"
-            min="0"
-            max="100"
-            value="50"
-            class="hidden w-24"
-            aria-label="Volumen"
-          >
-        </div>
-
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
           <div class="fade-in stagger-2 relative aspect-[4/3] overflow-hidden rounded-lg">
             <img
@@ -265,7 +229,7 @@
 
     <!-- Indicadores -->
     <section id="indicadores" class="w-full px-6 py-20">
-      <div class="mx-auto max-w-5xl">
+      <div class="mx-auto max-w-6xl">
         <h2 class="font-display mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">
           Indicadores de sustentabilidad
         </h2>
@@ -274,101 +238,95 @@
           Haz clic en cualquier indicador para conocer más información.
         </p>
 
-        <div id="indicators-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <div id="indicators-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Indicador 1 -->
           <div
-            class="indicator-card fade-in stagger-1 cursor-pointer rounded-xl p-5 text-center"
-            data-ind="0"
+            class="indicator-card fade-in stagger-1 cursor-pointer rounded-xl p-6 text-center"
             onclick="window.open('transporte-publico.html', '_blank')"
             role="link"
             tabindex="0"
-            aria-label="Ver más información sobre transporte público"
+            aria-label="Ver más información sobre el uso de transporte público"
             onkeydown="if(event.key==='Enter'||event.key===' '){window.open('transporte-publico.html','_blank');}"
           >
-            <div class="ind-value mb-1 text-3xl font-bold text-green-300">67%</div>
-            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
-              Usa transporte público
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
+              USA TRANSPORTE PÚBLICO
             </p>
 
-            <button
-              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
-              aria-label="Editar indicador de transporte público"
-            >
-              <i data-lucide="pencil" class="h-3 w-3"></i>
-              Editar
-            </button>
+            <div class="text-4xl font-bold text-green-300">
+              66.7%
+            </div>
           </div>
 
           <!-- Indicador 2 -->
           <div
-            class="indicator-card fade-in stagger-2 cursor-pointer rounded-xl p-5 text-center"
-            data-ind="1"
+            class="indicator-card fade-in stagger-2 cursor-pointer rounded-xl p-6 text-center"
             onclick="window.open('objetos-reutilizables.html', '_blank')"
             role="link"
             tabindex="0"
-            aria-label="Ver más información sobre objetos reutilizables"
+            aria-label="Ver más información sobre el uso de objetos reutilizables"
             onkeydown="if(event.key==='Enter'||event.key===' '){window.open('objetos-reutilizables.html','_blank');}"
           >
-            <div class="ind-value mb-1 text-3xl font-bold text-green-300">42%</div>
-            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
-              Usa objetos reutilizables
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
+              SIEMPRE USA REUTILIZABLES
             </p>
 
-            <button
-              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
-              aria-label="Editar indicador de objetos reutilizables"
-            >
-              <i data-lucide="pencil" class="h-3 w-3"></i>
-              Editar
-            </button>
+            <div class="text-4xl font-bold text-green-300">
+              50%
+            </div>
           </div>
 
           <!-- Indicador 3 -->
           <div
-            class="indicator-card fade-in stagger-3 cursor-pointer rounded-xl p-5 text-center"
-            data-ind="2"
-            onclick="window.open('viajes-compartidos.html', '_blank')"
+            class="indicator-card fade-in stagger-3 cursor-pointer rounded-xl p-6 text-center"
+            onclick="window.open('botellas-desechables.html', '_blank')"
             role="link"
             tabindex="0"
-            aria-label="Ver más información sobre viajes compartidos"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('viajes-compartidos.html','_blank');}"
+            aria-label="Ver más información sobre botellas desechables por semana"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('botellas-desechables.html','_blank');}"
           >
-            <div class="ind-value mb-1 text-3xl font-bold text-green-300">580</div>
-            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
-              Viajes compartidos al mes
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
+              BOTELLAS DESECHABLES POR SEMANA
             </p>
 
-            <button
-              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
-              aria-label="Editar indicador de viajes compartidos"
-            >
-              <i data-lucide="pencil" class="h-3 w-3"></i>
-              Editar
-            </button>
+            <div class="text-4xl font-bold text-green-300">
+              27
+            </div>
           </div>
 
           <!-- Indicador 4 -->
           <div
-            class="indicator-card fade-in stagger-4 cursor-pointer rounded-xl p-5 text-center"
-            data-ind="3"
-            onclick="window.open('reduccion-residuos.html', '_blank')"
+            class="indicator-card fade-in stagger-4 cursor-pointer rounded-xl p-6 text-center"
+            onclick="window.open('carne-roja.html', '_blank')"
             role="link"
             tabindex="0"
-            aria-label="Ver más información sobre reducción de residuos"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('reduccion-residuos.html','_blank');}"
+            aria-label="Ver más información sobre personas que nunca comen carne roja"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('carne-roja.html','_blank');}"
           >
-            <div class="ind-value mb-1 text-3xl font-bold text-green-300">35%</div>
-            <p class="text-xs uppercase tracking-wider text-gray-400 opacity-70">
-              Reducción de residuos
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
+              NUNCA COME CARNE ROJA
             </p>
 
-            <button
-              class="ind-edit mx-auto mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-gray-400 opacity-40 transition hover:opacity-100"
-              aria-label="Editar indicador de reducción de residuos"
-            >
-              <i data-lucide="pencil" class="h-3 w-3"></i>
-              Editar
-            </button>
+            <div class="text-4xl font-bold text-green-300">
+              25%
+            </div>
+          </div>
+
+          <!-- Indicador 5 -->
+          <div
+            class="indicator-card fade-in stagger-5 cursor-pointer rounded-xl p-6 text-center"
+            onclick="window.open('climate-clock.html', '_blank')"
+            role="link"
+            tabindex="0"
+            aria-label="Ver más información sobre el Climate Clock"
+            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('climate-clock.html','_blank');}"
+          >
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
+              NO HABÍAN ESCUCHADO DEL CLIMATE CLOCK
+            </p>
+
+            <div class="text-4xl font-bold text-green-300">
+              16.7%
+            </div>
           </div>
         </div>
       </div>
@@ -538,44 +496,6 @@
     class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-green-500 px-6 py-3 text-sm font-medium text-black shadow-lg"
   ></div>
 
-  <!-- Modal para editar indicadores -->
-  <div
-    id="ind-modal"
-    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="ind-modal-title"
-  >
-    <div class="mx-4 w-80 rounded-2xl border border-white/10 bg-neutral-900 p-6">
-      <h3 id="ind-modal-title" class="mb-4 text-sm uppercase tracking-wider text-gray-400">
-        Actualizar indicador
-      </h3>
-
-      <input
-        id="ind-modal-input"
-        type="text"
-        class="mb-4 w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
-        placeholder="Nuevo valor"
-      >
-
-      <div class="flex gap-3">
-        <button
-          id="ind-modal-save"
-          class="flex-1 rounded-full bg-green-400/20 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/30"
-        >
-          Guardar
-        </button>
-
-        <button
-          id="ind-modal-cancel"
-          class="flex-1 rounded-full border border-white/15 py-2 text-xs uppercase tracking-wider text-gray-300 transition hover:bg-white/5"
-        >
-          Cancelar
-        </button>
-      </div>
-    </div>
-  </div>
-
   <script>
     // Menú móvil
     const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -595,130 +515,6 @@
         mobileBtn.setAttribute('aria-expanded', 'false');
         mobileBtn.setAttribute('aria-label', 'Abrir menú');
       });
-    });
-
-    // Audio ambiente
-    let audioCtx;
-    let gainNode;
-    let isMuted = false;
-
-    const playBtn = document.getElementById('audio-play');
-    const pauseBtn = document.getElementById('audio-pause');
-    const muteBtn = document.getElementById('audio-mute');
-    const volSlider = document.getElementById('audio-volume');
-
-    function createAmbientTone() {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-      gainNode = audioCtx.createGain();
-      gainNode.gain.value = 0.15;
-      gainNode.connect(audioCtx.destination);
-
-      [174, 220, 277, 330].forEach((frequency, index) => {
-        const oscillator = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        oscillator.type = index % 2 === 0 ? 'sine' : 'triangle';
-        oscillator.frequency.value = frequency;
-        gain.gain.value = 0.04 - index * 0.008;
-
-        oscillator.connect(gain);
-        gain.connect(gainNode);
-        oscillator.start();
-      });
-    }
-
-    playBtn.addEventListener('click', () => {
-      if (!audioCtx) {
-        createAmbientTone();
-      } else {
-        audioCtx.resume();
-      }
-
-      playBtn.classList.add('hidden');
-      pauseBtn.classList.remove('hidden');
-      pauseBtn.classList.add('flex');
-      muteBtn.classList.remove('hidden');
-      volSlider.classList.remove('hidden');
-    });
-
-    pauseBtn.addEventListener('click', () => {
-      if (audioCtx) {
-        audioCtx.suspend();
-      }
-
-      pauseBtn.classList.add('hidden');
-      pauseBtn.classList.remove('flex');
-      playBtn.classList.remove('hidden');
-    });
-
-    muteBtn.addEventListener('click', () => {
-      isMuted = !isMuted;
-
-      if (gainNode) {
-        gainNode.gain.value = isMuted ? 0 : (volSlider.value / 100) * 0.3;
-      }
-
-      muteBtn.querySelector('i')?.remove();
-
-      const icon = document.createElement('i');
-      icon.setAttribute('data-lucide', isMuted ? 'volume-x' : 'volume-2');
-      icon.className = 'h-4 w-4';
-
-      muteBtn.appendChild(icon);
-      lucide.createIcons();
-    });
-
-    volSlider.addEventListener('input', () => {
-      if (gainNode && !isMuted) {
-        gainNode.gain.value = (volSlider.value / 100) * 0.3;
-      }
-    });
-
-    // Editar indicadores
-    const indValues = document.querySelectorAll('.ind-value');
-    const indModal = document.getElementById('ind-modal');
-    const indInput = document.getElementById('ind-modal-input');
-    const indSave = document.getElementById('ind-modal-save');
-    const indCancel = document.getElementById('ind-modal-cancel');
-
-    let editingInd = null;
-
-    document.querySelectorAll('.ind-edit').forEach((button, index) => {
-      button.addEventListener('click', event => {
-        event.stopPropagation();
-
-        editingInd = index;
-        indInput.value = indValues[index].textContent.trim();
-
-        indModal.classList.remove('hidden');
-        indModal.classList.add('flex');
-        indInput.focus();
-      });
-    });
-
-    function closeIndicatorModal() {
-      indModal.classList.add('hidden');
-      indModal.classList.remove('flex');
-      editingInd = null;
-    }
-
-    indSave.addEventListener('click', () => {
-      const newValue = indInput.value.trim();
-
-      if (editingInd !== null && newValue) {
-        indValues[editingInd].textContent = newValue;
-      }
-
-      closeIndicatorModal();
-    });
-
-    indCancel.addEventListener('click', closeIndicatorModal);
-
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && !indModal.classList.contains('hidden')) {
-        closeIndicatorModal();
-      }
     });
 
     // Mensajes flotantes
