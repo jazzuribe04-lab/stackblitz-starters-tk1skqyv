@@ -7,85 +7,81 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 
   <style>
-    body {
-      font-family: 'DM Sans', sans-serif;
-    }
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 56px; }
 
-    .font-display {
-      font-family: 'Playfair Display', serif;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.8s ease both;
-    }
-
+    /* Entrada del hero */
+    .fade-in { animation: fadeIn 0.9s ease both; }
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .stagger-1 { animation-delay: 0.1s; }
-    .stagger-2 { animation-delay: 0.2s; }
-    .stagger-3 { animation-delay: 0.3s; }
-    .stagger-4 { animation-delay: 0.4s; }
-    .stagger-5 { animation-delay: 0.5s; }
-    .stagger-6 { animation-delay: 0.6s; }
+    /* Aparición al hacer scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
 
-    .toast-show {
-      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
-      animation-fill-mode: both;
+    /* Flecha del hero */
+    .bounce { animation: bounce 1.8s ease-in-out infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
     }
 
-    @keyframes toastIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
+    /* Mensaje flotante */
+    .toast-show { animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s; animation-fill-mode: both; }
+    @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    /* Tarjetas */
+    .indicator-card, .tip-card {
+      border: 1px solid rgba(74, 222, 128, 0.12);
+      transition: border-color 0.3s, transform 0.3s ease, background-color 0.3s;
+    }
+    .indicator-card:hover, .tip-card:hover {
+      border-color: rgba(74, 222, 128, 0.45);
+      transform: translateY(-4px);
+    }
+    .collage-card { transition: transform 0.3s ease; }
+    .collage-card:hover { transform: scale(1.02); }
+
+    /* Menú activo */
+    .nav-link { transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: #86efac; }
+
+    /* Zona de arrastrar y soltar */
+    #dropzone.dragging { border-color: #4ade80; background: rgba(74, 222, 128, 0.08); }
+
+    /* Audio de YouTube oculto */
+    .youtube-audio {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
     }
 
-    @keyframes toastOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
+    /* Separador entre secciones */
+    .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(74, 222, 128, 0.25), transparent); }
 
-    .collage-card {
-      transition: transform 0.3s ease;
-    }
-
-    .collage-card:hover {
-      transform: scale(1.03);
-    }
-
-    .indicator-card {
-      border: 1px solid #222;
-      transition: border-color 0.3s, transform 0.3s ease;
-    }
-
-    .indicator-card:hover {
-      border-color: #4a7c59;
-      transform: translateY(-3px);
+    /* Accesibilidad: sin animaciones si el usuario lo pide */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
@@ -95,416 +91,366 @@
   <!-- Menú -->
   <nav class="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-      <span class="font-display text-sm uppercase tracking-widest text-gray-200">
-        Universidad de la Comunicación
-      </span>
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
 
       <div class="hidden gap-6 text-xs uppercase tracking-wider md:flex">
-        <a href="#portada" class="transition-colors hover:text-green-300">Inicio</a>
-        <a href="#media" class="transition-colors hover:text-green-300">Galería</a>
-        <a href="#indicadores" class="transition-colors hover:text-green-300">Indicadores</a>
-        <a href="#consejos" class="transition-colors hover:text-green-300">Consejos</a>
-        <a href="#participar" class="transition-colors hover:text-green-300">Participar</a>
-        <a href="#collage" class="transition-colors hover:text-green-300">Collage</a>
+        <a href="#portada" class="nav-link">Inicio</a>
+        <a href="#media" class="nav-link">Galería</a>
+        <a href="#indicadores" class="nav-link">Indicadores</a>
+        <a href="#consejos" class="nav-link">Consejos</a>
+        <a href="#participar" class="nav-link">Participar</a>
+        <a href="#collage" class="nav-link">Collage</a>
       </div>
 
-      <button
-        id="mobile-menu-btn"
-        class="p-1 md:hidden"
-        aria-label="Abrir menú"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-      >
+      <button id="mobile-menu-btn" class="p-1 md:hidden" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
         <i data-lucide="menu" class="h-5 w-5"></i>
       </button>
     </div>
 
     <div id="mobile-menu" class="hidden flex-col gap-3 px-4 pb-4 text-xs uppercase tracking-wider md:hidden">
-      <a href="#portada" class="transition-colors hover:text-green-300">Inicio</a>
-      <a href="#media" class="transition-colors hover:text-green-300">Galería</a>
-      <a href="#indicadores" class="transition-colors hover:text-green-300">Indicadores</a>
-      <a href="#consejos" class="transition-colors hover:text-green-300">Consejos</a>
-      <a href="#participar" class="transition-colors hover:text-green-300">Participar</a>
-      <a href="#collage" class="transition-colors hover:text-green-300">Collage</a>
+      <a href="#portada" class="nav-link">Inicio</a>
+      <a href="#media" class="nav-link">Galería</a>
+      <a href="#indicadores" class="nav-link">Indicadores</a>
+      <a href="#consejos" class="nav-link">Consejos</a>
+      <a href="#participar" class="nav-link">Participar</a>
+      <a href="#collage" class="nav-link">Collage</a>
     </div>
   </nav>
 
   <!-- Portada -->
   <header
     id="portada"
-    class="flex min-h-screen w-full items-center justify-center px-6 text-center"
-    style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));"
+    class="relative flex min-h-screen w-full items-center justify-center px-6 text-center"
+    style="background:
+      linear-gradient(to bottom, rgba(0,0,0,0.55), rgba(0,0,0,0.9)),
+      radial-gradient(at 50% 80%, rgba(10,31,10,0.9), rgba(0,0,0,0.9)),
+      url('https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1600') center / cover no-repeat #000;"
   >
     <div class="fade-in max-w-3xl">
-      <p class="mb-6 text-xs uppercase tracking-[0.3em] text-green-300 opacity-70">
+      <p class="mb-6 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">
         Universidad de la Comunicación · Sustentabilidad
       </p>
 
-      <h1 class="font-display mb-6 text-4xl font-bold leading-tight text-green-50 md:text-5xl">
-        ¿Cómo vives la sustentabilidad en tu universidad?
+      <h1 class="font-display mb-6 text-4xl font-bold leading-tight text-green-50 md:text-6xl lg:text-7xl">
+        ¿Cómo vives la <em class="italic text-green-400">sustentabilidad</em> en tu universidad?
       </h1>
 
-      <p class="mx-auto mb-10 max-w-xl text-lg text-gray-300 opacity-80">
+      <p class="mx-auto mb-10 max-w-xl text-lg text-gray-300 opacity-90">
         Movilidad, reutilización y cuidado del entorno: descubre cómo nuestra comunidad construye un campus más sustentable.
       </p>
 
-      <a
-        href="#media"
-        class="inline-block rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105"
-      >
+      <a href="#media" class="inline-block rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
         Explorar
       </a>
     </div>
+
+    <a href="#media" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-green-300/70 hover:text-green-300" aria-label="Bajar a la galería">
+      <i data-lucide="arrow-down" class="bounce h-6 w-6"></i>
+    </a>
   </header>
 
   <main>
     <!-- Galería -->
-    <section id="media" class="w-full px-6 py-20">
-      <div class="mx-auto max-w-6xl">
-        <h2 class="font-display mb-4 text-center text-2xl font-bold text-green-50 md:text-3xl">
-          Galería de sustentabilidad
-        </h2>
+    <section id="media" class="relative w-full overflow-hidden bg-black px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
 
-        <p class="mx-auto mb-10 max-w-xl text-center text-gray-400">
+      <div class="relative mx-auto max-w-6xl">
+        <h2 class="font-display reveal mb-4 text-center text-2xl font-bold text-green-50 md:text-4xl">Galería de sustentabilidad</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-gray-400">
           Movilidad activa, reutilización y espacios verdes en nuestra comunidad.
         </p>
 
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-          <div class="fade-in stagger-2 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+        <!-- Audio de YouTube (oculto) -->
+        <div class="youtube-audio"><div id="youtube-player"></div></div>
+
+        <!-- Controles de audio -->
+        <div class="mb-10 flex flex-wrap items-center justify-center gap-4">
+          <button id="audio-play" class="flex items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10">
+            <i data-lucide="play" class="h-4 w-4"></i><span>Música ambiente</span>
+          </button>
+
+          <button id="audio-pause" class="hidden items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10">
+            <i data-lucide="pause" class="h-4 w-4"></i><span>Pausar</span>
+          </button>
+
+          <button id="audio-mute" class="rounded-full border border-white/20 px-3 py-2 text-xs transition hover:bg-white/5" aria-label="Silenciar">
+            <i data-lucide="volume-2" class="h-4 w-4"></i>
+          </button>
+
+          <input id="audio-volume" type="range" min="0" max="100" value="50" class="w-32 accent-green-500" aria-label="Volumen">
+        </div>
+
+        <!-- Mosaico -->
+        <div class="grid auto-rows-[220px] grid-cols-1 gap-3 sm:grid-cols-2 md:auto-rows-[240px] md:grid-cols-3">
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900 md:col-span-2 md:row-span-2" data-caption="Movilidad activa">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Personas en bicicleta en campus universitario"
-            >
-          </div>
+              alt="Personas en bicicleta en campus universitario">
+          </button>
 
-          <div class="fade-in stagger-3 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900" data-caption="Trabajo en comunidad" data-d="100">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Estudiantes colaborando en espacio verde"
-            >
-          </div>
+              alt="Estudiantes colaborando en espacio verde">
+          </button>
 
-          <div class="fade-in stagger-4 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900" data-caption="Reutilización" data-d="200">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/802221/pexels-photo-802221.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Termo reutilizable con café"
-            >
-          </div>
+              alt="Termo reutilizable con café">
+          </button>
 
-          <div class="fade-in stagger-3 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900" data-caption="Caminar la ciudad">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/1550337/pexels-photo-1550337.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Persona caminando por parque urbano"
-            >
-          </div>
+              alt="Persona caminando por parque urbano">
+          </button>
 
-          <div class="fade-in stagger-4 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900" data-caption="Reciclaje en el campus" data-d="100">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Contenedores de reciclaje en campus"
-            >
-          </div>
+              alt="Contenedores de reciclaje en campus">
+          </button>
 
-          <div class="fade-in stagger-5 relative aspect-[4/3] overflow-hidden rounded-lg">
-            <img
-              class="h-full w-full object-cover"
-              loading="lazy"
+          <button type="button" class="gallery-item group reveal relative overflow-hidden rounded-xl bg-neutral-900" data-caption="Proyectos sustentables" data-d="200">
+            <img class="h-full w-full object-cover transition duration-700 group-hover:scale-110" loading="lazy"
               src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Equipo trabajando en proyecto sustentable"
-            >
-          </div>
+              alt="Equipo trabajando en proyecto sustentable">
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- Indicadores -->
-    <section id="indicadores" class="w-full px-6 py-20">
-      <div class="mx-auto max-w-6xl">
-        <h2 class="font-display mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">
-          Indicadores de sustentabilidad
-        </h2>
+    <div class="divider"></div>
 
-        <p class="mx-auto mb-12 max-w-lg text-center text-sm italic text-gray-400">
+    <!-- Indicadores -->
+    <section id="indicadores" class="relative w-full overflow-hidden bg-neutral-950 px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-6xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Indicadores de sustentabilidad</h2>
+        <p class="reveal mx-auto mb-12 max-w-lg text-center text-sm italic text-gray-400">
           Haz clic en cualquier indicador para conocer más información.
         </p>
 
-        <div id="indicators-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Indicador 1 -->
-          <div
-            class="indicator-card fade-in stagger-1 cursor-pointer rounded-xl p-6 text-center"
-            onclick="window.open('transporte-publico.html', '_blank')"
-            role="link"
-            tabindex="0"
-            aria-label="Ver más información sobre el uso de transporte público"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('transporte-publico.html','_blank');}"
-          >
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
-              USA TRANSPORTE PÚBLICO
-            </p>
-
-            <div class="text-4xl font-bold text-green-300">
-              66.7%
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- 1 -->
+          <a href="transporte-publico.html" target="_blank" rel="noopener"
+             class="indicator-card reveal group relative block rounded-xl bg-gradient-to-br from-green-950/50 to-transparent p-6 text-center"
+             aria-label="Ver más información sobre el uso de transporte público">
+            <i data-lucide="arrow-up-right" class="absolute right-4 top-4 h-4 w-4 text-green-300/50 transition group-hover:text-green-300"></i>
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="bus" class="h-6 w-6"></i></div>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">Usa transporte público</p>
+            <div class="font-display text-5xl font-bold text-green-300" data-target="66.7" data-dec="1" data-suffix="%">66.7%</div>
+            <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div class="h-full w-0 rounded-full bg-gradient-to-r from-green-600 to-green-300 transition-all duration-[1400ms] ease-out" data-w="66.7"></div>
             </div>
-          </div>
+          </a>
 
-          <!-- Indicador 2 -->
-          <div
-            class="indicator-card fade-in stagger-2 cursor-pointer rounded-xl p-6 text-center"
-            onclick="window.open('objetos-reutilizables.html', '_blank')"
-            role="link"
-            tabindex="0"
-            aria-label="Ver más información sobre el uso de objetos reutilizables"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('objetos-reutilizables.html','_blank');}"
-          >
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
-              SIEMPRE USA REUTILIZABLES
-            </p>
-
-            <div class="text-4xl font-bold text-green-300">
-              50%
+          <!-- 2 -->
+          <a href="objetos-reutilizables.html" target="_blank" rel="noopener"
+             class="indicator-card reveal group relative block rounded-xl bg-gradient-to-br from-green-950/50 to-transparent p-6 text-center" data-d="100"
+             aria-label="Ver más información sobre el uso de objetos reutilizables">
+            <i data-lucide="arrow-up-right" class="absolute right-4 top-4 h-4 w-4 text-green-300/50 transition group-hover:text-green-300"></i>
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="recycle" class="h-6 w-6"></i></div>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">Siempre usa reutilizables</p>
+            <div class="font-display text-5xl font-bold text-green-300" data-target="50" data-dec="0" data-suffix="%">50%</div>
+            <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div class="h-full w-0 rounded-full bg-gradient-to-r from-green-600 to-green-300 transition-all duration-[1400ms] ease-out" data-w="50"></div>
             </div>
-          </div>
+          </a>
 
-          <!-- Indicador 3 -->
-          <div
-            class="indicator-card fade-in stagger-3 cursor-pointer rounded-xl p-6 text-center"
-            onclick="window.open('botellas-desechables.html', '_blank')"
-            role="link"
-            tabindex="0"
-            aria-label="Ver más información sobre botellas desechables por semana"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('botellas-desechables.html','_blank');}"
-          >
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
-              BOTELLAS DESECHABLES POR SEMANA
-            </p>
+          <!-- 3 -->
+          <a href="botellas-desechables.html" target="_blank" rel="noopener"
+             class="indicator-card reveal group relative block rounded-xl bg-gradient-to-br from-green-950/50 to-transparent p-6 text-center" data-d="200"
+             aria-label="Ver más información sobre botellas desechables por semana">
+            <i data-lucide="arrow-up-right" class="absolute right-4 top-4 h-4 w-4 text-green-300/50 transition group-hover:text-green-300"></i>
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="droplet" class="h-6 w-6"></i></div>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">Botellas desechables por semana</p>
+            <div class="font-display text-5xl font-bold text-green-300" data-target="27" data-dec="0" data-suffix="">27</div>
+          </a>
 
-            <div class="text-4xl font-bold text-green-300">
-              27
+          <!-- 4 -->
+          <a href="carne-roja.html" target="_blank" rel="noopener"
+             class="indicator-card reveal group relative block rounded-xl bg-gradient-to-br from-green-950/50 to-transparent p-6 text-center"
+             aria-label="Ver más información sobre personas que nunca comen carne roja">
+            <i data-lucide="arrow-up-right" class="absolute right-4 top-4 h-4 w-4 text-green-300/50 transition group-hover:text-green-300"></i>
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="beef" class="h-6 w-6"></i></div>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">Nunca come carne roja</p>
+            <div class="font-display text-5xl font-bold text-green-300" data-target="25" data-dec="0" data-suffix="%">25%</div>
+            <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div class="h-full w-0 rounded-full bg-gradient-to-r from-green-600 to-green-300 transition-all duration-[1400ms] ease-out" data-w="25"></div>
             </div>
-          </div>
+          </a>
 
-          <!-- Indicador 4 -->
-          <div
-            class="indicator-card fade-in stagger-4 cursor-pointer rounded-xl p-6 text-center"
-            onclick="window.open('carne-roja.html', '_blank')"
-            role="link"
-            tabindex="0"
-            aria-label="Ver más información sobre personas que nunca comen carne roja"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('carne-roja.html','_blank');}"
-          >
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
-              NUNCA COME CARNE ROJA
-            </p>
-
-            <div class="text-4xl font-bold text-green-300">
-              25%
+          <!-- 5 -->
+          <a href="climate-clock.html" target="_blank" rel="noopener"
+             class="indicator-card reveal group relative block rounded-xl bg-gradient-to-br from-green-950/50 to-transparent p-6 text-center" data-d="100"
+             aria-label="Ver más información sobre el Climate Clock">
+            <i data-lucide="arrow-up-right" class="absolute right-4 top-4 h-4 w-4 text-green-300/50 transition group-hover:text-green-300"></i>
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="clock" class="h-6 w-6"></i></div>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">No habían escuchado del Climate Clock</p>
+            <div class="font-display text-5xl font-bold text-green-300" data-target="16.7" data-dec="1" data-suffix="%">16.7%</div>
+            <div class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+              <div class="h-full w-0 rounded-full bg-gradient-to-r from-green-600 to-green-300 transition-all duration-[1400ms] ease-out" data-w="16.7"></div>
             </div>
-          </div>
-
-          <!-- Indicador 5 -->
-          <div
-            class="indicator-card fade-in stagger-5 cursor-pointer rounded-xl p-6 text-center"
-            onclick="window.open('climate-clock.html', '_blank')"
-            role="link"
-            tabindex="0"
-            aria-label="Ver más información sobre el Climate Clock"
-            onkeydown="if(event.key==='Enter'||event.key===' '){window.open('climate-clock.html','_blank');}"
-          >
-            <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">
-              NO HABÍAN ESCUCHADO DEL CLIMATE CLOCK
-            </p>
-
-            <div class="text-4xl font-bold text-green-300">
-              16.7%
-            </div>
-          </div>
+          </a>
         </div>
       </div>
     </section>
+
+    <div class="divider"></div>
 
     <!-- Consejos -->
-    <section id="consejos" class="w-full px-6 py-20">
+    <section id="consejos" class="w-full bg-black px-6 py-20">
       <div class="mx-auto max-w-5xl">
-        <h2 class="font-display mb-10 text-center text-2xl font-bold text-green-50 md:text-3xl">
-          Consejos prácticos
-        </h2>
+        <h2 class="font-display reveal mb-10 text-center text-2xl font-bold text-green-50 md:text-4xl">Consejos prácticos</h2>
 
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div class="fade-in stagger-1 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">🚌</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="bus" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Usa el transporte público</h3>
-            <p class="text-sm text-gray-400">
-              El metrobús y el metro son opciones rápidas y de bajo impacto. Planea tu ruta con apps de movilidad.
-            </p>
+            <p class="text-sm text-gray-400">El metrobús y el metro son opciones rápidas y de bajo impacto. Planea tu ruta con apps de movilidad.</p>
           </div>
 
-          <div class="fade-in stagger-2 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">🚶</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" data-d="100">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="footprints" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Camina cuando puedas</h3>
-            <p class="text-sm text-gray-400">
-              Si tu trayecto es menor a 20 minutos, caminar es la opción más sustentable y saludable.
-            </p>
+            <p class="text-sm text-gray-400">Si tu trayecto es menor a 20 minutos, caminar es la opción más sustentable y saludable.</p>
           </div>
 
-          <div class="fade-in stagger-3 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">🚗</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" data-d="200">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="car" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Comparte el viaje</h3>
-            <p class="text-sm text-gray-400">
-              Coordina con compañeros que vivan cerca. Un auto compartido reduce emisiones y costos.
-            </p>
+            <p class="text-sm text-gray-400">Coordina con compañeros que vivan cerca. Un auto compartido reduce emisiones y costos.</p>
           </div>
 
-          <div class="fade-in stagger-4 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">♻️</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="recycle" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Reduce residuos</h3>
-            <p class="text-sm text-gray-400">
-              Evita empaques de un solo uso. Lleva tus contenedores a la cafetería y separa tu basura.
-            </p>
+            <p class="text-sm text-gray-400">Evita empaques de un solo uso. Lleva tus contenedores a la cafetería y separa tu basura.</p>
           </div>
 
-          <div class="fade-in stagger-5 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">🥤</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" data-d="100">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="coffee" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Elige reutilizable</h3>
-            <p class="text-sm text-gray-400">
-              Un termo, una bolsa de tela y cubiertos reutilizables hacen una gran diferencia al año.
-            </p>
+            <p class="text-sm text-gray-400">Un termo, una bolsa de tela y cubiertos reutilizables hacen una gran diferencia al año.</p>
           </div>
 
-          <div class="fade-in stagger-6 rounded-xl bg-green-950/40 p-6">
-            <div class="mb-3 text-2xl">🌱</div>
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" data-d="200">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="trees" class="h-5 w-5"></i></div>
             <h3 class="mb-2 font-bold text-green-100">Cuida los espacios verdes</h3>
-            <p class="text-sm text-gray-400">
-              Respeta las áreas verdes del campus. Participa en jornadas de reforestación y limpieza.
-            </p>
+            <p class="text-sm text-gray-400">Respeta las áreas verdes del campus. Participa en jornadas de reforestación y limpieza.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Participar -->
-    <section id="participar" class="w-full px-6 py-20">
-      <div class="mx-auto max-w-2xl">
-        <h2 class="font-display mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">
-          Comparte tu visión
-        </h2>
+    <div class="divider"></div>
 
-        <p class="mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">
+    <!-- Participar -->
+    <section id="participar" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-2xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Comparte tu visión</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">
           Sube un dibujo, carta o foto que muestre cómo vives la sustentabilidad en la universidad.
         </p>
 
-        <form
-          id="upload-form"
-          class="fade-in stagger-2 rounded-2xl border border-white/10 bg-neutral-950 p-6 md:p-8"
-        >
+        <form id="upload-form" class="reveal rounded-2xl border border-white/10 bg-black p-6 md:p-8">
           <div class="mb-5">
-            <label for="entry-title" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
-              Título de tu aportación
-            </label>
-
-            <input
-              id="entry-title"
-              type="text"
-              maxlength="60"
-              required
+            <label for="entry-title" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Título de tu aportación</label>
+            <input id="entry-title" type="text" maxlength="60" required
               class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
-              placeholder="Ej. Mi termo favorito"
-            >
+              placeholder="Ej. Mi termo favorito">
           </div>
 
           <div class="mb-5">
-            <label for="entry-author" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
-              Tu nombre (opcional)
-            </label>
-
-            <input
-              id="entry-author"
-              type="text"
-              maxlength="40"
+            <label for="entry-author" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Tu nombre (opcional)</label>
+            <input id="entry-author" type="text" maxlength="40"
               class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
-              placeholder="Opcional"
-            >
+              placeholder="Opcional">
           </div>
 
           <div class="mb-5">
-            <label for="entry-file" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">
-              Selecciona una imagen
-            </label>
+            <span class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Imagen</span>
 
-            <input
-              id="entry-file"
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              required
-              class="block w-full cursor-pointer text-sm text-gray-400 file:mr-4 file:cursor-pointer file:rounded-full file:border-0 file:bg-green-400/10 file:px-4 file:py-2 file:text-xs file:font-medium file:uppercase file:tracking-wider file:text-green-300 hover:file:bg-green-400/20"
-            >
+            <label id="dropzone" for="entry-file"
+              class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/20 px-4 py-8 text-center transition hover:border-green-400/50 hover:bg-green-400/5">
+              <i data-lucide="cloud-upload" class="h-8 w-8 text-green-300"></i>
+              <span class="text-sm text-gray-200">Arrastra tu imagen o haz clic para elegirla</span>
+              <span class="text-xs text-gray-500">JPG, PNG o WebP · máximo 2 MB</span>
+            </label>
+            <input id="entry-file" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only">
           </div>
 
           <div id="preview-area" class="mb-5 hidden">
-            <img
-              id="preview-img"
-              class="max-h-64 w-full rounded-lg bg-black/50 object-contain"
-              alt="Vista previa de la imagen seleccionada"
-            >
+            <img id="preview-img" class="max-h-64 w-full rounded-lg bg-neutral-900 object-contain" alt="Vista previa de la imagen seleccionada">
           </div>
 
-          <button
-            type="submit"
-            class="w-full rounded-full bg-green-500 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
-          >
+          <button type="submit" class="w-full rounded-full bg-green-500 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50">
             Agregar al collage
           </button>
         </form>
       </div>
     </section>
 
+    <div class="divider"></div>
+
     <!-- Collage -->
-    <section id="collage" class="w-full px-6 py-20">
+    <section id="collage" class="w-full bg-black px-6 py-20">
       <div class="mx-auto max-w-6xl">
-        <h2 class="font-display mb-10 text-center text-2xl font-bold text-green-50 md:text-3xl">
-          Collage colectivo
-        </h2>
+        <h2 class="font-display reveal mb-10 text-center text-2xl font-bold text-green-50 md:text-4xl">Collage colectivo</h2>
 
-        <div id="collage-grid" class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"></div>
+        <div id="collage-grid" class="columns-2 gap-3 md:columns-3 lg:columns-4"></div>
 
-        <p id="collage-empty" class="py-16 text-center italic text-gray-500">
-          Aún no hay aportaciones. ¡Sé la primera persona en compartir!
-        </p>
+        <div id="collage-empty" class="flex flex-col items-center gap-3 py-16 text-center text-gray-500">
+          <i data-lucide="image-plus" class="h-12 w-12 text-green-400/40"></i>
+          <p class="italic">Aún no hay aportaciones. ¡Sé la primera persona en compartir!</p>
+          <a href="#participar" class="text-sm text-green-300 underline underline-offset-4 hover:text-green-200">Subir mi imagen</a>
+        </div>
       </div>
     </section>
   </main>
 
   <!-- Footer -->
   <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
-    <p class="text-xs text-gray-500">
-      Universidad de la Comunicación · Proyecto de sustentabilidad · Contenido de muestra
-    </p>
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Contenido de muestra</p>
   </footer>
 
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/90 p-4" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+    <button id="lightbox-close" class="absolute right-4 top-4 rounded-full bg-white/10 p-2 hover:bg-white/20" aria-label="Cerrar">
+      <i data-lucide="x" class="h-5 w-5"></i>
+    </button>
+    <figure class="max-h-full max-w-4xl">
+      <img id="lightbox-img" class="max-h-[80vh] w-auto rounded-lg object-contain" alt="">
+      <figcaption id="lightbox-caption" class="mt-3 text-center text-sm text-gray-300"></figcaption>
+    </figure>
+  </div>
+
+  <!-- Volver arriba -->
+  <a id="to-top" href="#portada" aria-label="Volver arriba"
+     class="fixed bottom-6 right-6 z-40 hidden h-11 w-11 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition hover:scale-110">
+    <i data-lucide="arrow-up" class="h-5 w-5"></i>
+  </a>
+
   <!-- Mensaje flotante -->
-  <div
-    id="toast"
-    class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-green-500 px-6 py-3 text-sm font-medium text-black shadow-lg"
-  ></div>
+  <div id="toast" class="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-green-500 px-6 py-3 text-sm font-medium text-black shadow-lg"></div>
+
+  <!-- API de YouTube -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Menú móvil
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
     mobileBtn.addEventListener('click', () => {
       const isOpen = !mobileMenu.classList.contains('hidden');
-
       mobileMenu.classList.toggle('hidden');
+      mobileMenu.classList.toggle('flex');
       mobileBtn.setAttribute('aria-expanded', String(!isOpen));
       mobileBtn.setAttribute('aria-label', isOpen ? 'Abrir menú' : 'Cerrar menú');
     });
@@ -512,6 +458,7 @@
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
         mobileBtn.setAttribute('aria-expanded', 'false');
         mobileBtn.setAttribute('aria-label', 'Abrir menú');
       });
@@ -520,55 +467,241 @@
     // Mensajes flotantes
     function showToast(message) {
       const toast = document.getElementById('toast');
-
       toast.textContent = message;
       toast.classList.remove('hidden');
+      toast.classList.remove('toast-show');
+      void toast.offsetWidth;
       toast.classList.add('toast-show');
-
-      setTimeout(() => {
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
         toast.classList.add('hidden');
         toast.classList.remove('toast-show');
       }, 3000);
     }
 
-    // Vista previa y validación de imagen
-    const fileInput = document.getElementById('entry-file');
-    const previewArea = document.getElementById('preview-area');
-    const previewImg = document.getElementById('preview-img');
+    // Aparición al hacer scroll + contadores + barras
+    function countUp(el) {
+      const target = Number(el.dataset.target);
+      const decimals = Number(el.dataset.dec) || 0;
+      const suffix = el.dataset.suffix || '';
 
-    let fileDataUrl = null;
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files[0];
-
-      if (!file) {
-        previewArea.classList.add('hidden');
-        fileDataUrl = null;
+      if (reduceMotion) {
+        el.textContent = target.toFixed(decimals) + suffix;
         return;
       }
 
+      const start = performance.now();
+      const duration = 1400;
+
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * eased).toFixed(decimals) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const el = entry.target;
+        el.style.transitionDelay = (el.dataset.d || 0) + 'ms';
+        el.classList.add('visible');
+
+        el.querySelectorAll('[data-target]').forEach(countUp);
+        el.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+
+        revealObserver.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Menú activo según la sección visible
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    document.querySelectorAll('header[id], section[id]').forEach(s => sectionObserver.observe(s));
+
+    // Botón volver arriba
+    const toTop = document.getElementById('to-top');
+    window.addEventListener('scroll', () => {
+      const show = window.scrollY > 600;
+      toTop.classList.toggle('hidden', !show);
+      toTop.classList.toggle('flex', show);
+    }, { passive: true });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    function openLightbox(src, alt, caption) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      lightboxCaption.textContent = caption || '';
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.getElementById('lightbox-close').focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      lightboxImg.src = '';
+    }
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      const img = item.querySelector('img');
+
+      const caption = document.createElement('div');
+      caption.className = 'pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-black/80 to-transparent p-4 text-left opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100';
+      caption.innerHTML = '<p class="text-sm font-medium"></p>';
+      caption.firstChild.textContent = item.dataset.caption;
+      item.appendChild(caption);
+
+      item.setAttribute('aria-label', 'Ampliar: ' + item.dataset.caption);
+      item.addEventListener('click', () => {
+        openLightbox(img.src.replace('w=800', 'w=1600'), img.alt, item.dataset.caption);
+      });
+    });
+
+    lightbox.addEventListener('click', event => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeLightbox();
+    });
+
+    // Reproductor de YouTube solo para audio
+    let player;
+    let isMuted = false;
+
+    const playBtn = document.getElementById('audio-play');
+    const pauseBtn = document.getElementById('audio-pause');
+    const muteBtn = document.getElementById('audio-mute');
+    const volumeSlider = document.getElementById('audio-volume');
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtube-player', {
+        videoId: 'xNN7iTA57jM',
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1 },
+        events: { onReady: event => event.target.setVolume(50) }
+      });
+    }
+
+    function setMuteIcon(muted) {
+      muteBtn.innerHTML = '<i data-lucide="' + (muted ? 'volume-x' : 'volume-2') + '" class="h-4 w-4"></i>';
+      lucide.createIcons();
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!player) return;
+      player.unMute();
+      player.setVolume(Number(volumeSlider.value));
+      player.playVideo();
+      playBtn.classList.add('hidden');
+      pauseBtn.classList.remove('hidden');
+      pauseBtn.classList.add('flex');
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (!player) return;
+      player.pauseVideo();
+      pauseBtn.classList.add('hidden');
+      pauseBtn.classList.remove('flex');
+      playBtn.classList.remove('hidden');
+    });
+
+    muteBtn.addEventListener('click', () => {
+      if (!player) return;
+      isMuted = !isMuted;
+      if (isMuted) {
+        player.mute();
+      } else {
+        player.unMute();
+        player.setVolume(Number(volumeSlider.value));
+      }
+      setMuteIcon(isMuted);
+    });
+
+    volumeSlider.addEventListener('input', () => {
+      if (!player) return;
+      const volume = Number(volumeSlider.value);
+      player.setVolume(volume);
+      isMuted = volume === 0;
+      if (isMuted) player.mute(); else player.unMute();
+      setMuteIcon(isMuted);
+    });
+
+    // Imagen: vista previa, validación y arrastrar y soltar
+    const fileInput = document.getElementById('entry-file');
+    const dropzone = document.getElementById('dropzone');
+    const previewArea = document.getElementById('preview-area');
+    const previewImg = document.getElementById('preview-img');
+    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    let fileDataUrl = null;
+
+    function resetFile() {
+      fileInput.value = '';
+      fileDataUrl = null;
+      previewArea.classList.add('hidden');
+    }
+
+    function handleFile(file) {
+      if (!file) return resetFile();
+
       if (!validImageTypes.includes(file.type)) {
         showToast('Solo se aceptan imágenes JPG, PNG o WebP');
-        fileInput.value = '';
-        return;
+        return resetFile();
       }
 
       if (file.size > 2 * 1024 * 1024) {
         showToast('La imagen debe pesar menos de 2 MB');
-        fileInput.value = '';
-        return;
+        return resetFile();
       }
 
       const reader = new FileReader();
-
       reader.onload = event => {
         fileDataUrl = event.target.result;
         previewImg.src = fileDataUrl;
         previewArea.classList.remove('hidden');
       };
-
       reader.readAsDataURL(file);
+    }
+
+    fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+
+    ['dragenter', 'dragover'].forEach(type => {
+      dropzone.addEventListener(type, event => {
+        event.preventDefault();
+        dropzone.classList.add('dragging');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(type => {
+      dropzone.addEventListener(type, event => {
+        event.preventDefault();
+        dropzone.classList.remove('dragging');
+      });
+    });
+
+    dropzone.addEventListener('drop', event => {
+      const file = event.dataTransfer.files[0];
+      if (!file) return;
+      try { fileInput.files = event.dataTransfer.files; } catch (e) { /* navegadores antiguos */ }
+      handleFile(file);
     });
 
     // Collage guardado en el navegador
@@ -585,7 +718,12 @@
     }
 
     function saveEntries(entries) {
-      localStorage.setItem(storageKey, JSON.stringify(entries));
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(entries));
+        return true;
+      } catch {
+        return false;
+      }
     }
 
     function renderCollage(entries) {
@@ -593,15 +731,15 @@
 
       entries.forEach(entry => {
         const card = document.createElement('article');
-        card.className = 'collage-card overflow-hidden rounded-xl border border-white/5 bg-neutral-900';
+        card.className = 'collage-card group relative mb-3 break-inside-avoid overflow-hidden rounded-xl border border-white/5 bg-neutral-900';
 
         if (entry.image) {
           const image = document.createElement('img');
           image.src = entry.image;
           image.alt = entry.title || 'Aportación';
           image.loading = 'lazy';
-          image.className = 'aspect-square w-full object-cover';
-
+          image.className = 'h-auto w-full cursor-zoom-in';
+          image.addEventListener('click', () => openLightbox(entry.image, image.alt, entry.title));
           card.appendChild(image);
         }
 
@@ -615,16 +753,32 @@
 
         if (entry.author) {
           const author = document.createElement('p');
-          author.className = 'mt-1 text-[10px] text-gray-500';
+          author.className = 'mt-1 text-[11px] text-gray-400';
           author.textContent = entry.author;
           info.appendChild(author);
         }
 
         card.appendChild(info);
+
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.setAttribute('aria-label', 'Eliminar aportación');
+        del.className = 'absolute right-2 top-2 rounded-full bg-black/70 p-2 text-red-300 transition hover:bg-red-500 hover:text-white focus:opacity-100 md:opacity-0 md:group-hover:opacity-100';
+        del.innerHTML = '<i data-lucide="trash-2" class="h-4 w-4"></i>';
+        del.addEventListener('click', () => {
+          const remaining = getSavedEntries().filter(e => e.id !== entry.id);
+          saveEntries(remaining);
+          renderCollage(remaining);
+          showToast('Aportación eliminada');
+        });
+        card.appendChild(del);
+
         collageGrid.appendChild(card);
       });
 
       collageEmpty.classList.toggle('hidden', entries.length > 0);
+      collageEmpty.classList.toggle('flex', entries.length === 0);
+      lucide.createIcons();
     }
 
     renderCollage(getSavedEntries());
@@ -658,32 +812,30 @@
 
       uploadButton.disabled = true;
 
-      const newEntry = {
+      entries.unshift({
         id: Date.now().toString(),
         title,
         author,
         image: fileDataUrl,
         createdAt: new Date().toISOString()
-      };
+      });
 
-      entries.unshift(newEntry);
-      saveEntries(entries);
+      if (!saveEntries(entries)) {
+        entries.shift();
+        showToast('No hay espacio para guardar más imágenes');
+        uploadButton.disabled = false;
+        return;
+      }
+
       renderCollage(entries);
-
       showToast('¡Aportación agregada al collage!');
 
-      document.getElementById('entry-title').value = '';
-      document.getElementById('entry-author').value = '';
-      fileInput.value = '';
-      fileDataUrl = null;
-      previewArea.classList.add('hidden');
-
+      uploadForm.reset();
+      resetFile();
       uploadButton.disabled = false;
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      lucide.createIcons();
-    });
+    lucide.createIcons();
   </script>
 </body>
 </html>
