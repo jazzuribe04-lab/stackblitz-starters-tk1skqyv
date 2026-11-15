@@ -3,19 +3,435 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NUNCA COME CARNE ROJA</title>
+  <title>Nunca come carne roja · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .ring-progress { transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    .tip-card {
+      border: 1px solid rgba(74, 222, 128, 0.12);
+      transition: border-color 0.3s, transform 0.3s ease;
+    }
+    .tip-card:hover { border-color: rgba(74, 222, 128, 0.45); transform: translateY(-4px); }
+
+    .chip { border: 1px solid rgba(255, 255, 255, 0.18); transition: all 0.2s; }
+    .chip:hover { border-color: rgba(74, 222, 128, 0.5); }
+    .chip.active { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; color: #bbf7d0; }
+    .donut-seg { transition: stroke-dasharray 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
 </head>
 
-<body>
-  <h1>NUNCA COME CARNE ROJA</h1>
+<body class="min-h-screen w-full bg-black text-gray-100">
 
-  <h2>25%</h2>
+  <!-- Barra superior -->
+  <nav class="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
 
-  <p>
-    Aquí puedes agregar información sobre el uso del transporte público,
-    sus beneficios ambientales, rutas y recomendaciones para la comunidad universitaria.
-  </p>
+  <main>
+    <!-- Indicador principal -->
+    <header
+      class="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center"
+      style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));"
+    >
+      <div class="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
 
-  <a href="index.html">Volver a la página principal</a>
+      <div class="fade-in relative max-w-2xl">
+        <p class="mb-8 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Indicador de sustentabilidad</p>
+
+        <!-- Anillo de progreso -->
+        <div class="relative mx-auto mb-8 h-56 w-56 md:h-64 md:w-64" role="img" aria-label="25 por ciento">
+          <svg viewBox="0 0 160 160" class="h-full w-full -rotate-90">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"></circle>
+            <circle id="ring" class="ring-progress" cx="80" cy="80" r="70" fill="none" stroke="#4ade80" stroke-width="8"
+                    stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82"></circle>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="counter" class="font-display text-6xl font-bold text-green-300 md:text-7xl" data-target="25" data-suffix="%">25%</span>
+          </div>
+        </div>
+
+        <h1 class="font-display mb-4 text-3xl font-bold leading-tight text-green-50 md:text-5xl">Nunca come carne roja</h1>
+        <p class="mx-auto max-w-md text-gray-400">Una de cada cuatro personas ya eligió dejarla fuera de su plato.</p>
+
+        <a href="#mensaje" class="mt-10 inline-block text-green-300/70 transition hover:text-green-300" aria-label="Leer más">
+          <i data-lucide="arrow-down" class="h-6 w-6"></i>
+        </a>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Mensaje -->
+    <section id="mensaje" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="font-display reveal mb-6 text-2xl font-bold text-green-50 md:text-4xl">Cada elección alimentaria cuenta</h2>
+        <p class="reveal text-lg leading-relaxed text-gray-300">
+          Reducir el consumo de carne roja y procesada, diversificar las fuentes de proteína y aumentar el consumo de leguminosas, verduras y cereales integrales puede beneficiar la salud personal y reducir el impacto ambiental de nuestra comunidad universitaria.
+        </p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Frecuencia -->
+    <section id="frecuencia" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Con qué frecuencia comen carne roja?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">Porcentaje de personas según su frecuencia de consumo.</p>
+        <div id="freq-bars" class="reveal space-y-6"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Tipo de carne -->
+    <section id="preferencia" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Qué carne consumes más seguido?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">Tipo de carne que más se come en la comunidad.</p>
+
+        <div class="grid items-center gap-10 md:grid-cols-2">
+          <div id="donut" class="reveal relative mx-auto h-60 w-60 md:h-72 md:w-72">
+            <svg viewBox="0 0 160 160" class="h-full w-full -rotate-90" role="img" aria-label="Pollo o pavo 50%, carne roja 25%, pescado 16.7%">
+              <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="14"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="font-display text-5xl font-bold text-amber-300">50%</span>
+              <span class="text-xs text-gray-400">pollo o pavo</span>
+            </div>
+          </div>
+          <ul id="pref-legend" class="reveal space-y-4"></ul>
+        </div>
+
+        <p class="reveal mt-8 text-center text-xs text-gray-400">El anillo no cierra porque las respuestas mostradas suman 91.7%.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Huella de carbono -->
+    <section id="huella" class="relative w-full overflow-hidden bg-black px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">La hoja de tu huella</h2>
+        <p class="reveal mx-auto mb-12 max-w-xl text-center text-sm text-gray-400">
+          Elige cuántos días a la semana comes carne roja y mira cómo reacciona la hoja.
+        </p>
+
+        <div class="grid items-center gap-10 md:grid-cols-2">
+          <!-- Hoja -->
+          <div class="reveal relative mx-auto flex h-72 w-72 items-center justify-center">
+            <div id="leaf-glow" class="absolute inset-4 rounded-full opacity-25 blur-3xl transition-colors duration-700"></div>
+            <svg viewBox="0 0 200 250" class="relative h-full w-full" role="img" aria-label="Hoja que cambia de color según la huella de carbono">
+              <defs>
+                <linearGradient id="leaf-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop id="stop-a" offset="0" stop-color="#4ade80"></stop>
+                  <stop id="stop-b" offset="1" stop-color="#16a34a"></stop>
+                </linearGradient>
+              </defs>
+              <g id="leaf-body" style="transform-origin: 100px 236px; transition: transform 0.8s ease;">
+                <path d="M100 236 L100 212" stroke="#5b4a2e" stroke-width="5" stroke-linecap="round"></path>
+                <path d="M100 18 C172 60 182 150 100 218 C18 150 28 60 100 18Z" fill="url(#leaf-grad)"></path>
+                <path d="M100 30 L100 214 M100 90 L140 62 M100 90 L60 62 M100 130 L148 100 M100 130 L52 100 M100 170 L138 146 M100 170 L62 146" stroke="rgba(0,0,0,0.28)" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+                <g id="spots" fill="#3b1d0a" style="opacity: 0; transition: opacity 0.8s;">
+                  <circle cx="75" cy="110" r="7"></circle><circle cx="128" cy="85" r="5"></circle><circle cx="115" cy="150" r="8"></circle><circle cx="82" cy="165" r="5"></circle><circle cx="105" cy="60" r="4"></circle>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Controles -->
+          <div class="reveal">
+            <p id="leaf-status" class="font-display mb-1 text-3xl font-bold text-green-50" aria-live="polite">Hoja cansada</p>
+            <p id="leaf-days" class="mb-6 text-sm text-gray-400"></p>
+
+            <p class="text-xs uppercase tracking-wider text-gray-400">Huella estimada por año</p>
+            <p class="mb-8"><span id="leaf-kg" class="font-display text-5xl font-bold md:text-6xl">0</span> <span class="text-sm text-gray-400">kg CO₂e</span></p>
+
+            <div id="chips" class="mb-5 flex flex-wrap gap-2"></div>
+
+            <label for="days-slider" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Días por semana con carne roja</label>
+            <input id="days-slider" type="range" min="0" max="7" step="1" value="3" class="mb-6 w-full accent-green-500">
+
+            <div class="rounded-xl border border-green-400/15 bg-green-950/40 p-4">
+              <div class="mb-1 flex items-center gap-2 text-sm font-bold text-green-100"><i data-lucide="lightbulb" class="h-4 w-4"></i><span>Tip</span></div>
+              <p id="leaf-tip" class="text-sm text-gray-300"></p>
+              <p id="leaf-swap" class="mt-2 text-sm text-gray-400"></p>
+            </div>
+
+            <p id="community-avg" class="mt-5 text-sm text-gray-300"></p>
+            <p class="mt-3 text-xs text-gray-400">
+              Estimación con porciones de 150 g de res (≈60 kg CO₂e por kg; ≈6 el pollo y ≈0.9 las leguminosas, promedios globales de Poore y Nemecek, 2018). "Varias veces" se calcula como 3 días por semana.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Ideas -->
+    <section class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-10 text-center text-2xl font-bold text-green-50 md:text-4xl">Cómo empezar</h2>
+
+        <div class="grid gap-5 sm:grid-cols-3">
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="sprout" class="h-5 w-5"></i></div>
+            <h3 class="mb-2 font-bold text-green-100">Prueba las leguminosas</h3>
+            <p class="text-sm text-gray-400">Frijol, lentejas y garbanzos son proteína accesible y fácil de preparar.</p>
+          </div>
+
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" style="transition-delay:100ms">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="salad" class="h-5 w-5"></i></div>
+            <h3 class="mb-2 font-bold text-green-100">Llena el plato de verduras</h3>
+            <p class="text-sm text-gray-400">Haz que las verduras sean la base de tu comida y la carne, un complemento.</p>
+          </div>
+
+          <div class="tip-card reveal rounded-xl bg-green-950/40 p-6" style="transition-delay:200ms">
+            <div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="wheat" class="h-5 w-5"></i></div>
+            <h3 class="mb-2 font-bold text-green-100">Elige cereales integrales</h3>
+            <p class="text-sm text-gray-400">Avena, arroz integral y tortillas de maíz suman fibra y variedad a tu dieta.</p>
+          </div>
+        </div>
+
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Contenido de muestra</p>
+  </footer>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Anillo y contador al cargar
+    const ring = document.getElementById('ring');
+    const counter = document.getElementById('counter');
+    const circumference = 439.82;
+    const value = Number(counter.dataset.target);
+
+    requestAnimationFrame(() => {
+      ring.style.strokeDashoffset = circumference * (1 - value / 100);
+    });
+
+    if (reduceMotion) {
+      counter.textContent = value + '%';
+    } else {
+      const start = performance.now();
+      const tick = now => {
+        const p = Math.min((now - start) / 1600, 1);
+        counter.textContent = Math.round(value * (1 - Math.pow(1 - p, 3))) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    // Aparición al hacer scroll
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        entry.target.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        entry.target.querySelectorAll('.donut-seg').forEach(seg => {
+          seg.setAttribute('stroke-dasharray', seg.dataset.len + ' 439.82');
+        });
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ----- Datos de las gráficas -----
+    const freqData = [
+      { label: 'Todos los días', value: 8.3, days: 7, color: '#ef4444' },
+      { label: 'Varias veces por semana', value: 41.7, days: 3, color: '#f97316' },
+      { label: 'Una vez por semana', value: 25, days: 1, color: '#a3e635' },
+      { label: 'Nunca', value: 25, days: 0, color: '#4ade80' }
+    ];
+    const prefData = [
+      { label: 'Pollo o pavo', value: 50, color: '#fbbf24' },
+      { label: 'Carne roja', value: 25, color: '#ef4444' },
+      { label: 'Pescado', value: 16.7, color: '#38bdf8' }
+    ];
+    const fmt = n => Math.round(n).toLocaleString('es-MX');
+
+    // Barras de frecuencia
+    const freqBars = document.getElementById('freq-bars');
+    freqData.forEach((d, i) => {
+      const row = document.createElement('div');
+      row.innerHTML =
+        '<div class="mb-2 flex items-baseline justify-between gap-4 text-sm">' +
+          '<span class="text-gray-200">' + d.label + '</span>' +
+          '<span class="font-display text-xl font-bold" style="color:' + d.color + '">' + d.value + '%</span>' +
+        '</div>' +
+        '<div class="h-3 w-full overflow-hidden rounded-full bg-white/10">' +
+          '<div class="h-full w-0 rounded-full transition-all duration-[1400ms] ease-out" data-w="' + d.value + '" ' +
+          'style="background:' + d.color + ';transition-delay:' + (i * 120) + 'ms"></div>' +
+        '</div>';
+      freqBars.appendChild(row);
+    });
+
+    // Anillo y leyenda de tipo de carne
+    const DONUT_C = 439.82;
+    const donutSvg = document.querySelector('#donut svg');
+    const legend = document.getElementById('pref-legend');
+    let cum = 0;
+
+    prefData.forEach(d => {
+      const full = d.value / 100 * DONUT_C;
+      const seg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      Object.entries({
+        cx: 80, cy: 80, r: 70, fill: 'none', stroke: d.color, 'stroke-width': 14,
+        'stroke-dasharray': '0 ' + DONUT_C, 'stroke-dashoffset': -cum
+      }).forEach(([k, v]) => seg.setAttribute(k, v));
+      seg.classList.add('donut-seg');
+      seg.dataset.len = (full - 1.5).toFixed(2);
+      donutSvg.appendChild(seg);
+      cum += full;
+
+      const li = document.createElement('li');
+      li.className = 'flex items-center justify-between gap-4 border-b border-white/10 pb-3';
+      li.innerHTML =
+        '<span class="flex items-center gap-3 text-gray-200"><span class="h-3 w-3 rounded-full" style="background:' + d.color + '"></span>' + d.label + '</span>' +
+        '<span class="font-display text-2xl font-bold" style="color:' + d.color + '">' + d.value + '%</span>';
+      legend.appendChild(li);
+    });
+
+    // ----- Hoja de huella de carbono -----
+    const PORTION = 0.15; // kg por porción
+    const FACTOR = { beef: 60, chicken: 6, legumes: 0.9 }; // kg CO2e por kg de alimento
+    const annual = (days, f) => days * 52 * PORTION * f;
+
+    const slider = document.getElementById('days-slider');
+    const chipsEl = document.getElementById('chips');
+    const stopA = document.getElementById('stop-a');
+    const stopB = document.getElementById('stop-b');
+    const glow = document.getElementById('leaf-glow');
+    const leafBody = document.getElementById('leaf-body');
+    const spots = document.getElementById('spots');
+    const statusEl = document.getElementById('leaf-status');
+    const daysEl = document.getElementById('leaf-days');
+    const kgEl = document.getElementById('leaf-kg');
+    const swapEl = document.getElementById('leaf-swap');
+    const tipEl = document.getElementById('leaf-tip');
+
+    [...freqData].reverse().forEach(d => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip rounded-full px-4 py-2 text-sm text-gray-300';
+      b.dataset.days = d.days;
+      b.textContent = d.label;
+      b.addEventListener('click', () => { slider.value = d.days; updateLeaf(); });
+      chipsEl.appendChild(b);
+    });
+
+    const avgDays = freqData.reduce((sum, d) => sum + d.value / 100 * d.days, 0);
+    document.getElementById('community-avg').textContent =
+      'Con estos datos, la comunidad come carne roja ≈ ' + avgDays.toFixed(1) +
+      ' días por semana: unos ' + fmt(annual(avgDays, FACTOR.beef)) + ' kg CO₂e por persona al año.';
+
+    function leafColor(t) {
+      const k = Math.max(0, (t - 0.6) / 0.4);
+      const hue = t < 0.6 ? 130 - 90 * (t / 0.6) : 40 - 35 * k;
+      const sat = 65 - 20 * k;
+      const light = 48 - 18 * k;
+      return {
+        a: 'hsl(' + hue + ' ' + sat + '% ' + (light + 12) + '%)',
+        b: 'hsl(' + hue + ' ' + sat + '% ' + (light - 6) + '%)',
+        text: 'hsl(' + hue + ' ' + (sat + 10) + '% ' + Math.min(light + 22, 70) + '%)'
+      };
+    }
+
+    function tween(el, to) {
+      const from = el._v || 0;
+      el._v = to;
+      cancelAnimationFrame(el._raf);
+      if (reduceMotion) { el.textContent = fmt(to); return; }
+      const t0 = performance.now();
+      const step = now => {
+        const p = Math.min((now - t0) / 700, 1);
+        el.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) el._raf = requestAnimationFrame(step);
+      };
+      el._raf = requestAnimationFrame(step);
+    }
+
+    function updateLeaf() {
+      const days = Number(slider.value);
+      const t = days / 7;
+      const c = leafColor(t);
+
+      stopA.setAttribute('stop-color', c.a);
+      stopB.setAttribute('stop-color', c.b);
+      glow.style.background = c.text;
+      leafBody.style.transform = 'rotate(' + (t * 16).toFixed(1) + 'deg) scaleY(' + (1 - 0.1 * t).toFixed(3) + ')';
+      spots.style.opacity = Math.max(0, Math.min(1, (t - 0.4) / 0.5)) * 0.85;
+
+      statusEl.textContent = days === 0 ? 'Hoja fresca' : days === 1 ? 'Hoja sana' : days <= 3 ? 'Hoja cansada' : days <= 5 ? 'Hoja seca' : 'Hoja marchita';
+      daysEl.textContent = days === 1 ? '1 día por semana con carne roja' : days + ' días por semana con carne roja';
+      kgEl.style.color = c.text;
+      tween(kgEl, annual(days, FACTOR.beef));
+
+      if (days === 0) {
+        swapEl.textContent = 'Ya estás en el nivel más bajo de este indicador.';
+        tipEl.textContent = 'Mantén el hábito: leguminosas, verduras y cereales integrales cubren tu proteína.';
+      } else {
+        const toChicken = annual(days, FACTOR.beef) - annual(days, FACTOR.chicken);
+        const toLegumes = annual(days, FACTOR.beef) - annual(days, FACTOR.legumes);
+        swapEl.textContent = 'Si cambias esas porciones de res por pollo, ahorrarías ≈ ' + fmt(toChicken) +
+          ' kg CO₂e al año; por leguminosas, ≈ ' + fmt(toLegumes) + ' kg.';
+        tipEl.textContent = days <= 2
+          ? 'Prueba cambiar una de esas comidas por lentejas, frijoles o garbanzos.'
+          : days <= 4
+            ? 'Una buena meta: elige dos días sin carne roja y sustitúyela por pollo, pescado o leguminosas.'
+            : 'Empieza con un día sin carne roja a la semana; cada porción que cambias se nota en la hoja.';
+      }
+
+      chipsEl.querySelectorAll('.chip').forEach(b => b.classList.toggle('active', Number(b.dataset.days) === days));
+    }
+
+    slider.addEventListener('input', updateLeaf);
+    updateLeaf();
+
+    lucide.createIcons();
+  </script>
 </body>
 </html>
