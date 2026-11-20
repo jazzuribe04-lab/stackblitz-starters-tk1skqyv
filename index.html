@@ -54,15 +54,10 @@
       border-color: rgba(74, 222, 128, 0.45);
       transform: translateY(-4px);
     }
-    .collage-card { transition: transform 0.3s ease; }
-    .collage-card:hover { transform: scale(1.02); }
 
     /* Menú activo */
     .nav-link { transition: color 0.2s; }
     .nav-link:hover, .nav-link.active { color: #86efac; }
-
-    /* Zona de arrastrar y soltar */
-    #dropzone.dragging { border-color: #4ade80; background: rgba(74, 222, 128, 0.08); }
 
     /* Audio de YouTube oculto */
     .youtube-audio {
@@ -76,6 +71,19 @@
 
     /* Separador entre secciones */
     .divider { height: 1px; background: linear-gradient(to right, transparent, rgba(74, 222, 128, 0.25), transparent); }
+
+    /* Nube de palabras */
+    .word {
+      padding: 0.2rem 0.7rem;
+      border: 1px solid transparent;
+      border-radius: 9999px;
+      animation: floaty 6s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      transition: transform 0.25s ease, background-color 0.25s, border-color 0.25s;
+    }
+    .word:hover, .word:focus-visible { transform: scale(1.12); border-color: currentColor; outline: none; }
+    .word.word-active { background: rgba(74, 222, 128, 0.12); border-color: currentColor; transform: scale(1.12); }
+    @keyframes floaty { 50% { translate: 0 -5px; } }
 
     /* Accesibilidad: sin animaciones si el usuario lo pide */
     @media (prefers-reduced-motion: reduce) {
@@ -98,8 +106,7 @@
         <a href="#media" class="nav-link">Galería</a>
         <a href="#indicadores" class="nav-link">Indicadores</a>
         <a href="#consejos" class="nav-link">Consejos</a>
-        <a href="#participar" class="nav-link">Participar</a>
-        <a href="#collage" class="nav-link">Collage</a>
+        <a href="#ideas" class="nav-link">Ideas</a>
       </div>
 
       <button id="mobile-menu-btn" class="p-1 md:hidden" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
@@ -112,8 +119,7 @@
       <a href="#media" class="nav-link">Galería</a>
       <a href="#indicadores" class="nav-link">Indicadores</a>
       <a href="#consejos" class="nav-link">Consejos</a>
-      <a href="#participar" class="nav-link">Participar</a>
-      <a href="#collage" class="nav-link">Collage</a>
+      <a href="#ideas" class="nav-link">Ideas</a>
     </div>
   </nav>
 
@@ -296,6 +302,15 @@
             </div>
           </a>
         </div>
+
+        <div class="reveal mt-12 text-center">
+          <a href="transparencia.html" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 rounded-full border border-green-400/40 px-6 py-3 text-sm font-semibold uppercase tracking-wider text-green-300 transition hover:bg-green-400/10">
+            <i data-lucide="clipboard-list" class="h-4 w-4"></i>
+            <span>Transparencia de la encuesta</span>
+            <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -348,65 +363,23 @@
 
     <div class="divider"></div>
 
-    <!-- Participar -->
-    <section id="participar" class="w-full bg-neutral-950 px-6 py-20">
-      <div class="mx-auto max-w-2xl">
-        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Comparte tu visión</h2>
-        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">
-          Sube un dibujo, carta o foto que muestre cómo vives la sustentabilidad en la universidad.
-        </p>
+    <!-- Ideas de la comunidad -->
+    <section id="ideas" class="relative w-full overflow-hidden bg-neutral-950 px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
 
-        <form id="upload-form" class="reveal rounded-2xl border border-white/10 bg-black p-6 md:p-8">
-          <div class="mb-5">
-            <label for="entry-title" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Título de tu aportación</label>
-            <input id="entry-title" type="text" maxlength="60" required
-              class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
-              placeholder="Ej. Mi termo favorito">
+      <div class="relative mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Ideas de nuestra comunidad</h2>
+        <p class="reveal mx-auto mb-3 max-w-xl text-center text-sm text-gray-300">“Alguna medida que debería de estar dentro de nuestra comunidad”</p>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-xs italic text-gray-400">El tamaño de cada palabra indica en cuántas respuestas aparece. Toca una para leerlas.</p>
+
+        <div id="word-cloud" class="reveal mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 py-6" role="group" aria-label="Nube de palabras"></div>
+
+        <div class="reveal mx-auto mt-8 max-w-3xl rounded-2xl border border-white/10 bg-black p-6" aria-live="polite">
+          <div class="mb-4 flex items-center justify-between gap-4">
+            <p id="panel-title" class="font-display text-lg font-bold text-green-50"></p>
+            <button id="panel-reset" type="button" class="hidden text-xs uppercase tracking-wider text-green-300 hover:text-green-200">Ver todas</button>
           </div>
-
-          <div class="mb-5">
-            <label for="entry-author" class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Tu nombre (opcional)</label>
-            <input id="entry-author" type="text" maxlength="40"
-              class="w-full rounded-lg border border-white/15 bg-transparent px-4 py-2.5 text-sm transition focus:border-green-400/50 focus:outline-none"
-              placeholder="Opcional">
-          </div>
-
-          <div class="mb-5">
-            <span class="mb-2 block text-xs uppercase tracking-wider text-gray-400">Imagen</span>
-
-            <label id="dropzone" for="entry-file"
-              class="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/20 px-4 py-8 text-center transition hover:border-green-400/50 hover:bg-green-400/5">
-              <i data-lucide="cloud-upload" class="h-8 w-8 text-green-300"></i>
-              <span class="text-sm text-gray-200">Arrastra tu imagen o haz clic para elegirla</span>
-              <span class="text-xs text-gray-500">JPG, PNG o WebP · máximo 2 MB</span>
-            </label>
-            <input id="entry-file" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only">
-          </div>
-
-          <div id="preview-area" class="mb-5 hidden">
-            <img id="preview-img" class="max-h-64 w-full rounded-lg bg-neutral-900 object-contain" alt="Vista previa de la imagen seleccionada">
-          </div>
-
-          <button type="submit" class="w-full rounded-full bg-green-500 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50">
-            Agregar al collage
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- Collage -->
-    <section id="collage" class="w-full bg-black px-6 py-20">
-      <div class="mx-auto max-w-6xl">
-        <h2 class="font-display reveal mb-10 text-center text-2xl font-bold text-green-50 md:text-4xl">Collage colectivo</h2>
-
-        <div id="collage-grid" class="columns-2 gap-3 md:columns-3 lg:columns-4"></div>
-
-        <div id="collage-empty" class="flex flex-col items-center gap-3 py-16 text-center text-gray-500">
-          <i data-lucide="image-plus" class="h-12 w-12 text-green-400/40"></i>
-          <p class="italic">Aún no hay aportaciones. ¡Sé la primera persona en compartir!</p>
-          <a href="#participar" class="text-sm text-green-300 underline underline-offset-4 hover:text-green-200">Subir mi imagen</a>
+          <ul id="answers-list" class="space-y-3"></ul>
         </div>
       </div>
     </section>
@@ -645,195 +618,106 @@
       setMuteIcon(isMuted);
     });
 
-    // Imagen: vista previa, validación y arrastrar y soltar
-    const fileInput = document.getElementById('entry-file');
-    const dropzone = document.getElementById('dropzone');
-    const previewArea = document.getElementById('preview-area');
-    const previewImg = document.getElementById('preview-img');
-    const validImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    let fileDataUrl = null;
+    // Nube de palabras interactiva
+    const answers = [
+      'Fomentar traer tu tupper para que no te den platos desechables con un descuento.',
+      'El huerto que ofrezca comida más sana.',
+      'Retomar la iniciativa (y hacerla permanente) de llevar tu termo con un descuento. Apagar las luces y aparatos al salir de cada espacio. Incentivar el auto compartido por zonas. Hacer distintas campañas para reciclar diversos materiales.',
+      'Reducir el uso de platos y cubiertos desechables en cafetería.',
+      'Que regrese la cafetería saludable, incentivar el consumo de alimentos no procesados y asegurar que siempre haya agua en los garrafones.',
+      'Bote de botellas y tapas reciclables para reutilizar quizás con alguna dinámica para que toda la comunidad forme parte de la causa.',
+      'Dinámicas específicas como talleres o cursos.',
+      'Contenedores de reciclado de petróleo o vasos de cartón.'
+    ];
 
-    function resetFile() {
-      fileInput.value = '';
-      fileDataUrl = null;
-      previewArea.classList.add('hidden');
-    }
+    const themes = [
+      { label: 'Reciclaje', pattern: 'recicl\\w*' },
+      { label: 'Tupper', pattern: 'tupper\\w*' },
+      { label: 'Cafetería', pattern: 'cafeter[ií]a\\w*' },
+      { label: 'Descuento', pattern: 'descuento\\w*' },
+      { label: 'Huerto', pattern: 'huerto\\w*' },
+      { label: 'Dinámicas', pattern: 'din[aá]micas?' },
+      { label: 'Termo', pattern: 'termo\\w*' },
+      { label: 'Alimentación sana', pattern: 'sana\\w*|saludable\\w*|no procesados' },
+      { label: 'Agua', pattern: 'agua\\w*' },
+      { label: 'Desechables', pattern: 'desechable\\w*' },
+      { label: 'Campañas', pattern: 'campañas?' },
+      { label: 'Auto compartido', pattern: 'auto compartido' },
+      { label: 'Talleres y cursos', pattern: 'talleres?|cursos?' },
+      { label: 'Ahorro de energía', pattern: 'luces|aparatos' },
+      { label: 'Comunidad', pattern: 'comunidad' },
+      { label: 'Botellas y tapas', pattern: 'botellas?|tapas?' },
+      { label: 'Vasos de cartón', pattern: 'vasos? de cartón' }
+    ];
 
-    function handleFile(file) {
-      if (!file) return resetFile();
+    const cloud = document.getElementById('word-cloud');
+    const panelTitle = document.getElementById('panel-title');
+    const panelReset = document.getElementById('panel-reset');
+    const answersList = document.getElementById('answers-list');
+    const palette = ['#86efac', '#4ade80', '#fbbf24', '#38bdf8', '#f9a8d4', '#bef264'];
+    let activeTheme = null;
 
-      if (!validImageTypes.includes(file.type)) {
-        showToast('Solo se aceptan imágenes JPG, PNG o WebP');
-        return resetFile();
-      }
+    function renderAnswers(theme) {
+      answersList.innerHTML = '';
+      const rx = theme ? new RegExp('(' + theme.pattern + ')', 'gi') : null;
+      const list = theme ? theme.matches : answers;
 
-      if (file.size > 2 * 1024 * 1024) {
-        showToast('La imagen debe pesar menos de 2 MB');
-        return resetFile();
-      }
+      panelTitle.textContent = theme
+        ? '“' + theme.label + '” aparece en ' + list.length + (list.length === 1 ? ' respuesta' : ' respuestas')
+        : 'Todas las respuestas (' + answers.length + ')';
+      panelReset.classList.toggle('hidden', !theme);
 
-      const reader = new FileReader();
-      reader.onload = event => {
-        fileDataUrl = event.target.result;
-        previewImg.src = fileDataUrl;
-        previewArea.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
+      list.forEach(text => {
+        const li = document.createElement('li');
+        li.className = 'rounded-lg border border-white/10 bg-neutral-950 p-4 text-sm leading-relaxed text-gray-300';
 
-    fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
-
-    ['dragenter', 'dragover'].forEach(type => {
-      dropzone.addEventListener(type, event => {
-        event.preventDefault();
-        dropzone.classList.add('dragging');
-      });
-    });
-
-    ['dragleave', 'drop'].forEach(type => {
-      dropzone.addEventListener(type, event => {
-        event.preventDefault();
-        dropzone.classList.remove('dragging');
-      });
-    });
-
-    dropzone.addEventListener('drop', event => {
-      const file = event.dataTransfer.files[0];
-      if (!file) return;
-      try { fileInput.files = event.dataTransfer.files; } catch (e) { /* navegadores antiguos */ }
-      handleFile(file);
-    });
-
-    // Collage guardado en el navegador
-    const collageGrid = document.getElementById('collage-grid');
-    const collageEmpty = document.getElementById('collage-empty');
-    const storageKey = 'sustentabilidad-universitaria-aportaciones';
-
-    function getSavedEntries() {
-      try {
-        return JSON.parse(localStorage.getItem(storageKey)) || [];
-      } catch {
-        return [];
-      }
-    }
-
-    function saveEntries(entries) {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(entries));
-        return true;
-      } catch {
-        return false;
-      }
-    }
-
-    function renderCollage(entries) {
-      collageGrid.innerHTML = '';
-
-      entries.forEach(entry => {
-        const card = document.createElement('article');
-        card.className = 'collage-card group relative mb-3 break-inside-avoid overflow-hidden rounded-xl border border-white/5 bg-neutral-900';
-
-        if (entry.image) {
-          const image = document.createElement('img');
-          image.src = entry.image;
-          image.alt = entry.title || 'Aportación';
-          image.loading = 'lazy';
-          image.className = 'h-auto w-full cursor-zoom-in';
-          image.addEventListener('click', () => openLightbox(entry.image, image.alt, entry.title));
-          card.appendChild(image);
+        if (rx) {
+          text.split(rx).forEach((part, i) => {
+            if (i % 2 === 1) {
+              const mark = document.createElement('mark');
+              mark.className = 'rounded bg-green-400/25 px-1 text-green-100';
+              mark.textContent = part;
+              li.appendChild(mark);
+            } else {
+              li.appendChild(document.createTextNode(part));
+            }
+          });
+        } else {
+          li.textContent = text;
         }
 
-        const info = document.createElement('div');
-        info.className = 'p-3';
-
-        const title = document.createElement('p');
-        title.className = 'truncate text-sm font-medium text-gray-100';
-        title.textContent = entry.title || 'Sin título';
-        info.appendChild(title);
-
-        if (entry.author) {
-          const author = document.createElement('p');
-          author.className = 'mt-1 text-[11px] text-gray-400';
-          author.textContent = entry.author;
-          info.appendChild(author);
-        }
-
-        card.appendChild(info);
-
-        const del = document.createElement('button');
-        del.type = 'button';
-        del.setAttribute('aria-label', 'Eliminar aportación');
-        del.className = 'absolute right-2 top-2 rounded-full bg-black/70 p-2 text-red-300 transition hover:bg-red-500 hover:text-white focus:opacity-100 md:opacity-0 md:group-hover:opacity-100';
-        del.innerHTML = '<i data-lucide="trash-2" class="h-4 w-4"></i>';
-        del.addEventListener('click', () => {
-          const remaining = getSavedEntries().filter(e => e.id !== entry.id);
-          saveEntries(remaining);
-          renderCollage(remaining);
-          showToast('Aportación eliminada');
-        });
-        card.appendChild(del);
-
-        collageGrid.appendChild(card);
+        answersList.appendChild(li);
       });
-
-      collageEmpty.classList.toggle('hidden', entries.length > 0);
-      collageEmpty.classList.toggle('flex', entries.length === 0);
-      lucide.createIcons();
     }
 
-    renderCollage(getSavedEntries());
-
-    // Formulario
-    const uploadForm = document.getElementById('upload-form');
-    const uploadButton = uploadForm.querySelector('button[type="submit"]');
-
-    uploadForm.addEventListener('submit', event => {
-      event.preventDefault();
-
-      const title = document.getElementById('entry-title').value.trim();
-      const author = document.getElementById('entry-author').value.trim();
-
-      if (!fileDataUrl) {
-        showToast('Selecciona una imagen');
-        return;
-      }
-
-      if (!title) {
-        showToast('Agrega un título');
-        return;
-      }
-
-      const entries = getSavedEntries();
-
-      if (entries.length >= 99) {
-        showToast('Se alcanzó el límite de aportaciones');
-        return;
-      }
-
-      uploadButton.disabled = true;
-
-      entries.unshift({
-        id: Date.now().toString(),
-        title,
-        author,
-        image: fileDataUrl,
-        createdAt: new Date().toISOString()
+    function selectTheme(theme) {
+      activeTheme = activeTheme === theme ? null : theme;
+      cloud.querySelectorAll('.word').forEach(btn => {
+        const on = btn._theme === activeTheme;
+        btn.classList.toggle('word-active', on);
+        btn.setAttribute('aria-pressed', String(on));
       });
+      renderAnswers(activeTheme);
+    }
 
-      if (!saveEntries(entries)) {
-        entries.shift();
-        showToast('No hay espacio para guardar más imágenes');
-        uploadButton.disabled = false;
-        return;
-      }
+    themes.forEach((theme, i) => {
+      theme.matches = answers.filter(a => new RegExp(theme.pattern, 'i').test(a));
 
-      renderCollage(entries);
-      showToast('¡Aportación agregada al collage!');
-
-      uploadForm.reset();
-      resetFile();
-      uploadButton.disabled = false;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn._theme = theme;
+      btn.className = 'word font-display font-bold leading-tight';
+      btn.style.cssText = '--delay:' + (i * 0.4) + 's;color:' + palette[i % palette.length] +
+        ';font-size:' + (1.15 + (theme.matches.length - 1) * 0.7) + 'rem';
+      btn.textContent = theme.label;
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', theme.label + ', ' + theme.matches.length + (theme.matches.length === 1 ? ' respuesta' : ' respuestas'));
+      btn.addEventListener('click', () => selectTheme(theme));
+      cloud.appendChild(btn);
     });
+
+    panelReset.addEventListener('click', () => { if (activeTheme) selectTheme(activeTheme); });
+    renderAnswers(null);
 
     lucide.createIcons();
   </script>
