@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transparencia de la encuesta · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .info-card { border: 1px solid rgba(74, 222, 128, 0.12); transition: border-color 0.3s; }
+    .info-card:hover { border-color: rgba(74, 222, 128, 0.4); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen w-full bg-black text-gray-100">
+
+  <nav class="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Portada -->
+    <header class="relative flex w-full items-center justify-center overflow-hidden px-6 pb-16 pt-32 text-center"
+            style="background: radial-gradient(at 50% 100%, rgb(10, 31, 10), rgb(0, 0, 0));">
+      <div class="pointer-events-none absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="fade-in relative max-w-2xl">
+        <div class="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="clipboard-list" class="h-7 w-7"></i></div>
+        <p class="mb-4 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Metodología y datos</p>
+        <h1 class="font-display mb-4 text-4xl font-bold leading-tight text-green-50 md:text-6xl">Transparencia de la <em class="italic text-green-400">encuesta</em></h1>
+        <p class="mx-auto max-w-xl text-gray-300">Cómo se aplicó, quién respondió y qué resultados se publicaron, para que cualquiera pueda revisarlos.</p>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Ficha técnica -->
+    <section class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Ficha técnica</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">Los datos marcados como “Por completar” se editan en la variable <code class="text-green-300">SURVEY</code> al final de este archivo.</p>
+        <div id="facts" class="grid gap-5 sm:grid-cols-2"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Resultados publicados -->
+    <section class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Resultados publicados</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">Los porcentajes corresponden únicamente a las personas que respondieron.</p>
+        <div id="results" class="reveal divide-y divide-white/10 rounded-2xl border border-white/10 bg-neutral-950"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Respuestas abiertas -->
+    <section class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Respuestas abiertas</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-300">“Alguna medida que debería de estar dentro de nuestra comunidad”</p>
+        <ul id="open-answers" class="reveal space-y-3"></ul>
+
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Contenido de muestra</p>
+  </footer>
+
+  <script>
+    // ============================================================
+    // EDITA AQUÍ: deja null donde aún no tengas el dato.
+    // ============================================================
+    const SURVEY = {
+      total: '16 respuestas',          // Ej. '12 personas'
+      fechas: null,         // Ej. 'Del 3 al 14 de noviembre de 2026'
+      instrumento: null,    // Ej. 'Cuestionario en línea (Google Forms)'
+      poblacion: 'Alumnos y docentes',      // Ej. 'Estudiantes, docentes y personal de la universidad'
+      muestreo: null,       // Ej. 'Voluntario, sin selección aleatoria'
+      anonimato: null,      // Ej. 'Respuestas anónimas; no se recopilaron nombres'
+      responsables: null,   // Ej. 'Equipo del proyecto de sustentabilidad'
+      limitaciones: null    // Ej. 'Los resultados no representan a toda la comunidad'
+    };
+
+    const facts = [
+      { key: 'total', label: 'Personas que respondieron', icon: 'users' },
+      { key: 'fechas', label: 'Fechas de aplicación', icon: 'calendar' },
+      { key: 'instrumento', label: 'Instrumento', icon: 'file-text' },
+      { key: 'poblacion', label: 'Población objetivo', icon: 'graduation-cap' },
+      { key: 'muestreo', label: 'Tipo de muestreo', icon: 'shuffle' },
+      { key: 'anonimato', label: 'Anonimato y manejo de datos', icon: 'shield-check' },
+      { key: 'responsables', label: 'Responsables', icon: 'user-check' },
+      { key: 'limitaciones', label: 'Limitaciones', icon: 'triangle-alert' }
+    ];
+
+    const results = [
+      { label: 'Usa transporte público', value: '62.5%' },
+      { label: 'Siempre usa reutilizables', value: '50%' },
+      { label: 'Botellas desechables por semana', value: '27' },
+      { label: 'Nunca come carne roja', value: '25%' },
+      { label: 'No habían escuchado del Climate Clock', value: '18.8%' },
+      { label: 'Frecuencia de consumo de carne roja: todos los días', value: '8.3%' },
+      { label: 'Frecuencia de consumo de carne roja: varias veces por semana', value: '41.7%' },
+      { label: 'Frecuencia de consumo de carne roja: una vez por semana', value: '25%' },
+      { label: 'Frecuencia de consumo de carne roja: nunca', value: '25%' },
+      { label: 'Carne que consumen más seguido: pollo o pavo', value: '50%' },
+      { label: 'Carne que consumen más seguido: carne roja', value: '25%' },
+      { label: 'Carne que consumen más seguido: pescado', value: '16.7%' }
+    ];
+
+    const openAnswers = [
+      'Fomentar traer tu tupper para que no te den platos desechables con un descuento.',
+      'El huerto que ofrezca comida más sana.',
+      'Retomar la iniciativa (y hacerla permanente) de llevar tu termo con un descuento. Apagar las luces y aparatos al salir de cada espacio. Incentivar el auto compartido por zonas. Hacer distintas campañas para reciclar diversos materiales.',
+      'Reducir el uso de platos y cubiertos desechables en cafetería.',
+      'Que regrese la cafetería saludable, incentivar el consumo de alimentos no procesados y asegurar que siempre haya agua en los garrafones.',
+      'Bote de botellas y tapas reciclables para reutilizar quizás con alguna dinámica para que toda la comunidad forme parte de la causa.',
+      'Dinámicas específicas como talleres o cursos.',
+      'Contenedores de reciclado de petróleo o vasos de cartón.'
+    ];
+
+    // Ficha técnica
+    const factsEl = document.getElementById('facts');
+    facts.forEach((f, i) => {
+      const value = SURVEY[f.key];
+      const card = document.createElement('div');
+      card.className = 'info-card reveal rounded-xl bg-green-950/40 p-6';
+      card.style.transitionDelay = (i % 2) * 100 + 'ms';
+
+      const head = document.createElement('div');
+      head.className = 'mb-3 flex items-center gap-3';
+      head.innerHTML = '<div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-400/10 text-green-300"><i data-lucide="' + f.icon + '" class="h-5 w-5"></i></div>';
+      const label = document.createElement('p');
+      label.className = 'text-xs font-semibold uppercase tracking-wider text-green-300';
+      label.textContent = f.label;
+      head.appendChild(label);
+
+      const text = document.createElement('p');
+      text.className = value ? 'font-display text-xl font-bold text-green-50' : 'text-sm italic text-amber-300/80';
+      text.textContent = value || 'Por completar';
+
+      card.appendChild(head);
+      card.appendChild(text);
+      factsEl.appendChild(card);
+    });
+
+    // Resultados
+    const resultsEl = document.getElementById('results');
+    results.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between gap-4 px-5 py-4';
+      const l = document.createElement('span');
+      l.className = 'text-sm text-gray-200';
+      l.textContent = r.label;
+      const v = document.createElement('span');
+      v.className = 'font-display text-xl font-bold text-green-300';
+      v.textContent = r.value;
+      row.appendChild(l);
+      row.appendChild(v);
+      resultsEl.appendChild(row);
+    });
+
+    // Respuestas abiertas
+    const openEl = document.getElementById('open-answers');
+    openAnswers.forEach(t => {
+      const li = document.createElement('li');
+      li.className = 'rounded-lg border border-white/10 bg-black p-4 text-sm leading-relaxed text-gray-300';
+      li.textContent = t;
+      openEl.appendChild(li);
+    });
+
+    // Aparición al hacer scroll
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>

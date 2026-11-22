@@ -3,19 +3,545 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>USA TRANSPORTE PÚBLICO</title>
+  <title>Usa transporte público · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .ring-progress { transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    .card { border: 1px solid rgba(74, 222, 128, 0.12); transition: border-color 0.3s, transform 0.3s; }
+    .card:hover { border-color: rgba(74, 222, 128, 0.45); transform: translateY(-4px); }
+
+    details.acc { border: 1px solid rgba(74, 222, 128, 0.15); border-radius: 0.75rem; background: rgba(5, 46, 22, 0.3); }
+    details.acc[open] { border-color: rgba(74, 222, 128, 0.45); }
+    details.acc summary { cursor: pointer; list-style: none; }
+    details.acc summary::-webkit-details-marker { display: none; }
+    details.acc[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.3s; }
+
+    abbr[title] { text-decoration: underline dotted rgba(74, 222, 128, 0.7); text-underline-offset: 3px; cursor: help; }
+
+    .chip { border: 1px solid rgba(255, 255, 255, 0.18); transition: all 0.2s; }
+    .chip:hover { border-color: rgba(74, 222, 128, 0.5); }
+    .chip.active { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; color: #bbf7d0; }
+
+    /* Escena de la ciudad */
+    #scene { background: linear-gradient(to bottom, #07150c 0%, #0f2e1b 42%, #0a0a0a 42%); }
+    .sprite { position: absolute; left: -25%; animation: var(--an, cross) var(--d, 16s) linear var(--delay, 0s) infinite, appear 0.6s ease both; }
+    .sprite svg { display: block; height: 34px; width: auto; }
+    .sprite.station svg { height: 56px; }
+    .sprite.rev svg { transform: scaleX(-1); }
+    @keyframes cross { from { left: -25%; } to { left: 105%; } }
+    @keyframes crossrev { from { left: 105%; } to { left: -25%; } }
+    @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+    .wheel { animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .leg1, .leg2 { transform-origin: 10px 22px; animation: swing 0.6s ease-in-out infinite alternate; }
+    .leg2 { animation-direction: alternate-reverse; }
+    @keyframes swing { from { transform: rotate(-25deg); } to { transform: rotate(25deg); } }
+    .meter-fill { transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+      .sprite { animation: none !important; left: calc(var(--i, 0) * 22% + 4%); }
+    }
+  </style>
 </head>
 
-<body>
-  <h1>USA TRANSPORTE PÚBLICO</h1>
+<body class="min-h-screen w-full bg-black text-gray-100">
 
-  <h2>66.7%</h2>
+  <nav class="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
 
-  <p>
-    Aquí puedes agregar información sobre el uso del transporte público,
-    sus beneficios ambientales, rutas y recomendaciones para la comunidad universitaria.
-  </p>
+  <main>
+    <!-- Portada -->
+    <header class="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center"
+            style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));">
+      <div class="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="fade-in relative max-w-2xl">
+        <p class="mb-8 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Indicador de sustentabilidad</p>
 
-  <a href="index.html">Volver a la página principal</a>
+        <div class="relative mx-auto mb-8 h-56 w-56 md:h-64 md:w-64" role="img" aria-label="62.5 por ciento">
+          <svg viewBox="0 0 160 160" class="h-full w-full -rotate-90">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"></circle>
+            <circle id="ring" class="ring-progress" cx="80" cy="80" r="70" fill="none" stroke="#4ade80" stroke-width="8" stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82"></circle>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="counter" class="font-display text-6xl font-bold text-green-300 md:text-7xl" data-target="62.5">62.5%</span>
+          </div>
+        </div>
+
+        <h1 class="font-display mb-4 text-3xl font-bold leading-tight text-green-50 md:text-5xl">Usa <em class="italic text-green-400">transporte público</em></h1>
+        <p class="mx-auto max-w-md text-gray-400">10 de 16 personas de la UC llegan a la universidad en transporte público. ¿Qué significa eso para la sustentabilidad?</p>
+
+        <a href="#encuesta" class="mt-10 inline-block text-green-300/70 transition hover:text-green-300" aria-label="Ver resultados"><i data-lucide="arrow-down" class="h-6 w-6"></i></a>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Encuesta -->
+    <section id="encuesta" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Cómo llegas principalmente a la universidad?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">16 respuestas entre estudiantes y docentes de la UC</p>
+        <div id="bars" class="reveal space-y-6"></div>
+
+        <div id="stats" class="mt-12 grid gap-4 sm:grid-cols-3"></div>
+        <p class="reveal mt-6 text-center text-xs text-gray-400">Los porcentajes suman más de 100%, así que parece que se podía marcar más de una opción. Con 16 personas, cada una pesa 6.25 puntos porcentuales; los resultados describen a quienes respondieron, no a toda la universidad.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Información -->
+    <section id="informacion" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Cómo se mueve la sustentabilidad</h2>
+        <p class="reveal mx-auto mb-12 max-w-2xl text-center text-sm text-gray-400">Qué dicen los datos sobre el transporte, el clima y el aire que respiramos.</p>
+        <div id="info-cards" class="grid gap-5 md:grid-cols-2"></div>
+
+        <div id="metro-stats" class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4"></div>
+        <p class="reveal mt-3 text-center text-xs text-gray-400">Metro de la Ciudad de México. El Metrobús abrió en 2005 y el Metro en 1969.</p>
+
+        <h3 class="font-display reveal mb-6 mt-16 text-center text-xl font-bold text-green-100 md:text-2xl">Cómo empezar</h3>
+        <div id="tips" class="grid gap-5 sm:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Debate -->
+    <section id="debate" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">No todo es perfecto</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">El transporte público ayuda, pero con matices. Estas son las preguntas incómodas.</p>
+        <div id="accordion" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Escena interactiva -->
+    <section id="ciudad" class="relative w-full overflow-hidden bg-black px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="relative mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Llena la ciudad con tu forma de moverte</h2>
+        <p class="reveal mx-auto mb-8 max-w-xl text-center text-sm text-gray-400">¿Cómo llegas tú a la universidad? Marca uno o varios medios y mira cómo se llena la escena.</p>
+
+        <div id="mode-chips" class="reveal mb-6 flex flex-wrap justify-center gap-2"></div>
+
+        <div id="scene" class="reveal relative mx-auto h-[360px] w-full overflow-hidden rounded-2xl border border-green-400/20" role="img" aria-label="Escena de una ciudad con los medios de transporte elegidos">
+          <svg id="skyline" class="absolute left-0 top-0 h-[150px] w-full" viewBox="0 0 1000 150" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="absolute inset-x-0" style="top:134px;height:6px;background:#4b5563"></div>
+          <div class="absolute inset-x-0" style="top:140px;height:14px;background:repeating-linear-gradient(90deg,#374151 0 8px,transparent 8px 140px)"></div>
+          <div class="absolute inset-x-0" style="top:152px;height:126px;background:#1f2937"></div>
+          <div class="absolute inset-x-0" style="top:192px;border-top:2px dashed rgba(255,255,255,.22)"></div>
+          <div class="absolute inset-x-0" style="top:234px;border-top:2px dashed rgba(255,255,255,.22)"></div>
+          <div class="absolute inset-x-0" style="top:280px;height:36px;background:#14532d"></div>
+          <div class="absolute inset-x-0 bottom-0" style="top:318px;background:#374151"></div>
+          <p id="scene-hint" class="pointer-events-none absolute inset-x-0 top-1/2 z-10 hidden -translate-y-1/2 text-center text-sm text-gray-200">Elige un medio para empezar</p>
+        </div>
+
+        <p id="mode-msg" class="reveal mx-auto mt-6 max-w-2xl text-center font-display text-lg text-green-100" aria-live="polite"></p>
+        <div id="mode-info" class="mx-auto mt-6 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        <p class="reveal mt-4 text-center text-xs text-gray-400">La barra de huella es una escala ilustrativa basada en la clasificación de la EEA (Europa); no son cifras exactas ni medidas de México.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Glosario -->
+    <section id="glosario" class="w-full bg-neutral-950 px-6 py-16">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">Siglas y términos</h2>
+        <p class="reveal mb-8 text-center text-sm text-gray-400">Las siglas subrayadas muestran su significado al pasar el cursor.</p>
+        <div id="glossary" class="grid gap-3 sm:grid-cols-2"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Fuentes -->
+    <section class="w-full bg-black px-6 py-16">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-6 text-center text-xl font-bold text-green-50 md:text-2xl">Fuentes consultadas</h2>
+        <ul id="sources" class="reveal grid gap-2 text-sm sm:grid-cols-2"></ul>
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Datos de 16 encuestas aplicadas en la UC</p>
+  </footer>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = id => document.getElementById(id);
+    const icon = n => '<i data-lucide="' + n + '" class="h-5 w-5"></i>';
+
+    // ===== Anillo del hero =====
+    const counter = $('counter'), ring = $('ring'), value = Number(counter.dataset.target);
+    requestAnimationFrame(() => { ring.style.strokeDashoffset = 439.82 * (1 - value / 100); });
+    if (!reduceMotion) {
+      const t0 = performance.now();
+      const tick = now => {
+        const p = Math.min((now - t0) / 1600, 1);
+        counter.textContent = (value * (1 - Math.pow(1 - p, 3))).toFixed(1) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    // ===== Encuesta =====
+    [
+      { label: 'Transporte público', value: 62.5, n: 10, color: '#4ade80' },
+      { label: 'Auto particular', value: 37.5, n: 6, color: '#ef4444' },
+      { label: 'Bicicleta', value: 18.8, n: 3, color: '#38bdf8' },
+      { label: 'Caminando', value: 18.8, n: 3, color: '#fbbf24' },
+      { label: 'Taxi o aplicación como Uber', value: 0, n: 0, color: '#6b7280' }
+    ].forEach((d, i) => {
+      const row = document.createElement('div');
+      row.innerHTML =
+        '<div class="mb-2 flex items-baseline justify-between gap-4 text-sm"><span class="text-gray-200">' + d.label + '</span>' +
+        '<span class="font-display text-xl font-bold" style="color:' + d.color + '">' + d.value + '% <span class="text-xs font-normal text-gray-400">(' + d.n + ' de 16)</span></span></div>' +
+        '<div class="h-3 w-full overflow-hidden rounded-full bg-white/10"><div class="h-full w-0 rounded-full transition-all duration-[1400ms] ease-out" data-w="' + d.value + '" style="background:' + d.color + ';transition-delay:' + (i * 120) + 'ms"></div></div>';
+      $('bars').appendChild(row);
+    });
+
+    [
+      { v: '10 de 16', t: 'llegan en transporte público', i: 'bus' },
+      { v: '6 de 16', t: 'llegan en auto particular', i: 'car' },
+      { v: '0 de 16', t: 'usan taxi o aplicaciones como Uber', i: 'smartphone' }
+    ].forEach(s => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(s.i) + '</div>' +
+        '<p class="font-display text-3xl font-bold text-green-300">' + s.v + '</p><p class="mt-1 text-xs text-gray-400">' + s.t + '</p>';
+      $('stats').appendChild(d);
+    });
+
+    // ===== Información verificada =====
+    [
+      { i: 'globe', t: 'El transporte y el clima', p: 'A nivel mundial, el transporte genera cerca de 25% de las emisiones de GEI (WRI). En México, los combustibles del transporte produjeron alrededor de 32% de las emisiones de CO₂ en 2021, año en que el país emitió poco más de 714 millones de toneladas de CO₂ equivalente en total (INECC).' },
+      { i: 'map-pinned', t: 'En nuestra zona', p: 'En la ZMVM, el transporte privado y público generó más de 53% de los GEI (unos 35.8 millones de toneladas al año), según el Inventario de Emisiones 2020, con una flota de 6.24 millones de vehículos. También es la principal fuente de contaminación del aire de la zona.' },
+      { i: 'scale', t: 'No todos los modos pesan igual', p: 'Según la EEA, el tren es el modo motorizado más eficiente por pasajero-kilómetro y el autobús es el más eficiente de los que van por carretera. Los autos y los aviones emiten más. Caminar y andar en bici se asumen cercanos a cero.' },
+      { i: 'users', t: 'La ocupación lo cambia todo', p: 'La estimación europea supone 1.6 personas por auto. Un auto con más gente reparte sus emisiones, y un autobús casi vacío las concentra: la EEA notó que la eficiencia de los autobuses empeoró entre 2014 y 2018.' },
+      { i: 'heart-pulse', t: 'Salud y ciudad', p: 'Más allá del CO₂, menos autos significa menos contaminación, ruido y espacio dedicado a estacionar. La OMS recomienda a los adultos entre 150 y 300 minutos de actividad física moderada por semana, y caminar o pedalear al transporte ayuda a lograrlo.' },
+      { i: 'building-2', t: 'El ejemplo de la CDMX', p: 'El Metro abrió el 4 de septiembre de 1969. El Metrobús abrió el 19 de junio de 2005 en Avenida Insurgentes como sistema BRT: su Línea 1 sacó de circulación 352 microbuses y autobuses y, según el gobierno capitalino, hacia 2017 llevaba 1.3 millones de personas al día y había evitado 143 mil toneladas de GEI.' }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = (i % 2) * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm leading-relaxed text-gray-400">' + c.p + '</p>';
+      $('info-cards').appendChild(d);
+    });
+
+    [
+      { n: 12, s: '', l: 'líneas', d: 0 }, { n: 195, s: '', l: 'estaciones', d: 0 },
+      { n: 226, s: ' km', l: 'de red', d: 0 }, { n: 4.5, s: ' M', l: 'personas al día', d: 1 }
+    ].forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<p class="font-display text-4xl font-bold text-green-300" data-target="' + m.n + '" data-dec="' + m.d + '" data-suffix="' + m.s + '">' + m.n + m.s + '</p><p class="mt-1 text-xs uppercase tracking-wider text-gray-400">' + m.l + '</p>';
+      $('metro-stats').appendChild(d);
+    });
+
+    [
+      { i: 'route', t: 'Combina modos', p: 'Camina o pedalea el primer y el último tramo y usa el transporte público para la parte larga del viaje.' },
+      { i: 'car', t: 'Comparte el auto', p: 'Si necesitas el auto, ir con más personas reparte la huella. Coordina con compañeros que vivan cerca.' },
+      { i: 'credit-card', t: 'Usa la tarjeta', p: 'En la CDMX, el acceso al Metro es digital con la Tarjeta de Movilidad Integrada, que facilita combinar sistemas.' }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = i * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm text-gray-400">' + c.p + '</p>';
+      $('tips').appendChild(d);
+    });
+
+    // ===== Debate =====
+    [
+      { i: 'bus-front', t: '¿Siempre es más sustentable el transporte público?', b:
+        '<p>No automáticamente. Depende de tres cosas:</p><ul class="mt-2 list-disc space-y-2 pl-5">' +
+        '<li><strong>La ocupación:</strong> un autobús casi vacío emite por pasajero más que uno lleno. La EEA observó que la eficiencia de los autobuses y autocares no mejoró entre 2014 y 2018.</li>' +
+        '<li><strong>La electricidad:</strong> la mejora del tren en Europa vino sobre todo de electrificar la red y de una electricidad más limpia. El Metro será tan limpio como la energía que lo mueve.</li>' +
+        '<li><strong>El punto de comparación:</strong> frente a un auto con una sola persona, casi siempre gana; frente a caminar o la bici, no.</li></ul>' },
+      { i: 'zap', t: '¿Los autos eléctricos resuelven todo?', b:
+        '<p>La EEA señala que las mejoras de eficiencia de los vehículos nuevos en la UE han sido más que compensadas por el aumento de la demanda de viajes y de la proporción de viajes en auto. Es decir, no basta con cambiar el motor: también importa cuántos viajes se hacen en auto. Eso es un argumento a favor de mover más gente en menos vehículos.</p>' },
+      { i: 'triangle-alert', t: 'Seguridad y mantenimiento', b:
+        '<p>Mejorar el sistema también es sustentabilidad: nadie cambia de auto a un transporte que percibe inseguro o poco confiable. En mayo de 2021, el colapso de un tramo elevado de la Línea 12 del Metro dejó 26 personas muertas y puso el mantenimiento en el centro del debate público.</p>' },
+      { i: 'message-circle-question', t: 'Entre nuestros datos', b:
+        '<p>6 de 16 personas llegan en auto particular y ninguna usa taxi o aplicación. Como los porcentajes suman más de 100%, algunas personas combinan medios. Es una muestra pequeña, pero deja preguntas: ¿qué haría que quienes vienen en auto probaran otra opción (tiempos, seguridad, rutas, horarios)? ¿Y qué le falta al transporte público para ser su primera opción?</p>' },
+      { i: 'ruler', t: 'Ojo con los números', b:
+        '<p>Los datos de eficiencia por modo (EEA) son de Europa, y los de la ZMVM y México vienen de inventarios de años distintos, con definiciones diferentes. Por eso la escena de esta página compara modos de forma cualitativa y no con cifras de gramos por kilómetro: no encontré cifras comparables y verificadas para los modos de la Ciudad de México.</p>' }
+    ].forEach((a, i) => {
+      const d = document.createElement('details');
+      d.className = 'acc reveal';
+      if (i === 0) d.open = true;
+      d.innerHTML = '<summary class="flex items-center gap-3 p-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(a.i) + '</span>' +
+        '<span class="flex-1 font-bold text-green-100">' + a.t + '</span><span class="chev text-green-300"><i data-lucide="chevron-down" class="h-5 w-5"></i></span></summary>' +
+        '<div class="px-5 pb-5 text-sm leading-relaxed text-gray-300">' + a.b + '</div>';
+      $('accordion').appendChild(d);
+    });
+
+    // ===== Escena interactiva =====
+    const wheels = (cx, cy, r, extra) => '<g class="wheel" style="transform-origin:' + cx + 'px ' + cy + 'px"><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="#e5e7eb" stroke-width="2"/><path d="M' + (cx - r) + ' ' + cy + 'H' + (cx + r) + 'M' + cx + ' ' + (cy - r) + 'V' + (cy + r) + '" stroke="#9ca3af" stroke-width="1.5"/></g>';
+    const CAR_COLORS = ['#ef4444', '#3b82f6', '#e5e7eb', '#a855f7', '#22c55e', '#f59e0b'];
+    const car = (c, taxi) => '<svg viewBox="0 0 80 34"><path d="M3 26v-7l11-3 9-9h30l11 9 10 3v7z" fill="' + c + '"/><path d="M25 9.5L19 16h15V9.5zM37 9.5V16h19l-8-6.5z" fill="#dbeafe"/>' +
+      (taxi ? '<rect x="34" y="3" width="12" height="4" rx="1" fill="#111"/>' : '') +
+      '<circle cx="20" cy="27" r="6" fill="#0b0b0b" stroke="#6b7280" stroke-width="2"/><circle cx="62" cy="27" r="6" fill="#0b0b0b" stroke="#6b7280" stroke-width="2"/></svg>';
+    const bus = () => '<svg viewBox="0 0 120 34"><rect x="2" y="3" width="116" height="25" rx="5" fill="#dc2626"/><g fill="#dbeafe"><rect x="8" y="8" width="16" height="10" rx="2"/><rect x="28" y="8" width="16" height="10" rx="2"/><rect x="48" y="8" width="16" height="10" rx="2"/><rect x="68" y="8" width="16" height="10" rx="2"/><rect x="92" y="6" width="22" height="14" rx="2"/></g><rect x="2" y="21" width="116" height="3" fill="#fecaca"/><circle cx="26" cy="29" r="5" fill="#0b0b0b" stroke="#6b7280" stroke-width="2"/><circle cx="96" cy="29" r="5" fill="#0b0b0b" stroke="#6b7280" stroke-width="2"/></svg>';
+    const metro = () => {
+      let w = '', g = '';
+      [2, 94, 186].forEach(x => { w += '<rect x="' + x + '" y="4" width="' + (x === 186 ? 92 : 88) + '" height="26" rx="4"/>'; for (let k = 0; k < 4; k++) g += '<rect x="' + (x + 8 + k * 20) + '" y="10" width="14" height="10" rx="2"/>'; });
+      return '<svg viewBox="0 0 280 34"><g fill="#f97316">' + w + '</g><g fill="#fef3c7">' + g + '</g><rect x="2" y="24" width="276" height="3" fill="#c2410c"/></svg>';
+    };
+    const bike = () => '<svg viewBox="0 0 60 34">' + wheels(12, 24, 9) + wheels(48, 24, 9) + '<path d="M12 24L28 24L36 11L48 24M28 24L24 11M21 11H28" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="29" cy="3.5" r="3.5" fill="#fcd34d"/><path d="M28 8L29 16L37 12" stroke="#86efac" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+    const walker = c => '<svg viewBox="0 0 20 34"><circle cx="10" cy="5" r="4" fill="#fcd34d"/><path d="M10 10V22" stroke="' + c + '" stroke-width="6" stroke-linecap="round"/><path class="leg1" d="M10 22L10 33" stroke="#e5e7eb" stroke-width="3" stroke-linecap="round"/><path class="leg2" d="M10 22L10 33" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/></svg>';
+    const station = () => '<svg viewBox="0 0 130 56"><rect x="4" y="8" width="122" height="8" rx="3" fill="#475569"/><g fill="#334155"><rect x="14" y="16" width="6" height="40"/><rect x="110" y="16" width="6" height="40"/></g><rect x="30" y="0" width="70" height="20" rx="4" fill="#f97316"/><text x="65" y="14" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="9" font-weight="700" fill="#fff">ESTACIÓN</text><rect x="28" y="40" width="74" height="4" fill="#94a3b8"/></svg>';
+
+    const MODES = [
+      { id: 'pub', label: 'Transporte público', icon: 'bus', meter: 18, tag: 'Huella baja por pasajero', color: '#4ade80',
+        text: 'Según la EEA, el tren es el modo motorizado más eficiente y el autobús el más eficiente por carretera. Depende de ir con buena ocupación y de qué tan limpia sea la electricidad.',
+        lanes: [{ k: 'metro', y: 98, n: 2, d: 13 }, { k: 'bus', y: 156, n: 3, d: 21 }, { k: 'station', y: 78, n: 3, d: 36, rev: true }] },
+      { id: 'auto', label: 'Auto particular', icon: 'car', meter: 85, tag: 'Huella alta', color: '#ef4444',
+        text: 'Los autos están entre los modos con más emisiones por pasajero-kilómetro. La estimación europea supone solo 1.6 personas por auto: compartirlo reparte la huella.',
+        lanes: [{ k: 'car', y: 196, n: 6, d: 18 }] },
+      { id: 'bike', label: 'Bicicleta', icon: 'bike', meter: 3, tag: 'Huella casi cero', color: '#38bdf8',
+        text: 'La EEA asume que andar en bici tiene emisiones cercanas a cero. Además suma actividad física, que la OMS recomienda a los adultos.',
+        lanes: [{ k: 'bike', y: 282, n: 4, d: 26 }] },
+      { id: 'walk', label: 'Caminando', icon: 'footprints', meter: 2, tag: 'Huella casi cero', color: '#fbbf24',
+        text: 'Caminar tiene emisiones cercanas a cero y combina muy bien con el transporte público para el primer y último tramo.',
+        lanes: [{ k: 'walk', y: 322, n: 7, d: 60 }] },
+      { id: 'taxi', label: 'Taxi o app (Uber)', icon: 'smartphone', meter: 85, tag: 'Huella alta, como un auto', color: '#9ca3af',
+        text: 'Es un viaje en auto: la huella por persona depende de cuántas personas lo comparten. En nuestra encuesta, nadie lo usa para llegar.',
+        lanes: [{ k: 'taxi', y: 238, n: 4, d: 16, rev: true }] }
+    ];
+
+    // Horizonte de edificios
+    (function () {
+      let h = '';
+      for (let i = 0; i < 32; i++) {
+        const w = 22 + (i * 13) % 22, x = i * 33, ht = 40 + ((i * 37) % 7) * 14;
+        h += '<rect x="' + x + '" y="' + (150 - ht) + '" width="' + w + '" height="' + ht + '" fill="#0c2415" opacity="0.9"/>';
+        if (i % 3 === 0) h += '<rect x="' + (x + 5) + '" y="' + (150 - ht + 10) + '" width="3" height="4" fill="#fbbf24" opacity=".6"/>';
+      }
+      $('skyline').innerHTML = h;
+    })();
+
+    const scene = $('scene'), active = new Set(['pub']);
+
+    function sprite(kind, i) {
+      if (kind === 'metro') return metro();
+      if (kind === 'bus') return bus();
+      if (kind === 'car') return car(CAR_COLORS[i % CAR_COLORS.length]);
+      if (kind === 'taxi') return car('#facc15', true);
+      if (kind === 'bike') return bike();
+      if (kind === 'station') return station();
+      return walker(['#86efac', '#93c5fd', '#fca5a5', '#fde68a'][i % 4]);
+    }
+
+    function spawn(mode) {
+      mode.lanes.forEach(l => {
+        for (let i = 0; i < l.n; i++) {
+          const el = document.createElement('div');
+          el.className = 'sprite' + (l.k === 'station' ? ' station' : '') + (l.rev && l.k !== 'station' ? ' rev' : '');
+          el.dataset.mode = mode.id;
+          const jitter = 0.9 + Math.random() * 0.2;
+          el.style.cssText = 'top:' + l.y + 'px;--an:' + (l.rev ? 'crossrev' : 'cross') + ';--d:' + (l.d * jitter).toFixed(1) + 's;--delay:-' + (i * l.d / l.n).toFixed(1) + 's;--i:' + i;
+          el.innerHTML = sprite(l.k, i);
+          scene.appendChild(el);
+        }
+      });
+    }
+
+    function renderScene() {
+      scene.querySelectorAll('.sprite').forEach(e => e.remove());
+      MODES.filter(m => active.has(m.id)).forEach(spawn);
+      $('scene-hint').classList.toggle('hidden', active.size > 0);
+
+      document.querySelectorAll('#mode-chips .chip[data-id]').forEach(b => {
+        const on = active.has(b.dataset.id);
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+
+      const info = $('mode-info');
+      info.innerHTML = '';
+      MODES.filter(m => active.has(m.id)).forEach(m => {
+        const d = document.createElement('div');
+        d.className = 'rounded-xl border border-white/10 bg-neutral-950 p-5';
+        d.innerHTML = '<div class="mb-3 flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-full bg-white/5" style="color:' + m.color + '">' + icon(m.icon) + '</span>' +
+          '<div><p class="font-bold text-green-100">' + m.label + '</p><p class="text-xs" style="color:' + m.color + '">' + m.tag + '</p></div></div>' +
+          '<div class="mb-3 h-2 w-full overflow-hidden rounded-full bg-white/10"><div class="meter-fill h-full rounded-full" style="width:0;background:' + m.color + '" data-m="' + m.meter + '"></div></div>' +
+          '<p class="text-xs leading-relaxed text-gray-300">' + m.text + '</p>';
+        info.appendChild(d);
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => info.querySelectorAll('[data-m]').forEach(b => { b.style.width = b.dataset.m + '%'; })));
+
+      const hasCar = active.has('auto') || active.has('taxi');
+      const hasLow = active.has('pub') || active.has('bike') || active.has('walk');
+      $('mode-msg').textContent = !active.size ? 'Elige al menos un medio para ver tu escena.'
+        : hasCar && !hasLow ? 'Tu trayecto está entre los de mayor huella. Compartir el auto o combinarlo con transporte público la reduce.'
+        : hasCar ? 'Combinas medios: lo que más pese en tu trayecto define tu huella.'
+        : '¡Tu forma de llegar es de huella baja!';
+      annotate($('mode-info'));
+      lucide.createIcons();
+    }
+
+    const chips = $('mode-chips');
+    MODES.forEach(m => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.dataset.id = m.id;
+      b.className = 'chip flex items-center gap-2 rounded-full px-4 py-2 text-sm text-gray-300';
+      b.innerHTML = icon(m.icon).replace('h-5 w-5', 'h-4 w-4') + '<span>' + m.label + '</span>';
+      b.addEventListener('click', () => { active.has(m.id) ? active.delete(m.id) : active.add(m.id); renderScene(); });
+      chips.appendChild(b);
+    });
+    [['Mostrar todos', () => MODES.forEach(m => active.add(m.id))], ['Limpiar', () => active.clear()]].forEach(([t, fn]) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'rounded-full px-4 py-2 text-xs uppercase tracking-wider text-green-300 hover:text-green-200';
+      b.textContent = t;
+      b.addEventListener('click', () => { fn(); renderScene(); });
+      chips.appendChild(b);
+    });
+
+    // ===== Siglas y glosario =====
+    const GLOSS = [
+      ['UC', 'Universidad de la Comunicación, donde se aplicó la encuesta.'],
+      ['CDMX', 'Ciudad de México.'],
+      ['ZMVM', 'Zona Metropolitana del Valle de México: la Ciudad de México y municipios conurbados.'],
+      ['BRT', 'Bus Rapid Transit (Autobús de Tránsito Rápido): autobuses con carril exclusivo, como el Metrobús.'],
+      ['EEA', 'European Environment Agency (Agencia Europea de Medio Ambiente).'],
+      ['GEI', 'Gases de efecto invernadero.'],
+      ['INECC', 'Instituto Nacional de Ecología y Cambio Climático, que reporta el inventario de emisiones de México.'],
+      ['WRI', 'World Resources Institute, organización de investigación ambiental.'],
+      ['OMS', 'Organización Mundial de la Salud.'],
+      ['UE', 'Unión Europea.'],
+      ['CO₂', 'Dióxido de carbono, el principal gas de efecto invernadero de los combustibles fósiles.']
+    ];
+    const SIGLAS = {};
+    GLOSS.forEach(([k, v]) => { SIGLAS[k] = v; });
+    const sigAlt = Object.keys(SIGLAS).sort((x, y) => y.length - x.length).join('|');
+    const sigGuard = '(?<![\\p{L}\\p{N}_])(' + sigAlt + ')(?![\\p{L}\\p{N}_])';
+
+    function annotate(root) {
+      if (!root) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: n => n.parentElement && n.parentElement.closest('abbr,a,script,style,#glosario') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n => {
+        const txt = n.nodeValue, rx = new RegExp(sigGuard, 'gu');
+        let last = 0, m, frag = null;
+        while ((m = rx.exec(txt))) {
+          frag = frag || document.createDocumentFragment();
+          frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+          const ab = document.createElement('abbr');
+          ab.title = SIGLAS[m[1]];
+          ab.textContent = m[1];
+          frag.appendChild(ab);
+          last = m.index + m[1].length;
+        }
+        if (frag) { frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); }
+      });
+    }
+
+    GLOSS.forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'reveal rounded-xl border border-white/10 bg-black p-4';
+      d.innerHTML = '<p class="font-bold text-green-300"></p><p class="mt-1 text-sm leading-relaxed text-gray-300"></p>';
+      d.children[0].textContent = k;
+      d.children[1].textContent = v;
+      $('glossary').appendChild(d);
+    });
+
+    // ===== Fuentes =====
+    [
+      ['EEA: Rail and waterborne, best for low-carbon transport', 'https://www.eea.europa.eu/publications/rail-and-waterborne-transport/rail-and-waterborne-best/'],
+      ['EEA: Sustainability of Europe\'s mobility systems 2024', 'https://www.eea.europa.eu/en/analysis/publications/sustainability-of-europes-mobility-systems-2024/climate'],
+      ['EEA: Train or plane?', 'https://www.eea.europa.eu/ds_resolveuid/0cb79aeb83c744849b10c47cab0d14dc'],
+      ['WRI México: transporte y NDC', 'https://es.wri.org/sites/default/files/2024-02/NDC%20primera%20versio%CC%81n%2014122022.pdf'],
+      ['La Jornada: Inventario de Emisiones 2020 (ZMVM)', 'https://www.jornada.com.mx/2023/08/12/capital/024n1cap'],
+      ['The Logistics World: emisiones del transporte en México', 'https://thelogisticsworld.com/transporte/combustible-para-transportes-genera-32-de-las-emisiones-de-co2-en-mexico'],
+      ['Gobierno de la CDMX: el Metro', 'https://mexicocity.cdmx.gob.mx/?p=26'],
+      ['Gobierno de la CDMX: el Metrobús', 'https://mexicocity.cdmx.gob.mx/e/getting-around/metrobus/'],
+      ['Gobierno de la CDMX: Línea 7 del Metrobús (datos de la Línea 1)', 'https://www.obras.cdmx.gob.mx/storage/app/media/uploaded-files/sobse-informe-pormenorizado-construccion-linea-7-del-metrobus.pdf'],
+      ['Expansión: mapa del Metro CDMX', 'https://politica.expansion.mx/cdmx/2022/07/08/mapa-metro-cdmx'],
+      ['N+: 57 años del Metro', 'https://www.nmas.com.mx/movilidad/transporte-publico/aniversario-metro-cdmx-como-era-antes-asi-ha-cambiado-57-anos-transporte-publico/']
+    ].forEach(([t, u]) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-gray-300 transition hover:border-green-400/40 hover:text-green-300';
+      a.innerHTML = '<i data-lucide="external-link" class="h-4 w-4 shrink-0"></i>';
+      a.appendChild(document.createTextNode(t));
+      li.appendChild(a);
+      $('sources').appendChild(li);
+    });
+
+    // ===== Contadores y aparición al hacer scroll =====
+    function countUp(el) {
+      const target = Number(el.dataset.target), dec = Number(el.dataset.dec) || 0, suf = el.dataset.suffix || '';
+      if (reduceMotion) { el.textContent = target.toFixed(dec) + suf; return; }
+      const t0 = performance.now();
+      const step = now => {
+        const p = Math.min((now - t0) / 1400, 1);
+        el.textContent = (target * (1 - Math.pow(1 - p, 3))).toFixed(dec) + suf;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('visible');
+        el.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        if (el.matches('[data-target]')) countUp(el);
+        el.querySelectorAll('[data-target]').forEach(countUp);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12 });
+
+    renderScene();
+    annotate(document.querySelector('main'));
+    annotate(document.querySelector('footer'));
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    lucide.createIcons();
+  </script>
 </body>
 </html>

@@ -3,19 +3,779 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NO HABÍAN ESCUCHADO DEL CLIMATE CLOCK</title>
+  <title>Climate Clock · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .ring-progress { transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    .card { border: 1px solid rgba(74, 222, 128, 0.12); transition: border-color 0.3s, transform 0.3s; }
+    .card:hover { border-color: rgba(74, 222, 128, 0.45); transform: translateY(-4px); }
+
+    /* Acordeón */
+    details.acc { border: 1px solid rgba(74, 222, 128, 0.15); border-radius: 0.75rem; background: rgba(5, 46, 22, 0.3); }
+    details.acc[open] { border-color: rgba(74, 222, 128, 0.45); }
+    details.acc summary { cursor: pointer; list-style: none; }
+    details.acc summary::-webkit-details-marker { display: none; }
+    details.acc[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.3s; }
+
+    /* Línea del tiempo */
+    .tl { border-left: 2px solid rgba(74, 222, 128, 0.25); }
+    .tl-dot { position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 9999px; background: #fb923c; box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.2); }
+
+    /* Mapa */
+    #map { height: 520px; border-radius: 1rem; background: #0a0a0a; z-index: 1; }
+    .leaflet-container { font-family: 'DM Sans', sans-serif; }
+    .leaflet-popup-content-wrapper { background: #0b140b; color: #e5e7eb; border: 1px solid rgba(74, 222, 128, 0.35); border-radius: 16px; padding: 0; overflow: hidden; }
+    .leaflet-popup-content { margin: 0; width: 270px !important; }
+    .leaflet-popup-tip { background: #0b140b; }
+    .leaflet-container a.leaflet-popup-close-button { color: #fff; z-index: 5; text-shadow: 0 1px 3px #000; }
+    .pin { display: block; width: 18px; height: 18px; border-radius: 9999px; background: #fb923c; border: 3px solid #fff7ed; box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.7); animation: pulse 2s infinite; }
+    .pin.alt { background: #38bdf8; border-color: #f0f9ff; box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+    @keyframes pulse { 70% { box-shadow: 0 0 0 14px rgba(251, 146, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(251, 146, 60, 0); } }
+    .clockface { height: 130px; background: #050505; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #fb923c; font-family: ui-monospace, monospace; letter-spacing: 0.15em; }
+    .ph { position: relative; height: 130px; overflow: hidden; background: #050505; }
+    .ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+    abbr[title] { text-decoration: underline dotted rgba(251, 146, 60, 0.7); text-underline-offset: 3px; cursor: help; }
+    .youtube-audio { position: absolute; left: -9999px; top: 0; width: 200px; height: 200px; opacity: 0; pointer-events: none; overflow: hidden; }
+    figure.fig img { width: 100%; height: 100%; object-fit: cover; }
+    figure.fig svg { width: 100%; height: 100%; display: block; }
+    .cc-num { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-weight: 700; font-size: clamp(2rem, 8vw, 4.5rem); line-height: 1; color: #fb923c; text-shadow: 0 0 18px rgba(251, 146, 60, 0.5); font-variant-numeric: tabular-nums; }
+    .cc-cap { font-size: 10px; letter-spacing: 0.2em; color: #fdba74; opacity: 0.75; }
+    .cc-sep { font-family: ui-monospace, Menlo, monospace; font-size: clamp(1.5rem, 6vw, 3.5rem); color: #fb923c; opacity: 0.5; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
 </head>
 
-<body>
-  <h1>NO HABÍAN ESCUCHADO DEL CLIMATE CLOCK</h1>
+<body class="min-h-screen w-full bg-black text-gray-100">
 
-  <h2>16.7%</h2>
+  <nav class="fixed left-0 top-0 z-[1000] w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
 
-  <p>
-    Aquí puedes agregar información sobre el uso del transporte público,
-    sus beneficios ambientales, rutas y recomendaciones para la comunidad universitaria.
-  </p>
+  <main>
+    <!-- Portada -->
+    <header class="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center"
+            style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));">
+      <div class="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
 
-  <a href="index.html">Volver a la página principal</a>
+      <div class="fade-in relative max-w-2xl">
+        <p class="mb-8 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Indicador de sustentabilidad</p>
+
+        <div class="relative mx-auto mb-8 h-56 w-56 md:h-64 md:w-64" role="img" aria-label="18.8 por ciento">
+          <svg viewBox="0 0 160 160" class="h-full w-full -rotate-90">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"></circle>
+            <circle id="ring" class="ring-progress" cx="80" cy="80" r="70" fill="none" stroke="#fb923c" stroke-width="8"
+                    stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82"></circle>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="counter" class="font-display text-6xl font-bold text-orange-300 md:text-7xl" data-target="18.8">18.8%</span>
+          </div>
+        </div>
+
+        <h1 class="font-display mb-4 text-3xl font-bold leading-tight text-green-50 md:text-5xl">No habían escuchado del <em class="italic text-green-400">Climate Clock</em></h1>
+        <p class="mx-auto max-w-md text-gray-400">Encuesta a 16 personas entre alumnos y docentes de la UC. El Climate Clock, o Reloj Climático, cuenta cuánto tiempo queda para agotar el presupuesto de carbono de 1.5 °C.</p>
+
+        <a href="#encuesta" class="mt-10 inline-block text-green-300/70 transition hover:text-green-300" aria-label="Ver resultados"><i data-lucide="arrow-down" class="h-6 w-6"></i></a>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Encuesta -->
+    <section id="encuesta" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl space-y-16">
+        <div>
+          <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Has escuchado del Climate Clock?</h2>
+          <p class="reveal mb-10 text-center text-sm text-gray-400">16 respuestas entre alumnos y docentes de la UC</p>
+          <div id="bars-q1" class="reveal space-y-6"></div>
+        </div>
+
+        <div>
+          <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Qué tan preocupado(a) estás por el cambio climático?</h2>
+          <p class="reveal mb-10 text-center text-sm text-gray-400">16 respuestas entre alumnos y docentes de la UC</p>
+          <div id="bars-q2" class="reveal space-y-6"></div>
+        </div>
+
+        <div id="stats" class="grid gap-4 sm:grid-cols-3"></div>
+        <p class="reveal text-center text-xs text-gray-400">Con 16 personas, cada una pesa 6.25 puntos porcentuales. Los resultados describen a quienes respondieron, no a toda la universidad.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- El proyecto -->
+    <section id="proyecto" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Qué es el Climate Clock</h2>
+        <p class="reveal mx-auto mb-12 max-w-2xl text-center text-sm text-gray-400">Un proyecto que mezcla arte, ciencia, tecnología y activismo para que el mundo actúe a tiempo (#ActInTime).</p>
+        <div id="info-cards" class="grid gap-5 md:grid-cols-2"></div>
+
+        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+          <figure class="fig reveal" data-ill="clock" data-q="Climate Clock Union Square" data-cap="El Climate Clock en Union Square, Nueva York"></figure>
+          <figure class="fig reveal" data-ill="doomsday" data-q="Doomsday Clock" data-cap="El Reloj del Juicio Final, que inspiró el diseño"></figure>
+          <figure class="fig reveal" data-ill="metronome" data-q="Metronome Union Square" data-cap="El Metronome, la obra de 1999 que se reprogramó"></figure>
+        </div>
+        <p class="mt-3 text-center text-xs text-gray-400">Se muestran fotos de Wikimedia Commons buscadas automáticamente (pueden mostrar el lugar o el tema en general); si no hay conexión, se muestra una ilustración.</p>
+
+        <h3 class="font-display reveal mb-6 mt-16 text-center text-xl font-bold text-green-100 md:text-2xl">Los Lifelines: las soluciones que se miden</h3>
+        <div id="lifelines" class="reveal flex flex-wrap justify-center gap-2"></div>
+        <div class="mx-auto mt-8 max-w-md"><figure class="fig reveal" data-ill="energy" data-q="Solar panels wind turbines" data-cap="Energía renovable, uno de los Lifelines del reloj"></figure></div>
+
+        <div class="reveal mx-auto mt-14 max-w-3xl rounded-2xl border border-orange-400/30 bg-orange-950/20 p-6">
+          <div class="mb-2 flex items-center gap-2 font-bold text-orange-200"><i data-lucide="calculator" class="h-5 w-5"></i><span>¿Cuánto tiempo queda realmente?</span></div>
+          <p class="text-sm leading-relaxed text-gray-300">Según el informe <em>Indicators of Global Climate Change</em>, el presupuesto de carbono restante para tener 50% de probabilidad de limitar el calentamiento a 1.5 °C era de unos 130 mil millones de toneladas de CO₂ al inicio de 2026, algo más de 3 años al ritmo actual de unas 42 mil millones de toneladas por año. El Climate Clock usa otra convención (67% de probabilidad) y su propio cálculo, así que su número exacto es distinto. Consúltalo en vivo en <a class="text-orange-300 underline underline-offset-4" href="https://climateclock.world" target="_blank" rel="noopener">climateclock.world</a>.</p>
+        </div>
+
+        <div class="reveal mx-auto mt-6 max-w-3xl rounded-2xl border border-sky-400/30 bg-sky-950/20 p-6">
+          <div class="mb-2 flex items-center gap-2 font-bold text-sky-200"><i data-lucide="split" class="h-5 w-5"></i><span>Ojo: hay dos relojes climáticos distintos</span></div>
+          <p class="text-sm leading-relaxed text-gray-300">Existe también el reloj de <strong>climateclock.net</strong>, lanzado en 2015 por David Usher y Damon Matthews en la Universidad Concordia (Montreal), basado en otros datos y supuestos. El de Nueva York y los relojes monumentales son de <strong>climateclock.world</strong> (Gan Golan y Andrew Boyd). Por eso las fechas que muestran no coinciden.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Línea del tiempo -->
+    <section class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-2xl">
+        <h2 class="font-display reveal mb-12 text-center text-2xl font-bold text-green-50 md:text-4xl">Una línea del tiempo</h2>
+        <ol id="timeline" class="tl ml-2 space-y-8 pl-8"></ol>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Psicología y cuestionamientos -->
+    <section id="debate" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Lo bueno, lo discutido y lo que no sabemos</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">Un reloj que cuenta el tiempo puede motivar, preocupar o confundir. Esto dicen los datos y las críticas.</p>
+        <div class="mb-10 grid gap-4 sm:grid-cols-2">
+          <figure class="fig reveal" data-ill="march" data-q="Fridays for Future climate strike" data-cap="Jóvenes en una marcha climática"></figure>
+          <figure class="fig reveal" data-ill="square" data-q="Union Square New York" data-cap="Union Square, plaza muy transitada donde se ve el reloj"></figure>
+        </div>
+        <div id="accordion" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Mapa -->
+    <section id="mapa" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Relojes climáticos en el mundo</h2>
+        <p class="reveal mx-auto mb-8 max-w-xl text-center text-sm text-gray-400">Toca un punto para ver su historia y una foto del lugar. Las ubicaciones son aproximadas y algunos relojes fueron temporales.</p>
+        <div class="reveal">
+          <div id="map" role="region" aria-label="Mapa interactivo de relojes climáticos"></div>
+          <div id="map-list" class="mt-4 flex flex-wrap justify-center gap-2"></div>
+          <p class="mt-4 text-center text-xs text-gray-400"><span class="inline-block h-2 w-2 rounded-full bg-orange-400"></span> Relojes del proyecto &nbsp; <span class="inline-block h-2 w-2 rounded-full bg-sky-400"></span> Proyecto artístico con el mismo nombre. El proyecto reporta más de 100 relojes monumentales y portátiles en el mundo (incluidos Tokio, Londres, Pekín, África e India).</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Reloj en vivo -->
+    <section id="reloj" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">El reloj, en vivo</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">Los dos contadores del proyecto: el plazo y el Lifeline.</p>
+
+        <div class="reveal rounded-2xl border border-orange-500/30 bg-black p-6 text-center md:p-10" style="box-shadow: 0 0 60px rgba(251, 146, 60, 0.08);">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-orange-300">Deadline · plazo para agotar el presupuesto de carbono de 1.5 °C</p>
+          <div class="flex items-start justify-center gap-2 sm:gap-4" role="timer" aria-label="Cuenta regresiva del Climate Clock">
+            <div><div id="cc-y" class="cc-num">--</div><div class="cc-cap mt-2">AÑOS</div></div><span class="cc-sep">:</span>
+            <div><div id="cc-d" class="cc-num">---</div><div class="cc-cap mt-2">DÍAS</div></div><span class="cc-sep">:</span>
+            <div><div id="cc-h" class="cc-num">--</div><div class="cc-cap mt-2">HRS</div></div><span class="cc-sep">:</span>
+            <div><div id="cc-m" class="cc-num">--</div><div class="cc-cap mt-2">MIN</div></div><span class="cc-sep">:</span>
+            <div><div id="cc-s" class="cc-num">--</div><div class="cc-cap mt-2">SEG</div></div>
+          </div>
+
+          <div class="mx-auto my-8 h-px max-w-md bg-gradient-to-r from-transparent via-orange-400/40 to-transparent"></div>
+
+          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-orange-300">Lifeline · % de la energía mundial que viene de renovables</p>
+          <div id="cc-life" class="cc-num">--</div>
+
+          <p id="cc-status" class="sr-only" role="status">Conectando con climateclock.world…</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Glosario -->
+    <section id="glosario" class="w-full bg-neutral-950 px-6 py-16">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">Siglas y términos</h2>
+        <p class="reveal mb-8 text-center text-sm text-gray-400">En la página, las siglas subrayadas muestran su significado al pasar el cursor.</p>
+        <div id="glossary" class="grid gap-3 sm:grid-cols-2"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Fuentes -->
+    <section class="w-full bg-black px-6 py-16">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-6 text-center text-xl font-bold text-green-50 md:text-2xl">Fuentes consultadas</h2>
+        <ul id="sources" class="reveal grid gap-2 text-sm sm:grid-cols-2"></ul>
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Datos de 16 encuestas aplicadas en la UC</p>
+  </footer>
+
+  <!-- Música de fondo (oculta) -->
+  <div class="youtube-audio"><div id="youtube-player"></div></div>
+  <div class="fixed bottom-4 left-4 z-[1001] flex items-center gap-3 rounded-full border border-green-400/30 bg-black/80 px-4 py-2 backdrop-blur-md">
+    <button id="m-play" type="button" class="flex items-center gap-2 text-xs uppercase tracking-wider text-green-300" aria-label="Reproducir música ambiente">
+      <i data-lucide="play" class="h-4 w-4"></i><span class="hidden sm:inline">Música ambiente</span>
+    </button>
+    <button id="m-pause" type="button" class="hidden items-center gap-2 text-xs uppercase tracking-wider text-green-300" aria-label="Pausar música">
+      <i data-lucide="pause" class="h-4 w-4"></i><span class="hidden sm:inline">Pausar</span>
+    </button>
+    <button id="m-mute" type="button" class="text-gray-300" aria-label="Silenciar"><i data-lucide="volume-2" class="h-4 w-4"></i></button>
+    <input id="m-vol" type="range" min="0" max="100" value="40" class="hidden w-24 accent-green-500 sm:block" aria-label="Volumen">
+    <span id="m-msg" class="hidden max-w-[220px] text-[10px] leading-tight text-orange-300" role="status"></span>
+  </div>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = id => document.getElementById(id);
+    const icon = n => '<i data-lucide="' + n + '" class="h-5 w-5"></i>';
+
+    // ===== Anillo del hero =====
+    const counter = $('counter'), ring = $('ring'), value = Number(counter.dataset.target);
+    requestAnimationFrame(() => { ring.style.strokeDashoffset = 439.82 * (1 - value / 100); });
+    if (!reduceMotion) {
+      const t0 = performance.now();
+      const tick = now => {
+        const p = Math.min((now - t0) / 1600, 1);
+        counter.textContent = (value * (1 - Math.pow(1 - p, 3))).toFixed(1) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    // ===== Barras de la encuesta =====
+    function renderBars(id, data) {
+      const box = $(id);
+      data.forEach((d, i) => {
+        const row = document.createElement('div');
+        row.innerHTML =
+          '<div class="mb-2 flex items-baseline justify-between gap-4 text-sm">' +
+            '<span class="text-gray-200">' + d.label + '</span>' +
+            '<span class="font-display text-xl font-bold" style="color:' + d.color + '">' + d.value + '% <span class="text-xs font-normal text-gray-400">(' + d.n + ' de 16)</span></span>' +
+          '</div>' +
+          '<div class="h-3 w-full overflow-hidden rounded-full bg-white/10">' +
+            '<div class="h-full w-0 rounded-full transition-all duration-[1400ms] ease-out" data-w="' + d.value + '" style="background:' + d.color + ';transition-delay:' + (i * 120) + 'ms"></div>' +
+          '</div>';
+        box.appendChild(row);
+      });
+    }
+    renderBars('bars-q1', [
+      { label: 'Sí y sé qué es', value: 56.3, n: 9, color: '#4ade80' },
+      { label: 'Sí, pero no sé qué es', value: 25, n: 4, color: '#fbbf24' },
+      { label: 'No lo había escuchado', value: 18.8, n: 3, color: '#ef4444' }
+    ]);
+    renderBars('bars-q2', [
+      { label: 'Muy preocupado(a)', value: 18.8, n: 3, color: '#ef4444' },
+      { label: 'Preocupado(a)', value: 56.3, n: 9, color: '#f97316' },
+      { label: 'Poco preocupado(a)', value: 25, n: 4, color: '#a3e635' },
+      { label: 'Nada preocupado(a)', value: 0, n: 0, color: '#6b7280' }
+    ]);
+
+    [
+      { v: '75%', t: 'está preocupado(a) o muy preocupado(a) (12 de 16)', i: 'heart-pulse' },
+      { v: '81.3%', t: 'ha escuchado del Climate Clock (13 de 16)', i: 'ear' },
+      { v: '1 de 4', t: 'lo escuchó pero no sabe qué es (4 de 16)', i: 'circle-help' }
+    ].forEach(s => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(s.i) + '</div>' +
+        '<p class="font-display text-3xl font-bold text-green-300">' + s.v + '</p><p class="mt-1 text-xs text-gray-400">' + s.t + '</p>';
+      $('stats').appendChild(d);
+    });
+
+    // ===== Información del proyecto =====
+    [
+      { i: 'timer', t: 'Un contador con dos números', p: 'El <strong>Deadline</strong> (plazo) muestra cuánto tiempo queda, al ritmo actual de emisiones, para agotar el presupuesto de carbono que da 67% de probabilidad de no pasar de 1.5 °C. Los <strong>Lifelines</strong> miden soluciones, como el porcentaje de energía mundial que viene de renovables. Meta del proyecto: llevar los Lifelines a 100% antes de que el Deadline llegue a cero.' },
+      { i: 'users', t: 'Quién lo creó', p: 'Los artistas y activistas <strong>Gan Golan</strong> y <strong>Andrew Boyd</strong>, con Katie Peyton Hofstadter (arte e investigación) y Adrian Carpenter (tecnología). Es un proyecto de Beautiful Trouble, en alianza con March for Science. Golan cuenta que la idea nació cuando su hija nació una semana antes del informe del IPCC de 2018.' },
+      { i: 'microscope', t: 'En qué ciencia se basa', p: 'En el IPCC y en el Instituto Mercator de Investigación sobre Bienes Comunes Globales y Cambio Climático (MCC, Berlín). El proyecto dice que actualiza los datos cada tres meses: si bajan las emisiones, el plazo se alarga.' },
+      { i: 'maximize', t: 'Tres tamaños', p: '<strong>Monumental</strong> (grandes pantallas en espacios públicos), <strong>portátil</strong> (el primero se hizo para Greta Thunberg en 2019) y <strong>digital</strong> (widget web y app con un «Newsfeed of Hope» de buenas noticias climáticas). Cualquier ciudad o institución puede pedir asesoría para instalar el suyo.' },
+      { i: 'palette', t: 'Arte, no solo datos', p: 'Se inspiró en el Reloj del Juicio Final y en el reloj de la deuda nacional, pero busca ser lo contrario del fatalismo: «nuestro planeta tiene un plazo, pero podemos convertirlo en un salvavidas». El reloj de Nueva York también muestra mensajes que rotan, como «No more oil!».' },
+      { i: 'flag', t: 'Qué pasa si llega a cero', p: 'El proyecto aclara que no es el fin del mundo: sería la señal de que se superó la ventana más crítica. Habría una campaña mediática y la meta pasaría a otro umbral, como 2 °C, definido consultando a quienes usan los relojes.' }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = (i % 2) * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm leading-relaxed text-gray-400">' + c.p + '</p>';
+      $('info-cards').appendChild(d);
+    });
+
+    ['Energía renovable', 'Soberanía de tierras indígenas', 'Financiamiento de pérdidas y daños', 'Paridad de género', 'Desinversión de combustibles fósiles', 'Agricultura regenerativa', 'Proteger 30% del planeta para 2030', 'Fin de subsidios fósiles', 'Actuar rápido ahorra billones']
+      .forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'rounded-full border border-green-400/30 bg-green-400/10 px-4 py-2 text-sm text-green-200';
+        s.textContent = t;
+        $('lifelines').appendChild(s);
+      });
+
+    // ===== Línea del tiempo =====
+    [
+      ['2015', 'David Usher y Damon Matthews lanzan en Concordia (Montreal) un reloj climático digital que también se proyectó varias veces en el centro de la ciudad.'],
+      ['2018', 'El IPCC publica su informe especial sobre 1.5 °C, que inspira a Gan Golan y Andrew Boyd.'],
+      ['2019', 'Instalan en Berlín el «Carbon Clock» en el gasómetro, y Golan y Boyd construyen el primer reloj portátil para Greta Thunberg, que lo lleva a la ONU.'],
+      ['Sept. 2020', 'El Metronome de Union Square, en Nueva York, se convierte en el Climate Clock. Al encenderse marcaba 7 años y 102 días.'],
+      ['Abr. 2021', 'Se agrega el primer Lifeline: el porcentaje de energía mundial que viene de renovables.'],
+      ['May–Jun. 2021', 'Se instalan relojes monumentales en Seúl (el tercero del mundo) y Roma (4 de junio).'],
+      ['Nov. 2021', 'Un reloj gigante recibe a las delegaciones de la COP26 en Glasgow.'],
+      ['Nov. 2022', 'Una torre del Climate Clock acompaña la COP27 en Egipto y se añade el Lifeline de pérdidas y daños.'],
+      ['Abr. 2024', 'El CSIR activa el reloj climático más grande de la India en Nueva Delhi.'],
+      ['Jun. 2026', 'Se inaugura en Oulu, Finlandia, una ruta de arte llamada «Climate Clock», un proyecto distinto con el mismo nombre.']
+    ].forEach(([y, t]) => {
+      const li = document.createElement('li');
+      li.className = 'reveal relative';
+      li.innerHTML = '<span class="tl-dot"></span><p class="text-xs font-semibold uppercase tracking-wider text-orange-300">' + y + '</p><p class="mt-1 text-sm leading-relaxed text-gray-300">' + t + '</p>';
+      $('timeline').appendChild(li);
+    });
+
+    // ===== Debate y psicología =====
+    [
+      { i: 'heart-pulse', t: 'Ecoansiedad: el contexto', b:
+        '<p>En 2021, un estudio de <em>The Lancet Planetary Health</em> encuestó a 10 000 personas de 16 a 25 años en diez países: <strong>59%</strong> se dijo muy o extremadamente preocupado por el cambio climático, <strong>75%</strong> opinó que «el futuro da miedo» y <strong>45%</strong> reportó que estos sentimientos afectan su vida diaria (comer, dormir, concentrarse). Más de la mitad sintió tristeza, ansiedad, enojo, impotencia o culpa.</p>' +
+        '<p class="mt-3"><strong>Matices:</strong> esa encuesta no trata del Climate Clock, fue pagada por Avaaz y aplicada por Kantar, y mide percepciones, no diagnósticos. Los autores relacionan buena parte del malestar con la insatisfacción ante la respuesta de los gobiernos.</p>' },
+      { i: 'timer', t: '¿Una cuenta regresiva genera más ansiedad o más acción?', b:
+        '<p><strong>Dato honesto:</strong> no encontré estudios que midan el efecto psicológico del Climate Clock en sí. Lo que hay es evidencia cercana y posturas enfrentadas.</p>' +
+        '<p class="mt-3"><strong>A favor:</strong> un estudio de 2026 (Tetik y Faro, <em>Journal of Consumer Research</em>) encontró que decir «tiempo restante» en vez de una fecha lejana hace que la amenaza se sienta más cercana y urgente, y aumenta el apoyo a la acción.</p>' +
+        '<p class="mt-3"><strong>En contra:</strong> el geógrafo Mike Hulme (King\'s College London) sostiene que este «deadline-ismo» crea sensación de escasez de tiempo, miedo y pánico, instala la idea de un «punto sin retorno» y, cuando los plazos pasan, deja cinismo o apatía. Es un argumento teórico, no un resultado experimental, y menciona expresamente el reloj de Union Square.</p>' +
+        '<p class="mt-3"><strong>Respuesta de los creadores:</strong> Golan dice que no es una alarma sino «un cronómetro que ya está corriendo», y el proyecto recalca que el número no es cero y que los Lifelines muestran qué hacer.</p>' },
+      { i: 'flame', t: '¿Funciona el miedo para motivar?', b:
+        '<p>Depende de qué se mida. Un megaestudio con 255 especialistas, publicado en <em>Science Advances</em>, probó 11 mensajes psicológicos. El catastrofismo fue muy eficaz para que la gente <strong>compartiera información</strong> en redes, pero puede desmovilizar acciones que cuestan más esfuerzo, y varios mensajes fallaron o salieron contraproducentes.</p>' +
+        '<p class="mt-3">Por eso muchos especialistas distinguen entre la ecoansiedad que <strong>moviliza</strong> («tengo miedo, pero no me rindo») y la que <strong>paraliza</strong>.</p>' },
+      { i: 'siren', t: '¿Hay caos o pánico?', b:
+        '<p>No encontré reportes verificados de pánico o desórdenes provocados por el reloj. Lo documentado es <strong>confusión y debate</strong>: el Metronome llevaba más de veinte años desconcertando a los neoyorquinos antes de ser Climate Clock, y medios como Hyperallergic notaron que mucha gente seguía sin saber qué representaba. Coincide con nuestra encuesta: 1 de cada 4 lo ha escuchado pero no sabe qué es.</p>' +
+        '<p class="mt-3">Sí existe riesgo de <strong>malinterpretación</strong>: comunicadores como Alaina Wood han recibido a diario mensajes de adolescentes preguntando si el mundo se acaba en diez años o menos, a raíz de mensajes de plazos climáticos en general. El proyecto insiste en que el mundo no se acaba cuando el contador llegue a cero.</p>' },
+      { i: 'scale', t: 'Críticas a la ciencia y a la comunicación', b:
+        '<ul class="list-disc space-y-2 pl-5">' +
+        '<li><strong>Plazo no es acantilado:</strong> el contador marca cuándo se agotaría el presupuesto de carbono, no el día en que se cruza 1.5 °C de forma permanente. El propio MCC aclara que agotar el presupuesto no implica que la Tierra esté exactamente 1.5 °C más caliente en ese instante.</li>' +
+        '<li><strong>El número depende de supuestos:</strong> probabilidad elegida (el reloj usa 67%, otras estimaciones usan 50%), tendencia de emisiones y datos de temperatura. Por eso se actualiza y distintos relojes muestran fechas distintas.</li>' +
+        '<li><strong>«Tenemos hasta 2030»:</strong> climatólogos criticaron este tipo de retórica porque ningún punto de inflexión conocido condena al planeta a calentarse para siempre. Aun así, cada fracción de grado adicional aumenta fenómenos extremos.</li>' +
+        '<li><strong>Un reloj no es una política:</strong> una de las personas entrevistadas por Deccan Herald dudó de que un reloj por sí solo baste y pidió acción concreta.</li>' +
+        '<li><strong>Tiene postura:</strong> nace del activismo y se declara un llamado a la acción; la ciencia viene del IPCC y del MCC.</li></ul>' },
+      { i: 'scan-search', t: 'Lo que sabemos y lo que no', b:
+        '<p><strong>Sabemos:</strong> que el presupuesto de carbono de 1.5 °C es muy reducido, que la ansiedad climática juvenil es real y extendida, y que el proyecto es un símbolo con mensajes de esperanza incluidos.</p>' +
+        '<p class="mt-3"><strong>No sabemos:</strong> si ver el reloj aumenta la ansiedad, la acción o ninguna de las dos; ni si los relojes monumentales cambian decisiones políticas. Es una buena pregunta para investigar, incluso con esta misma encuesta.</p>' }
+    ].forEach((a, i) => {
+      const d = document.createElement('details');
+      d.className = 'acc reveal';
+      if (i === 1) d.open = true;
+      d.innerHTML =
+        '<summary class="flex items-center gap-3 p-4">' +
+          '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(a.i) + '</span>' +
+          '<span class="flex-1 font-bold text-green-100">' + a.t + '</span>' +
+          '<span class="chev text-green-300"><i data-lucide="chevron-down" class="h-5 w-5"></i></span>' +
+        '</summary><div class="px-5 pb-5 text-sm leading-relaxed text-gray-300">' + a.b + '</div>';
+      $('accordion').appendChild(d);
+    });
+
+    // ===== Fuentes =====
+    [
+      ['Climate Clock: preguntas frecuentes', 'https://climateclock.world/faqs'],
+      ['Climate Clock: la historia', 'https://climateclock.world/story'],
+      ['Wikipedia: Climate Clock', 'https://en.wikipedia.org/wiki/Climate_Clock'],
+      ['Lancet Planetary Health (2021)', 'https://pubmed.ncbi.nlm.nih.gov/34895496/'],
+      ['King\'s College London: Tetik y Faro (2026)', 'https://www.kcl.ac.uk/news/is-that-the-time-why-messaging-matters-with-crises-on-the-horizon'],
+      ['Scientific American: megaestudio de mensajes', 'https://www.scientificamerican.com/article/beyond-the-doom-and-gloom-heres-how-to-stimulate-climate-action/'],
+      ['Mike Hulme: «deadline-ism»', 'https://mikehulme.org/5368-2/'],
+      ['Grist: ¿amenaza existencial?', 'https://grist.org/climate/is-the-climate-crisis-an-existential-threat-scientists-weigh-in/'],
+      ['MCC Carbon Clock', 'https://www.pik-potsdam.de/@@multilingual-selector/72ba513e4c4d4ba4aa63f82d3ec6779b/en'],
+      ['Copernicus: indicadores del clima', 'https://indicators.climate.copernicus.eu/'],
+      ['Oulu2026: ruta Climate Clock', 'https://oulu2026.eu/?p=63070'],
+      ['GreenMe: reloj en Roma', 'https://www.greenme.it/ambiente/orologio-clima-italia/'],
+      ['Vikaspedia: reloj en Nueva Delhi', 'https://en.vikaspedia.in/viewcontent/news/india’s-biggest-climate-clock-activated-at-csir-hq-to-celebrate-earth-day?lgn=en'],
+      ['Common Dreams: COP27', 'https://commondreams.org/news/2022/11/10/climate-clock-erected-cop27-says-richest-nations-owe-318-trillion-and-counting']
+    ].forEach(([t, u]) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-gray-300 transition hover:border-green-400/40 hover:text-green-300';
+      a.innerHTML = '<i data-lucide="external-link" class="h-4 w-4 shrink-0"></i>';
+      a.appendChild(document.createTextNode(t));
+      li.appendChild(a);
+      $('sources').appendChild(li);
+    });
+
+    // ===== Mapa =====
+    const places = [
+      { city: 'Nueva York, EE. UU.', spot: 'Metronome, Union Square', when: 'Encendido el 19 de septiembre de 2020', ll: [40.7352, -73.9897], wiki: [['en', 'Metronome_(public_artwork)']],
+        txt: 'Reprogramó el Metronome, una obra pública de 1999 que antes solo mostraba la hora. Es el reloj más famoso del proyecto; en 2021 sumó el Lifeline de renovables. Sus creadores esperaban que fuera permanente.' },
+      { city: 'Berlín, Alemania', spot: 'Gasómetro de Schöneberg (EUREF-Campus)', when: '2019', ll: [52.4817, 13.3607], wiki: [['de', 'Gasometer_Schöneberg']],
+        txt: 'El «Carbon Clock», una escultura LED instalada por Fridays for Future y EUREF, basada en el reloj del instituto MCC. El proyecto neoyorquino lo considera su «reloj hermano».' },
+      { city: 'Seúl, Corea del Sur', spot: 'Azotea de la sede de Herald Corp.', when: 'Mayo de 2021', ll: [37.5600, 126.9770], wiki: [['en', 'Jung_District,_Seoul']],
+        txt: 'Fue el tercer reloj monumental del mundo. En mayo de 2021 marcaba unos seis años y 235 días de presupuesto de carbono.' },
+      { city: 'Glasgow, Escocia', spot: 'Glasgow Science Centre', when: 'COP26, noviembre de 2021', ll: [55.8588, -4.2955], wiki: [['en', 'Glasgow_Science_Centre']],
+        txt: 'Se instaló frente a las delegaciones de la cumbre climática de la ONU para recordarles el plazo mientras negociaban.' },
+      { city: 'Roma, Italia', spot: 'Fachada del Ministerio de la Transición Ecológica (MiTE, hoy MASE), Via Cristoforo Colombo', when: '4 de junio de 2021', ll: [41.8450, 12.4980], wiki: [['it', 'Ministero_della_transizione_ecologica'], ['en', 'Rome']],
+        txt: 'Primer reloj climático de Italia, inaugurado por el ministro Roberto Cingolani en el Día Mundial del Medio Ambiente. También muestra frases de científicos, artistas y activistas.' },
+      { city: 'Sharm el-Sheij, Egipto', spot: 'Torre del Climate Clock en la COP27', when: 'Noviembre de 2022', ll: [27.9158, 34.3300], wiki: [['en', 'Sharm_El_Sheikh']],
+        txt: 'Instalación temporal durante la cumbre. Recordaba que quedaban menos de siete años para limitar el calentamiento a 1.5 °C.' },
+      { city: 'Nueva Delhi, India', spot: 'Sede del CSIR, Rafi Marg', when: '23 de abril de 2024', ll: [28.6218, 77.2133], wiki: [['en', 'Rafi_Marg'], ['en', 'New_Delhi']],
+        txt: 'Presentado como el reloj climático más grande de la India, en el Día de la Tierra. Lo impulsó la fundación Energy Swaraj con el profesor Chetan Solanki (IIT Bombay).' },
+      { city: 'Oulu, Finlandia', spot: 'Ruta de arte «Climate Clock» (Oulu2026)', when: 'Abierta el 13 de junio de 2026', ll: [65.0121, 25.4651], wiki: [['en', 'Oulu']], alt: true,
+        txt: 'Ojo: es un proyecto distinto con el mismo nombre. Son siete obras permanentes en seis lugares de la región, creadas para la Capital Europea de la Cultura, sobre clima, tiempo y naturaleza. No es el contador de Golan y Boyd.' }
+    ];
+
+    const map = L.map('map', { scrollWheelZoom: false, worldCopyJump: true }).setView([30, 12], 2);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO', maxZoom: 18, minZoom: 2
+    }).addTo(map);
+    map.on('click', () => map.scrollWheelZoom.enable());
+    map.on('mouseout', () => map.scrollWheelZoom.disable());
+
+    function popupHtml(p, i) {
+      return '<div class="ph" id="ph-' + i + '"><div class="clockface"><span style="font-size:10px;opacity:.7">CLIMATE CLOCK</span><span style="font-size:18px;font-weight:700">' +
+        p.city.split(',')[0].toUpperCase() + '</span><span style="font-size:10px;opacity:.7">#ACTINTIME</span></div></div>' +
+        '<div class="p-4"><p class="text-[11px] font-semibold uppercase tracking-wider ' + (p.alt ? 'text-sky-300' : 'text-orange-300') + '">' + p.when + '</p>' +
+        '<h3 class="font-display mt-1 text-lg font-bold text-green-50">' + p.city + '</h3>' +
+        '<p class="text-xs text-gray-400">' + p.spot + '</p>' +
+        '<p class="mt-2 text-xs leading-relaxed text-gray-300">' + p.txt + '</p></div>';
+    }
+
+    // ----- Glosario y siglas -----
+    const GLOSS = [
+      ['UC', 'Universidad de la Comunicación, donde se aplicó la encuesta.'],
+      ['ONU', 'Organización de las Naciones Unidas.'],
+      ['EE. UU.', 'Estados Unidos.'],
+      ['IPCC', 'Intergovernmental Panel on Climate Change (Panel Intergubernamental sobre el Cambio Climático): organismo de la ONU que resume la ciencia del clima.'],
+      ['MCC', 'Mercator Research Institute on Global Commons and Climate Change: instituto de Berlín que calcula el presupuesto de carbono en el que se basa el reloj.'],
+      ['COP', 'Conferencia de las Partes: la cumbre anual de la ONU sobre cambio climático. COP26 fue en Glasgow (2021) y COP27 en Sharm el-Sheij (2022).'],
+      ['CO₂', 'Dióxido de carbono, el principal gas de efecto invernadero que emiten los combustibles fósiles.'],
+      ['CSIR', 'Council of Scientific & Industrial Research: consejo de investigación científica e industrial de la India.'],
+      ['IIT', 'Indian Institute of Technology: Instituto Indio de Tecnología.'],
+      ['EUREF', 'Europäisches Energieforum: campus de energía y sustentabilidad en Berlín.'],
+      ['MiTE', 'Ministero della Transizione Ecologica: Ministerio de la Transición Ecológica de Italia.'],
+      ['MASE', "Ministero dell'Ambiente e della Sicurezza Energetica: nombre actual de ese ministerio (Ambiente y Seguridad Energética)."]
+    ];
+    const TERMS = [
+      ['Deadline', 'Plazo: tiempo que queda, al ritmo actual de emisiones, para agotar el presupuesto de carbono de 1.5 °C.'],
+      ['Lifeline', 'Salvavidas: indicador de una solución climática, como el porcentaje de energía renovable.'],
+      ['Presupuesto de carbono', 'Cantidad máxima de CO₂ que aún se puede emitir con cierta probabilidad de no pasar de un nivel de calentamiento.'],
+      ['#ActInTime', '«Actúa a tiempo»: lema del proyecto.'],
+      ['°C', 'Grados Celsius.']
+    ];
+    const SIGLAS = {};
+    GLOSS.forEach(([k, v]) => { SIGLAS[k] = v; });
+    SIGLAS.COP26 = '26.ª Conferencia de las Partes de la ONU sobre cambio climático (Glasgow, 2021).';
+    SIGLAS.COP27 = '27.ª Conferencia de las Partes de la ONU sobre cambio climático (Sharm el-Sheij, 2022).';
+    const sigAlt = Object.keys(SIGLAS).sort((x, y) => y.length - x.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    const sigGuard = '(?<![\\p{L}\\p{N}_])(' + sigAlt + ')(?![\\p{L}\\p{N}_])';
+    const SIGLA_RX = new RegExp('(<[^>]*>)|' + sigGuard, 'gu');
+
+    function glossStr(html) {
+      return html.replace(SIGLA_RX, (m, tag, sig) => tag ? m : '<abbr title="' + SIGLAS[sig].replace(/"/g, '&quot;') + '">' + sig + '</abbr>');
+    }
+
+    function annotate(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: n => n.parentElement && n.parentElement.closest('abbr,a,script,style,#glosario,#map') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n => {
+        const txt = n.nodeValue, rx = new RegExp(sigGuard, 'gu');
+        let last = 0, m, frag = null;
+        while ((m = rx.exec(txt))) {
+          frag = frag || document.createDocumentFragment();
+          frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+          const ab = document.createElement('abbr');
+          ab.title = SIGLAS[m[1]];
+          ab.textContent = m[1];
+          frag.appendChild(ab);
+          last = m.index + m[1].length;
+        }
+        if (frag) { frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); }
+      });
+    }
+
+    // ----- Fotos (Wikimedia Commons y Wikipedia) -----
+    const photoCache = {};
+    const strip = h => new DOMParser().parseFromString(h || '', 'text/html').body.textContent.trim();
+
+    async function commonsPhoto(query) {
+      const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch=' +
+        encodeURIComponent(query) + '&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=640&iiextmetadatafilter=Artist|LicenseShortName';
+      const r = await fetch(url);
+      if (!r.ok) return null;
+      const j = await r.json();
+      const pages = j.query && j.query.pages ? Object.values(j.query.pages).sort((x, y) => x.index - y.index) : [];
+      for (const pg of pages) {
+        const ii = pg.imageinfo && pg.imageinfo[0];
+        if (!ii || !/^image\/(jpeg|png|webp)/.test(ii.mime || '')) continue;
+        const md = ii.extmetadata || {};
+        const artist = md.Artist ? strip(md.Artist.value).slice(0, 40) : '';
+        const lic = md.LicenseShortName ? md.LicenseShortName.value : '';
+        return { src: ii.thumburl || ii.url, credit: 'Foto: ' + (artist ? artist + ' · ' : '') + (lic ? lic + ' · ' : '') + 'Wikimedia Commons' };
+      }
+      return null;
+    }
+
+    async function wikiPhoto(lang, title) {
+      const r = await fetch('https://' + lang + '.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j.thumbnail && j.thumbnail.source ? { src: j.thumbnail.source, credit: 'Foto del lugar · Wikipedia' } : null;
+    }
+
+    async function findPhoto(queries, wiki) {
+      const key = queries.join('|') + JSON.stringify(wiki || []);
+      if (key in photoCache) return photoCache[key];
+      let res = null;
+      for (const q of queries) { try { res = await commonsPhoto(q); } catch (e) { /* sin conexión */ } if (res) break; }
+      if (!res) for (const [lang, title] of (wiki || [])) { try { res = await wikiPhoto(lang, title); } catch (e) { /* sin conexión */ } if (res) break; }
+      photoCache[key] = res;
+      return res;
+    }
+
+    const SVG = c => '<svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" role="img">' + c + '</svg>';
+    const ILLU = {
+      clock: SVG('<rect width="320" height="240" fill="#050505"/><rect x="24" y="52" width="272" height="136" rx="10" fill="#0b0b0b" stroke="#fb923c" stroke-opacity=".5" stroke-width="2"/><text x="160" y="92" text-anchor="middle" font-family="monospace" font-size="13" letter-spacing="4" fill="#fdba74">DEADLINE</text><text x="160" y="138" text-anchor="middle" font-family="monospace" font-size="38" font-weight="700" fill="#fb923c">--:---:--</text><text x="160" y="170" text-anchor="middle" font-family="monospace" font-size="11" letter-spacing="3" fill="#fdba74" opacity=".8">#ACTINTIME</text>'),
+      doomsday: SVG('<rect width="320" height="240" fill="#0a0a0a"/><circle cx="160" cy="120" r="84" fill="#111827" stroke="#e5e7eb" stroke-width="5"/><g stroke="#9ca3af" stroke-width="3"><path d="M160 44v14M160 182v14M84 120h14M222 120h14"/></g><path d="M160 120L160 62" stroke="#f9fafb" stroke-width="7" stroke-linecap="round"/><path d="M160 120L150 54" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><circle cx="160" cy="120" r="7" fill="#f9fafb"/>'),
+      metronome: SVG('<rect width="320" height="240" fill="#0a0f0a"/><path d="M110 210L160 36L210 210Z" fill="#1f2937" stroke="#9ca3af" stroke-width="3"/><path d="M160 190L188 70" stroke="#fb923c" stroke-width="5" stroke-linecap="round"/><circle cx="182" cy="92" r="11" fill="#fb923c"/><rect x="90" y="210" width="140" height="10" fill="#374151"/>'),
+      energy: SVG('<rect width="320" height="240" fill="#07130b"/><path d="M110 210L116 96" stroke="#d1d5db" stroke-width="6"/><g stroke="#e5e7eb" stroke-width="6" stroke-linecap="round"><path d="M116 96L116 40"/><path d="M116 96L164 124"/><path d="M116 96L68 124"/></g><circle cx="116" cy="96" r="8" fill="#9ca3af"/><path d="M190 190L226 130H300L290 190Z" fill="#1e3a8a" stroke="#93c5fd" stroke-width="3"/><path d="M208 160H296M214 140V190M238 130V190M262 130V190M278 130V190" stroke="#93c5fd" stroke-width="1.5"/><circle cx="270" cy="52" r="20" fill="#fbbf24"/>'),
+      march: SVG('<rect width="320" height="240" fill="#0a120d"/><g fill="#86efac"><circle cx="90" cy="120" r="14"/><rect x="76" y="136" width="28" height="64" rx="10"/><circle cx="160" cy="112" r="14"/><rect x="146" y="128" width="28" height="72" rx="10"/><circle cx="230" cy="120" r="14"/><rect x="216" y="136" width="28" height="64" rx="10"/></g><g stroke="#d1d5db" stroke-width="4"><path d="M90 100V60M160 92V44M230 100V56"/></g><g fill="#fbbf24"><rect x="62" y="36" width="56" height="30" rx="3"/><rect x="128" y="22" width="64" height="32" rx="3"/><rect x="202" y="32" width="56" height="30" rx="3"/></g>'),
+      square: SVG('<rect width="320" height="240" fill="#0b0f14"/><g fill="#1f2937" stroke="#374151"><rect x="20" y="90" width="60" height="120"/><rect x="90" y="50" width="70" height="160"/><rect x="170" y="80" width="56" height="130"/><rect x="236" y="110" width="64" height="100"/></g><g fill="#fbbf24" opacity=".7"><rect x="100" y="66" width="8" height="10"/><rect x="120" y="66" width="8" height="10"/><rect x="100" y="96" width="8" height="10"/><rect x="180" y="100" width="8" height="10"/><rect x="30" y="110" width="8" height="10"/></g><rect x="0" y="210" width="320" height="30" fill="#14532d"/><circle cx="210" cy="204" r="12" fill="#16a34a"/><circle cx="60" cy="204" r="12" fill="#16a34a"/>')
+    };
+
+    function loadFigure(fig) {
+      fig.innerHTML = '<div class="fbox aspect-[4/3] overflow-hidden rounded-xl bg-neutral-900">' + (ILLU[fig.dataset.ill] || '') + '</div>' +
+        '<figcaption class="mt-2 text-xs text-gray-300"><span class="cap"></span><span class="credit block text-[10px] text-gray-400">Ilustración</span></figcaption>';
+      fig.querySelector('.cap').textContent = fig.dataset.cap;
+      findPhoto([fig.dataset.q]).then(ph => {
+        if (!ph) return;
+        const img = new Image();
+        img.alt = fig.dataset.cap;
+        img.onload = () => {
+          const box = fig.querySelector('.fbox');
+          box.innerHTML = '';
+          box.appendChild(img);
+          fig.querySelector('.credit').textContent = ph.credit;
+        };
+        img.src = ph.src;
+      });
+    }
+    document.querySelectorAll('figure.fig').forEach(loadFigure);
+
+    [['Climate Clock Union Square New York', 'Union Square Metronome'], ['Gasometer Schöneberg Berlin', 'EUREF-Campus Berlin'],
+     ['Herald Corp Seoul building', 'Seoul Jung-gu'], ['Glasgow Science Centre', 'COP26 Glasgow'],
+     ['Ministero transizione ecologica Roma', 'Via Cristoforo Colombo Roma'], ['COP27 Sharm El Sheikh', 'Sharm El Sheikh'],
+     ['CSIR headquarters New Delhi', 'Rafi Marg New Delhi'], ['Oulu Climate Clock', 'Oulu']]
+      .forEach((q, i) => { places[i].q = q; });
+
+    async function loadPhoto(p, i) {
+      const ph = await findPhoto(p.q || [], p.wiki);
+      const box = document.getElementById('ph-' + i);
+      if (!ph || !box || box.querySelector('img')) return;
+      const img = new Image();
+      img.alt = 'Foto de ' + p.city;
+      img.onload = () => {
+        box.appendChild(img);
+        const cap = document.createElement('span');
+        cap.className = 'absolute bottom-1 left-1 right-1 truncate rounded bg-black/70 px-2 py-0.5 text-[9px] text-gray-300';
+        cap.textContent = ph.credit;
+        box.appendChild(cap);
+      };
+      img.src = ph.src;
+    }
+
+    places.forEach((p, i) => {
+      p.marker = L.marker(p.ll, {
+        icon: L.divIcon({ className: '', html: '<span class="pin' + (p.alt ? ' alt' : '') + '"></span>', iconSize: [18, 18], iconAnchor: [9, 9] }),
+        title: p.city, keyboard: true
+      }).addTo(map).bindPopup(glossStr(popupHtml(p, i)), { maxWidth: 270, minWidth: 270 });
+      p.marker.on('popupopen', () => loadPhoto(p, i));
+
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'rounded-full border px-4 py-2 text-xs transition hover:bg-white/5 ' + (p.alt ? 'border-sky-400/40 text-sky-300' : 'border-orange-400/40 text-orange-300');
+      b.textContent = p.city.split(',')[0];
+      b.addEventListener('click', () => {
+        map.flyTo(p.ll, 5, { duration: 1.2 });
+        setTimeout(() => p.marker.openPopup(), 1300);
+        $('map').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      });
+      $('map-list').appendChild(b);
+    });
+
+    // ===== Climate Clock en vivo (API oficial) =====
+    const cc = { deadline: null, life: null };
+    const pad = (n, l = 2) => String(n).padStart(l, '0');
+
+    function ccRender() {
+      if (cc.deadline) {
+        const now = new Date(), end = cc.deadline;
+        let y = 0, d = 0, h = 0, m = 0, s = 0;
+        if (end > now) {
+          y = end.getUTCFullYear() - now.getUTCFullYear();
+          let base = new Date(now); base.setUTCFullYear(now.getUTCFullYear() + y);
+          if (base > end) { y--; base = new Date(now); base.setUTCFullYear(now.getUTCFullYear() + y); }
+          let rest = Math.floor((end - base) / 1000);
+          d = Math.floor(rest / 86400); rest %= 86400;
+          h = Math.floor(rest / 3600); rest %= 3600;
+          m = Math.floor(rest / 60); s = rest % 60;
+        }
+        $('cc-y').textContent = pad(y); $('cc-d').textContent = pad(d, 3); $('cc-h').textContent = pad(h);
+        $('cc-m').textContent = pad(m); $('cc-s').textContent = pad(s);
+      }
+      if (cc.life) {
+        const v = cc.life.initial + cc.life.rate * ((Date.now() - cc.life.t0) / 1000);
+        $('cc-life').textContent = v.toFixed(cc.life.dec) + '%';
+      }
+    }
+
+    async function ccLoad() {
+      try {
+        const r = await fetch('https://api.climateclock.world/v2/clock.json');
+        if (!r.ok) throw new Error(r.status);
+        const mod = (await r.json()).data.modules;
+        const dl = mod.carbon_deadline_1;
+        cc.deadline = dl && dl.timestamp ? new Date(dl.timestamp) : null;
+        const rn = mod.renewables_1;
+        cc.life = null;
+        if (rn && rn.growth === 'linear') {
+          const v0 = Number(rn.initial), rate = Number(rn.rate), t0 = Date.parse(rn.timestamp);
+          const dec = Math.max(0, Math.min(8, Math.round(-Math.log10(rn.resolution || 0.01))));
+          const now = v0 + rate * ((Date.now() - t0) / 1000);
+          if (isFinite(now) && now > 0 && now < 100) cc.life = { initial: v0, rate, t0, dec };
+        }
+        if (!cc.deadline) throw new Error('la respuesta no trae el plazo');
+        cc.live = true;
+        $('cc-status').textContent = 'Datos en vivo desde la API oficial de climateclock.world.';
+        ccRender();
+      } catch (e) {
+        if (!cc.live) {
+          // Respaldo: estimación local para que el reloj siempre avance (50% de probabilidad, ≈130 mil millones de t de CO₂ desde 2026 a ≈42 mil millones por año)
+          cc.deadline = new Date(Date.UTC(2026, 0, 1) + (130 / 42) * 365.25 * 86400000);
+          cc.life = null;
+          $('cc-life').textContent = '13.5%';
+          $('cc-status').innerHTML = 'No se pudo conectar con climateclock.world (' + e.message + '). Se muestra una <strong>estimación local</strong> del plazo (presupuesto de 50% de probabilidad, distinta del reloj oficial) y el último valor publicado del Lifeline (13.5%), sin animación. <a class="text-orange-300 underline underline-offset-4" href="https://climateclock.world" target="_blank" rel="noopener">Abre el reloj oficial</a>.';
+          ccRender();
+          setTimeout(ccLoad, 30000);
+        }
+      }
+    }
+    ccLoad();
+    setInterval(ccLoad, 3600000);
+    setInterval(ccRender, reduceMotion ? 1000 : 200);
+
+    // ===== Glosario =====
+    [...GLOSS, ...TERMS].forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'reveal rounded-xl border border-white/10 bg-black p-4';
+      const t = document.createElement('p'); t.className = 'font-bold text-orange-300'; t.textContent = k;
+      const x = document.createElement('p'); x.className = 'mt-1 text-sm leading-relaxed text-gray-300'; x.textContent = v;
+      d.appendChild(t); d.appendChild(x);
+      $('glossary').appendChild(d);
+    });
+    annotate(document.querySelector('main'));
+    annotate(document.querySelector('footer'));
+
+    // ===== Música de fondo (oculta) =====
+    let ytPlayer, ytMuted = false;
+    function musicMsg(t) { const m = $('m-msg'); m.textContent = t; m.classList.remove('hidden'); }
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('youtube-player', {
+        videoId: 'R9mQ-yXtl04',
+        playerVars: Object.assign({ autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, loop: 1, playlist: 'R9mQ-yXtl04' },
+          location.protocol.startsWith('http') ? { origin: location.origin } : {}),
+        events: {
+          onReady: e => e.target.setVolume(40),
+          onError: e => {
+            musicMsg('Sin audio (error ' + e.data + '). Abre la página desde https:// o localhost, no como archivo.');
+            $('m-pause').classList.add('hidden'); $('m-pause').classList.remove('flex'); $('m-play').classList.remove('hidden');
+          }
+        }
+      });
+    }
+    function setMuteIcon() {
+      $('m-mute').innerHTML = '<i data-lucide="' + (ytMuted ? 'volume-x' : 'volume-2') + '" class="h-4 w-4"></i>';
+      lucide.createIcons();
+    }
+    $('m-play').addEventListener('click', () => {
+      if (!ytPlayer) { musicMsg('YouTube no cargó: revisa tu conexión o si la página bloquea contenido externo.'); return; }
+      ytPlayer.unMute(); ytPlayer.setVolume(Number($('m-vol').value)); ytPlayer.playVideo();
+      $('m-play').classList.add('hidden'); $('m-pause').classList.remove('hidden'); $('m-pause').classList.add('flex');
+    });
+    $('m-pause').addEventListener('click', () => {
+      if (!ytPlayer) return;
+      ytPlayer.pauseVideo();
+      $('m-pause').classList.add('hidden'); $('m-pause').classList.remove('flex'); $('m-play').classList.remove('hidden');
+    });
+    $('m-mute').addEventListener('click', () => {
+      if (!ytPlayer) return;
+      ytMuted = !ytMuted;
+      if (ytMuted) ytPlayer.mute(); else { ytPlayer.unMute(); ytPlayer.setVolume(Number($('m-vol').value)); }
+      setMuteIcon();
+    });
+    $('m-vol').addEventListener('input', () => {
+      if (!ytPlayer) return;
+      const v = Number($('m-vol').value);
+      ytPlayer.setVolume(v);
+      ytMuted = v === 0;
+      if (ytMuted) ytPlayer.mute(); else ytPlayer.unMute();
+      setMuteIcon();
+    });
+
+    // ===== Aparición al hacer scroll =====
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        entry.target.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    lucide.createIcons();
+  </script>
 </body>
 </html>
