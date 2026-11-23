@@ -3,19 +3,671 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIEMPRE USA REUTILIZABLES</title>
+  <title>Siempre usa reutilizables · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .ring-progress { transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    .card { border: 1px solid rgba(74, 222, 128, 0.12); transition: border-color 0.3s, transform 0.3s; }
+    .card:hover { border-color: rgba(74, 222, 128, 0.45); transform: translateY(-4px); }
+
+    details.acc { border: 1px solid rgba(74, 222, 128, 0.15); border-radius: 0.75rem; background: rgba(5, 46, 22, 0.3); }
+    details.acc[open] { border-color: rgba(74, 222, 128, 0.45); }
+    details.acc summary { cursor: pointer; list-style: none; }
+    details.acc summary::-webkit-details-marker { display: none; }
+    details.acc[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.3s; }
+
+    abbr[title] { text-decoration: underline dotted rgba(74, 222, 128, 0.7); text-underline-offset: 3px; cursor: help; }
+
+    .chip { border: 1px solid rgba(255, 255, 255, 0.18); transition: all 0.2s; }
+    .chip:hover { border-color: rgba(74, 222, 128, 0.5); }
+    .chip.active { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; color: #bbf7d0; }
+
+    /* Piano de objetos */
+    .pkey { border: 1px solid rgba(255, 255, 255, 0.12); background: linear-gradient(to bottom, #0a0a0a, #111827); transition: transform 0.12s, box-shadow 0.2s, border-color 0.2s; touch-action: manipulation; }
+    .pkey:hover { border-color: var(--c); }
+    .pkey.on { transform: translateY(5px) scale(0.96); border-color: var(--c); box-shadow: 0 0 30px var(--c), inset 0 0 18px rgba(255, 255, 255, 0.08); }
+    .pfloat { position: absolute; pointer-events: none; z-index: 5; display: flex; align-items: center; gap: 2px; animation: floatup 1.1s ease-out forwards; }
+    @keyframes floatup { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-100px) scale(1.3) rotate(12deg); } }
+    .snote { transition: transform 0.15s, background-color 0.15s; }
+    .snote.cur { transform: scale(1.25); background: rgba(74, 222, 128, 0.25); }
+    .rec-dot { animation: blink 1s steps(2, start) infinite; }
+    @keyframes blink { to { opacity: 0.2; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
 </head>
 
-<body>
-  <h1>SIEMPRE USA REUTILIZABLES</h1>
+<body class="min-h-screen w-full bg-black text-gray-100">
 
-  <h2>50%</h2>
+  <nav class="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
 
-  <p>
-    Aquí puedes agregar información sobre el uso del transporte público,
-    sus beneficios ambientales, rutas y recomendaciones para la comunidad universitaria.
-  </p>
+  <main>
+    <!-- Portada -->
+    <header class="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center"
+            style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));">
+      <div class="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="fade-in relative max-w-2xl">
+        <p class="mb-8 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Indicador de sustentabilidad</p>
 
-  <a href="index.html">Volver a la página principal</a>
+        <div class="relative mx-auto mb-8 h-56 w-56 md:h-64 md:w-64" role="img" aria-label="37.5 por ciento">
+          <svg viewBox="0 0 160 160" class="h-full w-full -rotate-90">
+            <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"></circle>
+            <circle id="ring" class="ring-progress" cx="80" cy="80" r="70" fill="none" stroke="#4ade80" stroke-width="8" stroke-linecap="round" stroke-dasharray="439.82" stroke-dashoffset="439.82"></circle>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span id="counter" class="font-display text-6xl font-bold text-green-300 md:text-7xl" data-target="37.5">37.5%</span>
+          </div>
+        </div>
+
+        <h1 class="font-display mb-4 text-3xl font-bold leading-tight text-green-50 md:text-5xl">Siempre usa <em class="italic text-green-400">reutilizables</em></h1>
+        <p class="mx-auto max-w-md text-gray-400">6 de 16 personas de la UC siempre usan botella o bolsa reutilizable, y otras 7 lo hacen casi siempre.</p>
+
+        <a href="#encuesta" class="mt-10 inline-block text-green-300/70 transition hover:text-green-300" aria-label="Ver resultados"><i data-lucide="arrow-down" class="h-6 w-6"></i></a>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Encuesta -->
+    <section id="encuesta" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Con qué frecuencia usas botella o bolsa reutilizable?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">16 respuestas entre alumnos y docentes de la UC</p>
+        <div id="bars" class="reveal space-y-6"></div>
+        <div id="stats" class="mt-12 grid gap-4 sm:grid-cols-3"></div>
+        <p class="reveal mt-6 text-center text-xs text-gray-400">La suma es 100.1% por redondeo. Con 16 personas, cada una pesa 6.25 puntos porcentuales; los resultados describen a quienes respondieron, no a toda la universidad.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Qué afecta y qué beneficia -->
+    <section id="informacion" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Qué afecta y qué beneficia reutilizar</h2>
+        <p class="reveal mx-auto mb-12 max-w-2xl text-center text-sm text-gray-400">Datos del Programa de las Naciones Unidas para el Medio Ambiente y de la normativa de la Ciudad de México.</p>
+        <div id="info-cards" class="grid gap-5 md:grid-cols-2"></div>
+        <div id="big-stats" class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4"></div>
+        <p class="reveal mt-3 text-center text-xs text-gray-400">Cifras globales del PNUMA (UNEP) y de la OCDE.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Qué se puede reutilizar -->
+    <section id="lista" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Cosas que se pueden reutilizar</h2>
+        <p class="reveal mx-auto mb-12 max-w-xl text-center text-sm text-gray-400">Empieza por las que ya tienes en casa: lo más sustentable es el objeto que ya existe.</p>
+        <div id="reusables" class="grid gap-5 md:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Cafetería -->
+    <section id="cafeteria" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Medidas para una cafetería escolar</h2>
+        <p class="reveal mx-auto mb-12 max-w-2xl text-center text-sm text-gray-400">Ideas aplicables en la cafetería de la universidad. Las marcadas con una etiqueta salieron de las respuestas de la comunidad.</p>
+        <div id="measures" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Debate -->
+    <section id="debate" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">No todo es perfecto</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">Reutilizar ayuda, pero con condiciones. Esto es lo que dicen los estudios.</p>
+        <div id="accordion" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Piano -->
+    <section id="piano" class="relative w-full overflow-hidden bg-black px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div id="stage" class="relative mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Toca tu canción reutilizable</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">Cada objeto es una nota. Tócalos con el mouse, el dedo o el teclado (A S D F G H J K), graba tu melodía o deja que la página componga una con los objetos que usas tú.</p>
+
+        <div id="keys" class="reveal grid grid-cols-4 gap-3 md:grid-cols-8"></div>
+
+        <div class="reveal mt-6 flex flex-wrap items-center justify-center gap-3">
+          <button id="b-rec" type="button" class="flex items-center gap-2 rounded-full border border-red-400/40 px-4 py-2 text-xs uppercase tracking-wider text-red-300 transition hover:bg-red-400/10"><span id="rec-dot" class="h-2.5 w-2.5 rounded-full bg-red-500"></span><span id="rec-txt">Grabar</span></button>
+          <button id="b-play" type="button" class="flex items-center gap-2 rounded-full border border-green-400/40 px-4 py-2 text-xs uppercase tracking-wider text-green-300 transition hover:bg-green-400/10"><i data-lucide="play" class="h-4 w-4"></i><span id="play-txt">Reproducir</span></button>
+          <button id="b-demo" type="button" class="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-wider text-gray-300 transition hover:bg-white/5"><i data-lucide="music" class="h-4 w-4"></i><span>Ejemplo</span></button>
+          <button id="b-clear" type="button" class="flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-xs uppercase tracking-wider text-gray-300 transition hover:bg-white/5"><i data-lucide="trash-2" class="h-4 w-4"></i><span>Borrar</span></button>
+          <label class="flex items-center gap-2 text-xs text-gray-400"><i data-lucide="volume-2" class="h-4 w-4"></i><span class="sr-only">Volumen</span><input id="vol" type="range" min="0" max="100" value="60" class="w-24 accent-green-500"></label>
+        </div>
+
+        <p id="piano-msg" class="mt-5 text-center text-sm text-green-200" aria-live="polite">Toca un objeto para escuchar su nota.</p>
+
+        <div class="reveal mx-auto mt-4 max-w-3xl rounded-xl border border-white/10 bg-neutral-950 p-4">
+          <p id="song-title" class="mb-3 text-xs font-semibold uppercase tracking-wider text-green-300">Tu canción</p>
+          <div id="staff" class="flex min-h-[52px] flex-wrap items-center gap-2"><span class="text-sm italic text-gray-400">Tu canción aparecerá aquí.</span></div>
+        </div>
+
+        <div class="reveal mx-auto mt-8 max-w-3xl rounded-2xl border border-green-400/20 bg-green-950/20 p-6">
+          <h3 class="font-display mb-1 text-center text-xl font-bold text-green-100">Componer con mis objetos</h3>
+          <p class="mb-4 text-center text-sm text-gray-400">Marca los reutilizables que usas tú (al menos 2) y la página creará una melodía solo con sus notas.</p>
+          <div id="mine" class="mb-5 flex flex-wrap justify-center gap-2"></div>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <button id="b-gen" type="button" class="flex items-center gap-2 rounded-full bg-green-500 px-6 py-2.5 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105"><i data-lucide="wand-sparkles" class="h-4 w-4"></i><span>Generar mi canción</span></button>
+            <button id="b-var" type="button" class="flex items-center gap-2 rounded-full border border-green-400/40 px-5 py-2.5 text-sm text-green-300 transition hover:bg-green-400/10"><i data-lucide="shuffle" class="h-4 w-4"></i><span>Otra versión</span></button>
+            <label class="flex items-center gap-2 text-xs text-gray-400">Velocidad <input id="tempo" type="range" min="60" max="160" value="100" class="w-24 accent-green-500"></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Glosario -->
+    <section id="glosario" class="w-full bg-neutral-950 px-6 py-16">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">Siglas y términos</h2>
+        <p class="reveal mb-8 text-center text-sm text-gray-400">Las siglas subrayadas muestran su significado al pasar el cursor.</p>
+        <div id="glossary" class="grid gap-3 sm:grid-cols-2"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Fuentes -->
+    <section class="w-full bg-black px-6 py-16">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-6 text-center text-xl font-bold text-green-50 md:text-2xl">Fuentes consultadas</h2>
+        <ul id="sources" class="reveal grid gap-2 text-sm sm:grid-cols-2"></ul>
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Datos de 16 encuestas aplicadas en la UC</p>
+  </footer>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = id => document.getElementById(id);
+    const icon = (n, c) => '<i data-lucide="' + n + '" class="' + (c || 'h-5 w-5') + '"></i>';
+
+    // ===== Anillo del hero =====
+    const counter = $('counter'), ring = $('ring'), value = Number(counter.dataset.target);
+    requestAnimationFrame(() => { ring.style.strokeDashoffset = 439.82 * (1 - value / 100); });
+    if (!reduceMotion) {
+      const t0 = performance.now();
+      const tick = now => {
+        const p = Math.min((now - t0) / 1600, 1);
+        counter.textContent = (value * (1 - Math.pow(1 - p, 3))).toFixed(1) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+
+    // ===== Encuesta =====
+    [
+      { label: 'Siempre', value: 37.5, n: 6, color: '#4ade80' },
+      { label: 'Casi siempre', value: 43.8, n: 7, color: '#a3e635' },
+      { label: 'A veces', value: 18.8, n: 3, color: '#fbbf24' },
+      { label: 'Nunca', value: 0, n: 0, color: '#6b7280' }
+    ].forEach((d, i) => {
+      const row = document.createElement('div');
+      row.innerHTML =
+        '<div class="mb-2 flex items-baseline justify-between gap-4 text-sm"><span class="text-gray-200">' + d.label + '</span>' +
+        '<span class="font-display text-xl font-bold" style="color:' + d.color + '">' + d.value + '% <span class="text-xs font-normal text-gray-400">(' + d.n + ' de 16)</span></span></div>' +
+        '<div class="h-3 w-full overflow-hidden rounded-full bg-white/10"><div class="h-full w-0 rounded-full transition-all duration-[1400ms] ease-out" data-w="' + d.value + '" style="background:' + d.color + ';transition-delay:' + (i * 120) + 'ms"></div></div>';
+      $('bars').appendChild(row);
+    });
+
+    [
+      { v: '81.3%', t: 'siempre o casi siempre usa reutilizables (13 de 16)', i: 'badge-check' },
+      { v: '3 de 16', t: 'los usa solo a veces', i: 'repeat' },
+      { v: '0 de 16', t: 'nunca los usa', i: 'ban' }
+    ].forEach(s => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(s.i) + '</div>' +
+        '<p class="font-display text-3xl font-bold text-green-300">' + s.v + '</p><p class="mt-1 text-xs text-gray-400">' + s.t + '</p>';
+      $('stats').appendChild(d);
+    });
+
+    // ===== Información oficial =====
+    [
+      { i: 'package-x', t: 'El problema de lo desechable', p: 'Cada año se producen más de 430 millones de toneladas de plástico y dos tercios son productos de vida corta que pronto se vuelven residuo (PNUMA). El empaque es el mayor generador de residuos plásticos de un solo uso, y 85% de los envases de comida y bebida de un solo uso termina en rellenos sanitarios o como residuo mal gestionado.' },
+      { i: 'thermometer-sun', t: 'Plástico y clima', p: 'En 2019, el plástico generó 1.8 mil millones de toneladas de GEI, 3.4% del total mundial (PNUMA). Y solo alrededor de 9% del plástico se recicla (OCDE): como reciclar no alcanza, evitar producir más es clave.' },
+      { i: 'refresh-cw', t: 'Lo que dice el PNUMA sobre reutilizar', p: 'Su hoja de ruta de 2023 calcula que fomentar la reutilización (botellas rellenables, dispensadores a granel y sistemas de depósito) puede reducir 30% de la contaminación por plásticos para 2040, y estima ahorros netos de 1,289 dólares por tonelada de plástico en los esquemas de reutilización.' },
+      { i: 'scale', t: 'Lo problemático es que sea de un solo uso', p: 'Para el PNUMA y su Iniciativa de Ciclo de Vida, lo más problemático es que el producto sea de un solo uso, más que el material. Recomiendan reutilizables adecuados para cada uso, y reutilizar también las alternativas de un solo uso hechas de otros materiales.' },
+      { i: 'landmark', t: 'Lo que pasa en la CDMX', p: 'Desde 2020 la CDMX prohíbe las bolsas de plástico de un solo uso y, desde el 1 de enero de 2021, la venta y entrega de cubiertos, platos, vasos con tapas, popotes, mezcladores, charolas y otros desechables de plástico (salvo los compostables), por reformas de 2019 a la Ley de Residuos Sólidos. Según cifras oficiales, cada familia desechaba en promedio 650 bolsas de plástico al año.' },
+      { i: 'piggy-bank', t: 'Quién se beneficia', p: 'Menos residuos y menos contaminación, menos materias primas y energía para fabricar productos nuevos y, según el PNUMA, ahorros económicos. En la cafetería, además, ayuda a cumplir la ley de residuos de la ciudad.' }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = (i % 2) * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm leading-relaxed text-gray-400">' + c.p + '</p>';
+      $('info-cards').appendChild(d);
+    });
+
+    [
+      { n: 430, s: ' M t', l: 'de plástico al año' }, { n: 3.4, s: '%', l: 'de los GEI mundiales', d: 1 },
+      { n: 9, s: '%', l: 'del plástico se recicla' }, { n: 30, s: '%', l: 'menos contaminación con reutilización' }
+    ].forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<p class="font-display text-4xl font-bold text-green-300" data-target="' + m.n + '" data-dec="' + (m.d || 0) + '" data-suffix="' + m.s + '">' + m.n + m.s + '</p><p class="mt-1 text-xs uppercase tracking-wider text-gray-400">' + m.l + '</p>';
+      $('big-stats').appendChild(d);
+    });
+
+    // ===== Lista de reutilizables =====
+    [
+      { i: 'utensils', t: 'Para comer y beber', l: ['Botella o termo', 'Taza o vaso reutilizable', 'Tupper o contenedor', 'Cubiertos de acero o bambú', 'Popote de acero o vidrio', 'Servilleta de tela', 'Frascos de vidrio', 'Bolsa de tela para el pan'] },
+      { i: 'shopping-bag', t: 'Para comprar y cargar', l: ['Bolsa de tela', 'Bolsa de malla para fruta y verdura', 'Morral o canasta', 'Mochila', 'Bolsas de papel o tela para mandado', 'Cajas de cartón para guardar'] },
+      { i: 'graduation-cap', t: 'En la escuela', l: ['Hojas por ambos lados', 'Cuadernos con hojas sin usar', 'Libros y apuntes de segunda mano', 'Bolígrafos y plumones recargables', 'Pilas recargables', 'Carpetas y folders'] }
+    ].forEach((g, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = i * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(g.i) + '</span><h3 class="font-bold text-green-100">' + g.t + '</h3></div>' +
+        '<ul class="space-y-2 text-sm text-gray-300">' + g.l.map(x => '<li class="flex items-start gap-2"><span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-green-400"></span>' + x + '</li>').join('') + '</ul>';
+      $('reusables').appendChild(d);
+    });
+
+    // ===== Medidas para la cafetería =====
+    [
+      { i: 'badge-percent', t: 'Descuento por traer tu envase', p: 'Un descuento pequeño por llevar tu tupper o tu termo. Es de las ideas que más pidió la comunidad.', tag: true },
+      { i: 'utensils-crossed', t: 'Vajilla y cubiertos lavables', p: 'Cambia platos y cubiertos desechables por reutilizables. La CDMX ya prohíbe vender y entregar los de plástico de un solo uso.', tag: true },
+      { i: 'droplets', t: 'Agua siempre disponible', p: 'Garrafones y estaciones de llenado funcionando todos los días, para que la botella reutilizable tenga sentido.', tag: true },
+      { i: 'recycle', t: 'Depósito y retorno', p: 'Vasos o tuppers prestados con un pequeño depósito que se devuelve al regresarlos, como los sistemas de depósito que propone el PNUMA.' },
+      { i: 'milk', t: 'Dispensadores a granel', p: 'Salsas, aderezos, azúcar y café en dispensadores, en lugar de sobres individuales (otra opción que menciona el PNUMA).' },
+      { i: 'washing-machine', t: 'Estación de lavado y devolución', p: 'Un punto claro para dejar charolas y trastes usados y una zona de lavado con agua y jabón.' },
+      { i: 'megaphone', t: 'Señalética y metas', p: 'Letreros como "Hoy trae tu termo" y un contador visible de desechables evitados cada semana.' },
+      { i: 'trophy', t: 'Retos y dinámicas', p: 'Semana sin desechables, puntos o rifas para quienes usan reutilizables, y un bote de tapas y botellas con alguna dinámica.', tag: true }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal relative rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = (i % 4) * 80 + 'ms';
+      d.innerHTML = (c.tag ? '<span class="absolute right-3 top-3 rounded-full bg-amber-400/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-300">Lo pidió la comunidad</span>' : '') +
+        '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm leading-relaxed text-gray-400">' + c.p + '</p>';
+      $('measures').appendChild(d);
+    });
+
+    // ===== Debate =====
+    [
+      { i: 'repeat', t: 'Solo ayuda si realmente se reutiliza', b:
+        '<p>Un resumen de estudios de ciclo de vida hecho para el PNUMA concluye que una bolsa reutilizable puede ser mejor que una de un solo uso, pero solo si se usa muchas veces: una bolsa de algodón necesita entre 50 y 150 usos para tener menos impacto climático que una bolsa de plástico desechable; una bolsa gruesa de polipropileno (PP), unos 10 a 20; y una de polietileno (PE) más delgada, 5 a 10.</p>' +
+        '<p class="mt-3">Los resultados cambian mucho según los supuestos: un estudio danés de 2018 llegó a cifras bastante mayores. La conclusión práctica es usar los reutilizables que ya tienes, en lugar de acumular bolsas nuevas.</p>' },
+      { i: 'list-ordered', t: 'Primero reducir, luego reutilizar, luego reciclar', b:
+        '<p>El PNUMA propone empezar por eliminar el plástico innecesario y después rediseñar los productos para reutilizarlos. Reciclar solo recupera cerca de 9% del plástico, así que no puede ser la única estrategia. Reutilizar es, según su hoja de ruta, el cambio de mercado con mayor potencial: 30% de la contaminación por plásticos para 2040.</p>' },
+      { i: 'droplets', t: 'Lavar también cuesta', b:
+        '<p>Un reutilizable necesita lavarse: usa agua, jabón y tiempo, y debe mantenerse limpio por higiene. No encontré cifras oficiales para comparar ese costo en una cafetería escolar, pero es una razón para planear bien la estación de lavado y no solo regalar envases.</p>' },
+      { i: 'wallet', t: 'Acceso y costo', b:
+        '<p>Un termo o un juego de cubiertos tiene un costo inicial. Por eso medidas como los descuentos, el préstamo con depósito o una campaña para reutilizar lo que ya se tiene ayudan a que la práctica no dependa de cuánto pueda gastar cada persona.</p>' },
+      { i: 'message-circle-question', t: 'Entre nuestros datos', b:
+        '<p>13 de 16 personas usan reutilizables siempre o casi siempre y ninguna nunca. Aun así, 3 solo lo hacen a veces. ¿Qué les falta: agua disponible, un lugar para lavar, un descuento, o simplemente acordarse? La comunidad ya dio varias pistas en sus respuestas abiertas.</p>' },
+      { i: 'ruler', t: 'Ojo con los números', b:
+        '<p>Las cifras de producción, emisiones y reciclaje son globales (PNUMA y OCDE), no de México. Los análisis de ciclo de vida (ACV) dependen de supuestos y arrojan resultados distintos según el país, el material y el uso. Lo robusto es la idea central: lo que más daña es lo de un solo uso.</p>' }
+    ].forEach((a, i) => {
+      const d = document.createElement('details');
+      d.className = 'acc reveal';
+      if (i === 0) d.open = true;
+      d.innerHTML = '<summary class="flex items-center gap-3 p-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(a.i) + '</span>' +
+        '<span class="flex-1 font-bold text-green-100">' + a.t + '</span><span class="chev text-green-300"><i data-lucide="chevron-down" class="h-5 w-5"></i></span></summary>' +
+        '<div class="px-5 pb-5 text-sm leading-relaxed text-gray-300">' + a.b + '</div>';
+      $('accordion').appendChild(d);
+    });
+
+    // ===== Piano de objetos reutilizables =====
+    const OBJ = [
+      { n: 'Botella', note: 'Do', f: 261.63, c: '#38bdf8', k: 'a', svg: c => '<rect x="19" y="3" width="10" height="6" rx="2" fill="#e5e7eb"/><path d="M20 9h8v5l4 5v21a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V19l4-5z" fill="' + c + '"/><rect x="18" y="26" width="12" height="8" rx="2" fill="#fff" opacity=".35"/>' },
+      { n: 'Bolsa de tela', note: 'Re', f: 293.66, c: '#4ade80', k: 's', svg: c => '<path d="M10 16h28l3 28H7z" fill="' + c + '"/><path d="M17 16c0-11 14-11 14 0" fill="none" stroke="#e5e7eb" stroke-width="3"/><circle cx="24" cy="31" r="5" fill="#fff" opacity=".4"/>' },
+      { n: 'Termo', note: 'Mi', f: 329.63, c: '#f59e0b', k: 'd', svg: c => '<rect x="15" y="8" width="18" height="36" rx="5" fill="' + c + '"/><rect x="14" y="3" width="20" height="8" rx="3" fill="#e5e7eb"/><rect x="15" y="24" width="18" height="4" fill="#fff" opacity=".35"/>' },
+      { n: 'Tupper', note: 'Fa', f: 349.23, c: '#a78bfa', k: 'f', svg: c => '<rect x="6" y="19" width="36" height="22" rx="4" fill="' + c + '"/><rect x="4" y="12" width="40" height="9" rx="3" fill="#e5e7eb"/><path d="M12 31h24" stroke="#fff" opacity=".4" stroke-width="3"/>' },
+      { n: 'Cubiertos', note: 'Sol', f: 392.0, c: '#fb7185', k: 'g', svg: c => '<path d="M14 4v10a4 4 0 0 0 8 0V4M18 4v40" stroke="' + c + '" stroke-width="3" stroke-linecap="round" fill="none"/><ellipse cx="34" cy="13" rx="6" ry="9" fill="' + c + '"/><path d="M34 21v23" stroke="' + c + '" stroke-width="3" stroke-linecap="round"/>' },
+      { n: 'Popote de acero', note: 'La', f: 440.0, c: '#2dd4bf', k: 'h', svg: c => '<rect x="20" y="2" width="8" height="42" rx="4" fill="' + c + '" transform="rotate(25 24 24)"/><rect x="21.5" y="5" width="2" height="36" rx="1" fill="#fff" opacity=".45" transform="rotate(25 24 24)"/>' },
+      { n: 'Frasco de vidrio', note: 'Si', f: 493.88, c: '#facc15', k: 'j', svg: c => '<rect x="14" y="3" width="20" height="8" rx="2" fill="#e5e7eb"/><rect x="12" y="11" width="24" height="33" rx="6" fill="' + c + '" opacity=".85"/><rect x="16" y="18" width="16" height="14" rx="2" fill="#fff" opacity=".35"/>' },
+      { n: 'Servilleta de tela', note: "Do'", f: 523.25, c: '#f472b6', k: 'k', svg: c => '<rect x="8" y="8" width="32" height="32" rx="2" fill="' + c + '"/><rect x="12" y="12" width="24" height="24" fill="none" stroke="#fff" stroke-opacity=".6" stroke-dasharray="3 3"/><path d="M12 36L36 12" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>' }
+    ];
+    const ico = (i, s) => '<svg viewBox="0 0 48 48" width="' + s + '" height="' + s + '" aria-hidden="true">' + OBJ[i].svg(OBJ[i].c) + '</svg>';
+
+    // Composición: función pura (misma selección y semilla = misma canción)
+    function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    function composeSong(S, seed, bpm) {
+      const rnd = mulberry(seed), L = S.length, beat = 60000 / bpm;
+      const clamp = p => Math.max(0, Math.min(L - 1, p));
+      const pats = [[1, 1, 1, 1], [1, 0.5, 0.5, 1, 1], [2, 1, 1], [0.5, 0.5, 0.5, 0.5, 1, 1], [1.5, 0.5, 1, 1]];
+      const pick = () => pats[Math.floor(rnd() * pats.length)];
+      const walk = (len, start) => {
+        const out = []; let p = start;
+        for (let k = 0; k < len; k++) { out.push(p); const r = rnd(); p += r < 0.3 ? -1 : r < 0.65 ? 1 : r < 0.75 ? 0 : r < 0.88 ? 2 : -2; p = clamp(p); }
+        return out;
+      };
+      const pA = pick(), pB = pick();
+      const mA = walk(pA.length, Math.floor(rnd() * L)), mB = walk(pB.length, Math.floor(rnd() * L));
+      const bars = [[pA, mA], [pA, mA.map(p => clamp(p + 1))], [pB, mB], [[1, 1, 2], [Math.min(2, L - 1), Math.min(1, L - 1), 0]]];
+      const ev = []; let t = 0;
+      bars.forEach(([pat, pos]) => pat.forEach((b, k) => { ev.push({ i: S[pos[k]], t: Math.round(t), d: Math.round(b * beat * 0.9) }); t += b * beat; }));
+      return ev;
+    }
+
+    const keysEl = $('keys'), stage = $('stage'), msgEl = $('piano-msg');
+    const keyBtns = [];
+    let song = [], rec = false, recBuf = [], recStart = 0, playing = false, timers = [], variant = 0;
+    const mine = new Set([0, 1, 3]);
+    let AC = null, master = null, bus = null;
+
+    function audio() {
+      if (!AC) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        if (!C) { say('Tu navegador no permite reproducir audio.'); return null; }
+        AC = new C();
+        master = AC.createGain(); master.gain.value = $('vol').value / 100; master.connect(AC.destination);
+        bus = AC.createGain(); bus.connect(master);
+      }
+      if (AC.state === 'suspended') AC.resume();
+      return AC;
+    }
+    function say(t) { msgEl.textContent = t; }
+
+    function tone(i, when, dur) {
+      const ac = audio(); if (!ac) return;
+      const t = ac.currentTime + (when || 0), f = OBJ[i].f;
+      const o1 = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), g2 = ac.createGain();
+      o1.type = 'triangle'; o1.frequency.value = f;
+      o2.type = 'sine'; o2.frequency.value = f * 2; g2.gain.value = 0.25;
+      o2.connect(g2); g2.connect(g); o1.connect(g);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      g.connect(bus);
+      o1.start(t); o2.start(t); o1.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    }
+
+    function flash(i) {
+      const k = keyBtns[i];
+      k.classList.add('on');
+      setTimeout(() => k.classList.remove('on'), 170);
+      if (reduceMotion) return;
+      const r = k.getBoundingClientRect(), s = stage.getBoundingClientRect();
+      const p = document.createElement('div');
+      p.className = 'pfloat';
+      p.style.cssText = 'left:' + (r.left - s.left + r.width / 2 - 24) + 'px;top:' + (r.top - s.top - 10) + 'px';
+      p.innerHTML = ico(i, 28) + '<span style="color:' + OBJ[i].c + ';font-size:22px;font-weight:700">♪</span>';
+      stage.appendChild(p);
+      setTimeout(() => p.remove(), 1150);
+    }
+
+    function press(i, fromPlay) {
+      tone(i, 0, 0.7);
+      flash(i);
+      if (rec && !fromPlay && recBuf.length < 64) recBuf.push({ i, t: performance.now() - recStart, d: 380 });
+    }
+
+    OBJ.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pkey flex flex-col items-center gap-1 rounded-2xl p-3 text-center';
+      b.style.setProperty('--c', o.c);
+      b.setAttribute('aria-label', o.n + ', nota ' + o.note);
+      b.innerHTML = ico(i, 52) + '<span class="text-xs font-semibold text-gray-100">' + o.n + '</span><span class="text-[11px] font-bold" style="color:' + o.c + '">' + o.note + '</span><span class="hidden text-[10px] uppercase text-gray-400 md:block">' + o.k + '</span>';
+      b.addEventListener('pointerdown', e => { e.preventDefault(); press(i); });
+      b.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!e.repeat) press(i); } });
+      keysEl.appendChild(b);
+      keyBtns.push(b);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      const i = OBJ.findIndex(o => o.k === e.key.toLowerCase());
+      if (i >= 0) press(i);
+    });
+
+    // Partitura
+    function renderStaff(title) {
+      const st = $('staff');
+      st.innerHTML = '';
+      $('song-title').textContent = title || 'Tu canción';
+      if (!song.length) { st.innerHTML = '<span class="text-sm italic text-gray-400">Tu canción aparecerá aquí.</span>'; return; }
+      song.forEach((e, k) => {
+        const c = document.createElement('button');
+        c.type = 'button';
+        c.className = 'snote flex flex-col items-center rounded-lg border border-white/10 px-2 py-1';
+        c.dataset.k = k;
+        c.title = OBJ[e.i].n;
+        c.innerHTML = ico(e.i, 24) + '<span class="text-[10px] font-bold" style="color:' + OBJ[e.i].c + '">' + OBJ[e.i].note + '</span>';
+        c.addEventListener('click', () => press(e.i, true));
+        st.appendChild(c);
+      });
+    }
+    function cur(k) {
+      $('staff').querySelectorAll('.snote').forEach(n => n.classList.toggle('cur', Number(n.dataset.k) === k));
+    }
+
+    // Reproducción
+    function setPlayUi() {
+      $('play-txt').textContent = playing ? 'Detener' : 'Reproducir';
+    }
+    function stopPlay() {
+      timers.forEach(clearTimeout); timers = []; playing = false;
+      if (AC && bus) { bus.gain.setTargetAtTime(0, AC.currentTime, 0.03); const old = bus; setTimeout(() => old.disconnect(), 400); bus = AC.createGain(); bus.connect(master); }
+      cur(-1); setPlayUi();
+    }
+    function playSong() {
+      if (playing) { stopPlay(); return; }
+      if (!song.length) { say('Aún no hay canción: graba una, toca "Ejemplo" o genera la tuya.'); return; }
+      if (!audio()) return;
+      stopPlay(); playing = true; setPlayUi();
+      song.forEach((e, k) => {
+        tone(e.i, e.t / 1000 + 0.05, Math.max(e.d, 200) / 1000 + 0.25);
+        timers.push(setTimeout(() => { flash(e.i); cur(k); }, e.t + 50));
+      });
+      const last = song[song.length - 1];
+      timers.push(setTimeout(() => { playing = false; cur(-1); setPlayUi(); say('¡Listo! Puedes volver a reproducirla o crear otra.'); }, last.t + last.d + 500));
+    }
+
+    // Grabar
+    $('b-rec').addEventListener('click', () => {
+      if (!audio()) return;
+      if (!rec) {
+        stopPlay(); rec = true; recBuf = []; recStart = performance.now();
+        $('rec-txt').textContent = 'Detener'; $('rec-dot').classList.add('rec-dot');
+        say('Grabando… toca los objetos en el orden que quieras.');
+      } else {
+        rec = false;
+        $('rec-txt').textContent = 'Grabar'; $('rec-dot').classList.remove('rec-dot');
+        if (recBuf.length) {
+          const t0 = recBuf[0].t;
+          song = recBuf.map(e => ({ i: e.i, t: Math.round(e.t - t0), d: e.d }));
+          renderStaff('Tu melodía grabada (' + song.length + ' notas)');
+          say('Melodía guardada. Pulsa "Reproducir" para escucharla.');
+        } else say('No se grabó ninguna nota.');
+      }
+    });
+    $('b-play').addEventListener('click', playSong);
+    $('b-clear').addEventListener('click', () => { stopPlay(); song = []; renderStaff(); say('Canción borrada.'); });
+
+    // Ejemplo: "Oda a la alegría" (Beethoven, dominio público)
+    $('b-demo').addEventListener('click', () => {
+      stopPlay();
+      const notes = [2, 2, 3, 4, 4, 3, 2, 1, 0, 0, 1, 2, 2, 1, 1], beats = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5, 0.5, 2];
+      const beat = 60000 / Number($('tempo').value); let t = 0;
+      song = notes.map((n, k) => { const e = { i: n, t: Math.round(t), d: Math.round(beats[k] * beat * 0.9) }; t += beats[k] * beat; return e; });
+      renderStaff('Ejemplo: Oda a la alegría (Beethoven)');
+      playSong();
+    });
+
+    // Componer con mis objetos
+    const mineEl = $('mine');
+    OBJ.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip flex items-center gap-2 rounded-full px-3 py-1.5 text-xs text-gray-300';
+      b.dataset.i = i;
+      b.innerHTML = ico(i, 18) + '<span>' + o.n + '</span>';
+      b.addEventListener('click', () => { mine.has(i) ? mine.delete(i) : mine.add(i); syncMine(); });
+      mineEl.appendChild(b);
+    });
+    function syncMine() {
+      mineEl.querySelectorAll('.chip').forEach(b => {
+        const on = mine.has(Number(b.dataset.i));
+        b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+      });
+    }
+    function generate(again) {
+      const S = [...mine].sort((a, b) => a - b);
+      if (S.length < 2) { say('Marca al menos 2 objetos que uses para componer.'); return; }
+      if (again) variant++;
+      stopPlay();
+      const seed = S.reduce((h, i) => h * 31 + i + 1, 7) + variant * 977;
+      song = composeSong(S, seed, Number($('tempo').value));
+      renderStaff('Canción de tus ' + S.length + ' objetos' + (variant ? ' (versión ' + (variant + 1) + ')' : ''));
+      say('Compuesta con: ' + S.map(i => OBJ[i].n).join(', ') + '.');
+      playSong();
+    }
+    $('b-gen').addEventListener('click', () => generate(false));
+    $('b-var').addEventListener('click', () => generate(true));
+    $('vol').addEventListener('input', () => { if (master) master.gain.value = $('vol').value / 100; });
+    syncMine();
+
+    // ===== Siglas y glosario =====
+    const GLOSS = [
+      ['UC', 'Universidad de la Comunicación, donde se aplicó la encuesta.'],
+      ['CDMX', 'Ciudad de México.'],
+      ['PNUMA', 'Programa de las Naciones Unidas para el Medio Ambiente (en inglés, UNEP).'],
+      ['UNEP', 'United Nations Environment Programme: Programa de las Naciones Unidas para el Medio Ambiente.'],
+      ['OCDE', 'Organización para la Cooperación y el Desarrollo Económicos.'],
+      ['GEI', 'Gases de efecto invernadero.'],
+      ['ACV', 'Análisis de ciclo de vida: método que mide el impacto ambiental de un producto desde su fabricación hasta que se desecha.'],
+      ['PP', 'Polipropileno: plástico de las bolsas gruesas reutilizables.'],
+      ['PE', 'Polietileno: plástico de las bolsas delgadas.']
+    ];
+    const SIGLAS = {};
+    GLOSS.forEach(([k, v]) => { SIGLAS[k] = v; });
+    const sigGuard = '(?<![\\p{L}\\p{N}_])(' + Object.keys(SIGLAS).sort((x, y) => y.length - x.length).join('|') + ')(?![\\p{L}\\p{N}_])';
+
+    function annotate(root) {
+      if (!root) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: n => n.parentElement && n.parentElement.closest('abbr,a,script,style,#glosario,#piano,button') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n => {
+        const txt = n.nodeValue, rx = new RegExp(sigGuard, 'gu');
+        let last = 0, m, frag = null;
+        while ((m = rx.exec(txt))) {
+          frag = frag || document.createDocumentFragment();
+          frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+          const ab = document.createElement('abbr');
+          ab.title = SIGLAS[m[1]];
+          ab.textContent = m[1];
+          frag.appendChild(ab);
+          last = m.index + m[1].length;
+        }
+        if (frag) { frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); }
+      });
+    }
+
+    GLOSS.forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'reveal rounded-xl border border-white/10 bg-black p-4';
+      d.innerHTML = '<p class="font-bold text-green-300"></p><p class="mt-1 text-sm leading-relaxed text-gray-300"></p>';
+      d.children[0].textContent = k;
+      d.children[1].textContent = v;
+      $('glossary').appendChild(d);
+    });
+
+    // ===== Fuentes =====
+    [
+      ['PNUMA: todo sobre la contaminación por plásticos', 'https://www.unep.org/news-and-stories/story/everything-you-need-know-about-plastic-pollution?lctg=255204127'],
+      ['PNUMA: plan para vencer la contaminación por plásticos', 'https://www.unep.org/beatpollution/beat-plastic-pollution/gameplan-it-is-time-to-beat-plastic-pollution'],
+      ['PNUMA: hoja de ruta para reducir los plásticos', 'https://www.unep.org/news-and-stories/press-release/un-roadmap-outlines-solutions-cut-global-plastic-pollution'],
+      ['PNUMA: "Turning off the tap" (resumen)', 'https://wedocs.unep.org/bitstream/handle/20.500.11822/42408/turning_off_the_KMEN.pdf?sequence=6'],
+      ['PNUMA: cómo reducir el impacto de los plásticos de un solo uso', 'https://www.unep.org/news-and-stories/story/how-reduce-impacts-single-use-plastic-products'],
+      ['PNUMA: bolsas de plástico y sus alternativas (ACV)', 'https://wedocs.unep.org/20.500.11822/31932'],
+      ['CTC-N: conclusiones del informe sobre bolsas', 'https://www.ctc-n.org/resources/single-use-plastic-bags-and-their-alternatives-recommendations-life-cycle-assessments'],
+      ['KSL: cuántas veces reutilizar una bolsa', 'https://www.ksl.com/article/news/utah/environment/heres-how-many-times-you-need-to-reuse-your-reusable-grocery-bags/50598875'],
+      ['Gaceta Oficial de la CDMX, 25 de junio de 2019', 'https://www.sedema.cdmx.gob.mx/storage/app/media/DGEIRA/GacetaDel25DeJunio2019.pdf'],
+      ['SEDEMA: Basura Cero', 'https://www.sedema.cdmx.gob.mx/storage/app/media/Cuadernillos-Ambientales/7-BASURA-CERO.pdf'],
+      ['Expansión: la CDMX dice adiós a los plásticos desechables', 'https://politica.expansion.mx/cdmx/2021/01/01/la-cdmx-dice-adios-a-los-plasticos-desechables'],
+      ['Telemundo / EFE: prohibición en la CDMX (650 bolsas por familia)', 'https://www.telemundo51.com/noticias/mexico/ciudad-de-mexico-inicia-2021-con-prohibicion-de-plasticos-de-un-solo-uso/2149701/']
+    ].forEach(([t, u]) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-gray-300 transition hover:border-green-400/40 hover:text-green-300';
+      a.innerHTML = '<i data-lucide="external-link" class="h-4 w-4 shrink-0"></i>';
+      a.appendChild(document.createTextNode(t));
+      li.appendChild(a);
+      $('sources').appendChild(li);
+    });
+
+    // ===== Contadores y aparición al hacer scroll =====
+    function countUp(el) {
+      const target = Number(el.dataset.target), dec = Number(el.dataset.dec) || 0, suf = el.dataset.suffix || '';
+      if (reduceMotion) { el.textContent = target.toFixed(dec) + suf; return; }
+      const t0 = performance.now();
+      const step = now => {
+        const p = Math.min((now - t0) / 1400, 1);
+        el.textContent = (target * (1 - Math.pow(1 - p, 3))).toFixed(dec) + suf;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('visible');
+        el.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        el.querySelectorAll('[data-target]').forEach(countUp);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12 });
+
+    annotate(document.querySelector('main'));
+    annotate(document.querySelector('footer'));
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    lucide.createIcons();
+  </script>
 </body>
 </html>

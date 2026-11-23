@@ -3,19 +3,733 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BOTELLAS DESECHABLES POR SEMANA</title>
+  <title>Botellas desechables por semana · Sustentabilidad Universitaria</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    .fade-in { animation: fadeIn 0.9s ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .dot { opacity: 0; animation: pop 0.5s ease forwards; }
+    @keyframes pop { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
+
+    .card { border: 1px solid rgba(74, 222, 128, 0.12); transition: border-color 0.3s, transform 0.3s; }
+    .card:hover { border-color: rgba(74, 222, 128, 0.45); transform: translateY(-4px); }
+
+    details.acc { border: 1px solid rgba(74, 222, 128, 0.15); border-radius: 0.75rem; background: rgba(5, 46, 22, 0.3); }
+    details.acc[open] { border-color: rgba(74, 222, 128, 0.45); }
+    details.acc summary { cursor: pointer; list-style: none; }
+    details.acc summary::-webkit-details-marker { display: none; }
+    details.acc[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.3s; }
+
+    abbr[title] { text-decoration: underline dotted rgba(74, 222, 128, 0.7); text-underline-offset: 3px; cursor: help; }
+
+    .chip { border: 1px solid rgba(255, 255, 255, 0.18); transition: all 0.2s; }
+    .chip:hover { border-color: rgba(74, 222, 128, 0.5); }
+    .chip.active { background: rgba(74, 222, 128, 0.15); border-color: #4ade80; color: #bbf7d0; }
+
+    /* Explorador de piezas */
+    .exp-svg { --ex: 0; width: 100%; height: 100%; }
+    .part { cursor: pointer; transform: translate(calc(var(--dx) * var(--ex) * 1px), calc(var(--dy) * var(--ex) * 1px)); transition: transform 0.35s ease, filter 0.2s; outline: none; }
+    .part:hover, .part:focus-visible, .part.sel { filter: drop-shadow(0 0 5px #4ade80) brightness(1.15); }
+
+    .fx { border: 1px solid rgba(255, 255, 255, 0.1); transition: border-color 0.5s, background-color 0.5s; }
+    .fx.on { border-color: rgba(239, 68, 68, 0.55); background: rgba(127, 29, 29, 0.18); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; }
+      .dot { opacity: 1; }
+    }
+  </style>
 </head>
 
-<body>
-  <h1>BOTELLAS DESECHABLES POR SEMANA</h1>
+<body class="min-h-screen w-full bg-black text-gray-100">
 
-  <h2>27</h2>
+  <nav class="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+      <span class="font-display text-sm uppercase tracking-widest text-gray-200">Universidad de la Comunicación</span>
+      <a href="index.html#indicadores" class="flex items-center gap-2 text-xs uppercase tracking-wider transition-colors hover:text-green-300">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar</span>
+      </a>
+    </div>
+  </nav>
 
-  <p>
-    Aquí puedes agregar información sobre el uso del transporte público,
-    sus beneficios ambientales, rutas y recomendaciones para la comunidad universitaria.
-  </p>
+  <main>
+    <!-- Portada -->
+    <header class="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-16 pt-24 text-center"
+            style="background: radial-gradient(at 50% 80%, rgb(10, 31, 10), rgb(0, 0, 0));">
+      <div class="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="fade-in relative max-w-2xl">
+        <p class="mb-8 text-xs uppercase tracking-[0.3em] text-green-300 opacity-80">Indicador de sustentabilidad</p>
 
-  <a href="index.html">Volver a la página principal</a>
+        <div class="relative mx-auto mb-8 h-56 w-56 md:h-64 md:w-64" role="img" aria-label="38 botellas o bolsas desechables por semana entre 16 personas: 4 ninguna, 8 de 1 a 3, 4 de 4 a 7">
+          <svg id="dots" viewBox="0 0 160 160" class="h-full w-full"></svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="counter" class="font-display text-6xl font-bold text-green-300 md:text-7xl" data-target="38">38</span>
+            <span class="text-[11px] uppercase tracking-widest text-gray-400">por semana</span>
+          </div>
+        </div>
+
+        <h1 class="font-display mb-4 text-3xl font-bold leading-tight text-green-50 md:text-5xl">Botellas <em class="italic text-green-400">desechables</em> por semana</h1>
+        <p class="mx-auto max-w-md text-gray-400">Entre las 16 personas que respondieron, se estima que usan 38 botellas o bolsas de plástico desechables cada semana, unas 2.4 por persona. Cada punto es una persona.</p>
+
+        <a href="#encuesta" class="mt-10 inline-block text-green-300/70 transition hover:text-green-300" aria-label="Ver resultados"><i data-lucide="arrow-down" class="h-6 w-6"></i></a>
+      </div>
+    </header>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Encuesta -->
+    <section id="encuesta" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Cuántas botellas o bolsas de plástico desechables usas por semana?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">16 respuestas entre alumnos y docentes de la UC</p>
+        <div id="bars-use" class="reveal space-y-6"></div>
+        <div id="stats-use" class="mt-12 grid gap-4 sm:grid-cols-3"></div>
+
+        <div class="reveal mt-10 rounded-2xl border border-green-400/20 bg-green-950/20 p-6">
+          <div class="mb-2 flex items-center gap-2 font-bold text-green-100"><i data-lucide="calculator" class="h-5 w-5"></i><span>¿De dónde sale el 38?</span></div>
+          <p class="text-sm leading-relaxed text-gray-300">Como la encuesta pregunta por rangos, el total se estima con el punto medio de cada uno: 8 personas en "de 1 a 3" (2 en promedio) suman 16, y 4 personas en "de 4 a 7" (5.5 en promedio) suman 22. En total, <strong>16 + 22 = 38 por semana</strong>, o 38 ÷ 16 ≈ <strong>2.4 por persona</strong> y unas 1,976 al año. Es una estimación: según el rango real de cada respuesta, el total estaría entre 24 y 52.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Quiénes respondieron -->
+    <section id="poblacion" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-2 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Quiénes respondieron?</h2>
+        <p class="reveal mb-10 text-center text-sm text-gray-400">Perfil de las 16 personas que respondieron, entre alumnos y docentes de la UC</p>
+
+        <h3 class="reveal mb-5 font-bold text-green-100">¿Qué año cursas?</h3>
+        <div id="bars-who" class="reveal space-y-6"></div>
+        <div id="stats-who" class="mt-10 grid gap-4 sm:grid-cols-3"></div>
+
+        <h3 class="reveal mb-5 mt-14 font-bold text-green-100">¿Cuál es tu sexo?</h3>
+        <div id="bars-sex" class="reveal space-y-6"></div>
+
+        <h3 class="reveal mb-5 mt-14 font-bold text-green-100">¿Qué edad tienes?</h3>
+        <div id="bars-age" class="reveal space-y-6"></div>
+
+        <h3 class="reveal mb-5 mt-14 font-bold text-green-100">¿En qué carrera estás?</h3>
+        <div id="bars-career" class="reveal space-y-6"></div>
+        <p class="reveal mt-4 text-xs text-gray-400">Los porcentajes de carrera suman 112.7% (18 menciones entre 16 personas), así que parece que se podía marcar más de una opción.</p>
+        <div id="stats-profile" class="mt-10 grid gap-4 sm:grid-cols-3"></div>
+
+        <div class="reveal mt-10 space-y-4 rounded-2xl border border-white/10 bg-neutral-950 p-6 text-sm leading-relaxed text-gray-300">
+          <p class="font-bold text-green-100">Cómo leer el 38 con esta población</p>
+          <p><strong>Por puesto o año:</strong> 12 de las 16 respuestas son de docentes (6) y de estudiantes de 4.º año (6). No respondió nadie de 1.er año ni del personal administrativo, y de 2.º, 3.er año y posgrado hay 4 personas en total.</p>
+          <p><strong>Por perfil:</strong> 9 hombres y 7 mujeres. 9 de 16 tienen entre 18 y 24 años, 2 entre 25 y 30 y 5 más de 30; nadie es menor de 18. 12 de 16 son de Comunicación social, y 5 de las 11 opciones de carrera (como Publicidad, Cine o Periodismo) no tuvieron ninguna respuesta.</p>
+          <p>Por eso el 38 describe sobre todo a docentes y estudiantes avanzados de Comunicación social, y no sabemos cómo usan las botellas y bolsas otras carreras, el primer año o el personal administrativo.</p>
+          <p>No tenemos el cruce (cuántas botellas usa cada grupo), así que <strong>no se puede decir qué grupo usa más</strong>. Si lo tienes, sería el siguiente dato para agregar.</p>
+          <p>Tampoco podemos extrapolar a toda la universidad: no sabemos cuántas personas la forman ni cómo se eligió a quienes respondieron.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Información -->
+    <section id="informacion" class="w-full bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Botellas y bolsas desechables en el mundo y en México</h2>
+        <p class="reveal mx-auto mb-12 max-w-2xl text-center text-sm text-gray-400">Datos de la ONU (PNUMA y PNUD), de la SEMARNAT y de la normativa de la Ciudad de México.</p>
+        <div id="info-cards" class="grid gap-5 md:grid-cols-2"></div>
+        <div id="big-stats" class="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4"></div>
+
+        <h3 class="font-display reveal mb-2 mt-16 text-center text-xl font-bold text-green-100 md:text-2xl">¿Cómo se compara nuestra muestra?</h3>
+        <p class="reveal mb-8 text-center text-sm text-gray-400">Botellas o bolsas desechables por persona al año (aproximado)</p>
+        <div id="bars-compare" class="reveal mx-auto max-w-3xl space-y-6"></div>
+        <p class="reveal mx-auto mt-6 max-w-3xl text-center text-xs text-gray-400">Ojo: son medidas distintas. Nuestra muestra suma botellas y bolsas (estimado con puntos medios); el dato de México es de botellas de PET; el mundial sale de 1 millón de botellas por minuto repartidas entre unos 8,200 millones de personas. Sirve para dimensionar, no para concluir.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Debate -->
+    <section id="debate" class="w-full bg-black px-6 py-20">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Matices y preguntas</h2>
+        <p class="reveal mx-auto mb-10 max-w-xl text-center text-sm text-gray-400">Lo que conviene tener en cuenta antes de sacar conclusiones.</p>
+        <div id="accordion" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Juego 1: explorador -->
+    <section id="explorador" class="relative w-full overflow-hidden bg-neutral-950 px-6 py-20">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">Desarma una botella y una bolsa</h2>
+        <p class="reveal mx-auto mb-8 max-w-xl text-center text-sm text-gray-400">Mueve el control para separar las piezas y toca cada una para ver de qué está hecha. Compara la desechable con la reutilizable.</p>
+
+        <div id="exp-tabs" class="reveal mb-6 flex justify-center gap-2"></div>
+        <div id="exp-cards" class="reveal grid gap-5 md:grid-cols-2"></div>
+
+        <div class="reveal mx-auto mt-6 flex max-w-md items-center gap-3 text-xs text-gray-400">
+          <i data-lucide="package" class="h-4 w-4"></i><span>Armada</span>
+          <input id="exp-slider" type="range" min="0" max="100" value="45" class="w-full accent-green-500" aria-label="Separar las piezas">
+          <span>Desarmada</span><i data-lucide="package-open" class="h-4 w-4"></i>
+        </div>
+
+        <div id="exp-info" class="reveal mx-auto mt-6 max-w-3xl rounded-2xl border border-green-400/20 bg-black p-5 text-sm leading-relaxed text-gray-300" aria-live="polite">Toca una pieza para ver su material.</div>
+        <div id="exp-table" class="reveal mx-auto mt-6 max-w-3xl overflow-x-auto"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Juego 2: planeta -->
+    <section id="planeta" class="relative w-full overflow-hidden bg-black px-6 py-20">
+      <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 rounded-full bg-green-500/10 blur-3xl"></div>
+      <div class="relative mx-auto max-w-5xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-4xl">¿Qué pasaría si todos hiciéramos lo mismo que tú?</h2>
+        <p class="reveal mx-auto mb-8 max-w-xl text-center text-sm text-gray-400">Elige cuántas botellas o bolsas desechables usas por semana y mira cómo se llena un planeta con las de un año.</p>
+
+        <div class="reveal mb-4 flex flex-wrap justify-center gap-2" id="pl-kind"></div>
+        <div class="reveal mb-4 flex flex-wrap justify-center gap-2" id="pl-scale"></div>
+        <div class="reveal mb-2 flex flex-wrap justify-center gap-2" id="pl-opts"></div>
+        <p class="reveal mb-6 text-center text-xs text-gray-400">Para el cálculo usamos el punto medio de cada rango (2 y 5.5) y 10 para "más de 7".</p>
+
+        <div class="grid items-center gap-8 md:grid-cols-2">
+          <div class="reveal mx-auto w-full max-w-[520px]"><canvas id="planet" class="mx-auto rounded-2xl border border-white/10" role="img" aria-label="Un planeta que se llena de botellas o bolsas según lo que elijas"></canvas></div>
+
+          <div class="reveal space-y-4">
+            <p id="pl-msg" class="font-display text-xl text-green-100" aria-live="polite">Elige una opción para empezar.</p>
+            <div class="rounded-xl border border-white/10 bg-neutral-950 p-4">
+              <p class="text-xs uppercase tracking-wider text-gray-400">Tú, en un año</p>
+              <p id="pl-yr" class="font-display text-3xl font-bold text-green-300">—</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-neutral-950 p-4">
+              <p class="text-xs uppercase tracking-wider text-gray-400">Si las 8,200 millones de personas hicieran lo mismo</p>
+              <p id="pl-world" class="font-display text-3xl font-bold text-orange-300">—</p>
+              <p id="pl-real" class="mt-1 text-xs leading-relaxed text-gray-400"></p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-neutral-950 p-4">
+              <p class="text-xs uppercase tracking-wider text-gray-400">A dónde irían</p>
+              <p id="pl-end" class="text-sm leading-relaxed text-gray-300">—</p>
+            </div>
+            <p id="pl-legend" class="text-xs text-gray-400"></p>
+          </div>
+        </div>
+
+        <h3 class="font-display reveal mb-6 mt-14 text-center text-xl font-bold text-green-100 md:text-2xl">Cómo afecta al planeta</h3>
+        <div id="pl-fx" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+        <p class="reveal mt-4 text-center text-xs text-gray-400">Las barras y el color son ilustrativos. Las cifras de efectos son estimaciones globales de la ONU, no se reparten por botella.</p>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Glosario -->
+    <section id="glosario" class="w-full bg-neutral-950 px-6 py-16">
+      <div class="mx-auto max-w-4xl">
+        <h2 class="font-display reveal mb-3 text-center text-2xl font-bold text-green-50 md:text-3xl">Siglas y términos</h2>
+        <p class="reveal mb-8 text-center text-sm text-gray-400">Las siglas subrayadas muestran su significado al pasar el cursor.</p>
+        <div id="glossary" class="grid gap-3 sm:grid-cols-2"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-green-400/25 to-transparent"></div>
+
+    <!-- Fuentes -->
+    <section class="w-full bg-black px-6 py-16">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="font-display reveal mb-6 text-center text-xl font-bold text-green-50 md:text-2xl">Fuentes consultadas</h2>
+        <ul id="sources" class="reveal grid gap-2 text-sm sm:grid-cols-2"></ul>
+        <div class="reveal mt-12 text-center">
+          <a href="index.html#indicadores" class="inline-flex items-center gap-2 rounded-full bg-green-500 px-8 py-3 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:scale-105">
+            <i data-lucide="arrow-left" class="h-4 w-4"></i><span>Regresar a indicadores</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 bg-black px-6 py-8 text-center">
+    <p class="text-xs text-gray-400">Universidad de la Comunicación · Proyecto de sustentabilidad · Datos de 16 encuestas aplicadas en la UC</p>
+  </footer>
+
+  <script>
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const $ = id => document.getElementById(id);
+    const icon = (n, c) => '<i data-lucide="' + n + '" class="' + (c || 'h-5 w-5') + '"></i>';
+
+    // ===== Portada: 16 puntos (personas) =====
+    (function () {
+      const cols = [].concat(Array(4).fill('#6b7280'), Array(8).fill('#fbbf24'), Array(4).fill('#ef4444'));
+      let h = '<circle cx="80" cy="80" r="74" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>';
+      cols.forEach((c, i) => {
+        const a = -Math.PI / 2 + i * 2 * Math.PI / 16, x = 80 + 66 * Math.cos(a), y = 80 + 66 * Math.sin(a);
+        h += '<circle class="dot" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="6" fill="' + c + '" style="animation-delay:' + (i * 90) + 'ms;transform-origin:' + x.toFixed(1) + 'px ' + y.toFixed(1) + 'px"/>';
+      });
+      $('dots').innerHTML = h;
+    })();
+
+    // ===== Barras =====
+    function renderBars(id, data, unit) {
+      data.forEach((d, i) => {
+        const row = document.createElement('div');
+        row.innerHTML =
+          '<div class="mb-2 flex items-baseline justify-between gap-4 text-sm"><span class="text-gray-200">' + d.label + '</span>' +
+          '<span class="font-display text-xl font-bold" style="color:' + d.color + '">' + d.text + '</span></div>' +
+          '<div class="h-3 w-full overflow-hidden rounded-full bg-white/10"><div class="h-full w-0 rounded-full transition-all duration-[1400ms] ease-out" data-w="' + d.w + '" style="background:' + d.color + ';transition-delay:' + (i * 120) + 'ms"></div></div>';
+        $(id).appendChild(row);
+      });
+    }
+    const pc = (v, n) => v + '% <span class="text-xs font-normal text-gray-400">(' + n + ' de 16)</span>';
+    renderBars('bars-use', [
+      { label: 'Ninguna', w: 25, text: pc(25, 4), color: '#4ade80' },
+      { label: 'De 1 a 3', w: 50, text: pc(50, 8), color: '#fbbf24' },
+      { label: 'De 4 a 7', w: 25, text: pc(25, 4), color: '#ef4444' },
+      { label: 'Más de 7', w: 0, text: pc(0, 0), color: '#6b7280' }
+    ]);
+    renderBars('bars-who', [
+      { label: 'Docentes', w: 37.5, text: pc(37.5, 6), color: '#38bdf8' },
+      { label: '4.º año', w: 37.5, text: pc(37.5, 6), color: '#4ade80' },
+      { label: '3.er año', w: 12.5, text: pc(12.5, 2), color: '#a3e635' },
+      { label: '2.º año', w: 6.3, text: pc(6.3, 1), color: '#fbbf24' },
+      { label: 'Posgrado', w: 6.3, text: pc(6.3, 1), color: '#f472b6' },
+      { label: '1.er año', w: 0, text: pc(0, 0), color: '#6b7280' },
+      { label: 'Administrativos', w: 0, text: pc(0, 0), color: '#6b7280' }
+    ]);
+    renderBars('bars-sex', [
+      { label: 'Hombre', w: 56.3, text: pc(56.3, 9), color: '#38bdf8' },
+      { label: 'Mujer', w: 43.8, text: pc(43.8, 7), color: '#f472b6' }
+    ]);
+    renderBars('bars-age', [
+      { label: '18 a 24 años', w: 56.3, text: pc(56.3, 9), color: '#4ade80' },
+      { label: 'Más de 30 años', w: 31.3, text: pc(31.3, 5), color: '#a78bfa' },
+      { label: '25 a 30 años', w: 12.5, text: pc(12.5, 2), color: '#fbbf24' },
+      { label: 'Menos de 18 años', w: 0, text: pc(0, 0), color: '#6b7280' }
+    ]);
+    renderBars('bars-career', [
+      { label: 'Comunicación social', w: 75, text: pc(75, 12), color: '#38bdf8' },
+      { label: 'Mercadotecnia y análisis del consumidor', w: 12.5, text: pc(12.5, 2), color: '#fbbf24' },
+      { label: 'Comunicación y gestión de la cultura y de las artes', w: 6.3, text: pc(6.3, 1), color: '#4ade80' },
+      { label: 'Comunicación visual', w: 6.3, text: pc(6.3, 1), color: '#f472b6' },
+      { label: 'Comunicación organizacional', w: 6.3, text: pc(6.3, 1), color: '#a78bfa' },
+      { label: 'Posgrado', w: 6.3, text: pc(6.3, 1), color: '#2dd4bf' },
+      { label: 'Comunicación e inteligencia artificial', w: 0, text: pc(0, 0), color: '#6b7280' },
+      { label: 'Publicidad', w: 0, text: pc(0, 0), color: '#6b7280' },
+      { label: 'Cine', w: 0, text: pc(0, 0), color: '#6b7280' },
+      { label: 'Periodismo', w: 0, text: pc(0, 0), color: '#6b7280' },
+      { label: 'Animación', w: 0, text: pc(0, 0), color: '#6b7280' }
+    ]);
+    renderBars('bars-compare', [
+      { label: 'Mundo (botellas de plástico)', w: 32, text: '≈ 64', color: '#38bdf8' },
+      { label: 'Nuestra muestra (botellas o bolsas, estimado)', w: 61.8, text: '≈ 124', color: '#fbbf24' },
+      { label: 'México (botellas de PET)', w: 100, text: '≈ 200', color: '#ef4444' }
+    ]);
+
+    function statCards(id, list) {
+      list.forEach(s => {
+        const d = document.createElement('div');
+        d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+        d.innerHTML = '<div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(s.i) + '</div>' +
+          '<p class="font-display text-3xl font-bold text-green-300">' + s.v + '</p><p class="mt-1 text-xs text-gray-400">' + s.t + '</p>';
+        $(id).appendChild(d);
+      });
+    }
+    statCards('stats-use', [
+      { v: '75%', t: 'usa al menos una por semana (12 de 16)', i: 'package-x' },
+      { v: '≈ 2.4', t: 'por persona a la semana (estimado)', i: 'calculator' },
+      { v: '4 de 16', t: 'no usa ninguna', i: 'badge-check' }
+    ]);
+    statCards('stats-who', [
+      { v: '75%', t: 'son docentes o de 4.º año (12 de 16)', i: 'users' },
+      { v: '0 de 16', t: 'son de 1.er año o administrativos', i: 'user-x' },
+      { v: '4 de 16', t: 'son de 2.º, 3.º o posgrado', i: 'graduation-cap' }
+    ]);
+
+    statCards('stats-profile', [
+      { v: '56.3%', t: 'son hombres (9 de 16) y 43.8% mujeres (7 de 16)', i: 'users-round' },
+      { v: '9 de 16', t: 'tienen entre 18 y 24 años; 5 más de 30', i: 'cake' },
+      { v: '12 de 16', t: 'son de Comunicación social', i: 'book-open' }
+    ]);
+
+    // ===== Información oficial =====
+    [
+      { i: 'timer', t: 'Un millón por minuto', p: 'En todo el mundo se compra más de un millón de botellas de plástico para beber cada minuto, y se usan hasta 5 billones de bolsas de plástico desechables al año, según la ONU (PNUMA y PNUD). Un millón por minuto equivale a unos 525 mil millones al año; el PNUMA habla de alrededor de 500 mil millones de botellas de PET vendidas cada año.' },
+      { i: 'timer-reset', t: 'La mitad se usa una sola vez', p: 'La ONU calcula que la mitad del plástico que se produce está diseñado para usarse una sola vez y luego tirarse. El empaque es el mayor generador de residuos plásticos de un solo uso: cerca de 36% de todo el plástico se destina a empaques (PNUMA).' },
+      { i: 'trash-2', t: 'A dónde va', p: 'Según el PNUMA, 85% de los envases de comida y bebida de un solo uso termina en rellenos sanitarios o como residuo mal gestionado. La ONU estima que casi un tercio del empaque plástico usado escapa de los sistemas de recolección, y cada año entran unos 8 millones de toneladas de plástico al océano.' },
+      { i: 'flag', t: 'En México', p: 'La SEMARNAT estima que en México se generan más de 9 mil millones de botellas de PET al año, con un consumo de unas 200 botellas por persona, lo que ubica al país entre los cinco mayores consumidores del mundo (cifra recogida en un documento de la Cámara de Diputados de 2025).' },
+      { i: 'landmark', t: 'En la CDMX', p: 'Desde enero de 2020 la CDMX prohíbe las bolsas de plástico de un solo uso, y desde 2021 la venta y entrega de cubiertos, platos, vasos, popotes y otros desechables de plástico. Las botellas de bebidas no aparecen en esa lista. Según cifras oficiales, cada familia desechaba en promedio 650 bolsas de plástico al año.' },
+      { i: 'fish', t: 'Efectos', p: 'Según el PNUD, la contaminación por plásticos afecta a 88% de las especies marinas; durante su ciclo de vida puede liberar sustancias dañinas que afectan los sistemas inmune y hormonal, y la producción de plástico es una fuente creciente de gases de efecto invernadero (3.4% del total mundial en 2019, PNUMA).' }
+    ].forEach((c, i) => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-6';
+      d.style.transitionDelay = (i % 2) * 100 + 'ms';
+      d.innerHTML = '<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(c.i) + '</div>' +
+        '<h3 class="mb-2 font-bold text-green-100">' + c.t + '</h3><p class="text-sm leading-relaxed text-gray-400">' + c.p + '</p>';
+      $('info-cards').appendChild(d);
+    });
+    [
+      { n: 1, s: ' M', l: 'de botellas por minuto' }, { n: 5, s: ' billones', l: 'de bolsas al año (hasta)' },
+      { n: 50, s: '%', l: 'del plástico, de un solo uso' }, { n: 85, s: '%', l: 'de envases a relleno o mal gestionados' }
+    ].forEach(m => {
+      const d = document.createElement('div');
+      d.className = 'card reveal rounded-xl bg-green-950/40 p-5 text-center';
+      d.innerHTML = '<p class="font-display text-3xl font-bold text-green-300 md:text-4xl" data-target="' + m.n + '" data-suffix="' + m.s + '">' + m.n + m.s + '</p><p class="mt-1 text-xs uppercase tracking-wider text-gray-400">' + m.l + '</p>';
+      $('big-stats').appendChild(d);
+    });
+
+    // ===== Matices =====
+    [
+      { i: 'users', t: 'Una muestra pequeña y sesgada', b:
+        '<p>12 de 16 respuestas son de docentes y estudiantes de 4.º año, 12 de 16 son de Comunicación social (75%), 9 son hombres y 9 tienen entre 18 y 24 años. No hay nadie de 1.er año ni administrativos, ni de 5 de las 11 carreras. El 38 describe a quienes respondieron, no a la universidad. Además, la encuesta agrupa botellas y bolsas y mide por rangos, así que el total es una estimación.</p>' },
+      { i: 'split', t: 'Botellas y bolsas no son lo mismo', b:
+        '<p>Las botellas desechables suelen ser de PET con tapa de polipropileno; las bolsas, de polietileno. Sus cifras mundiales, su impacto y las leyes que las regulan son distintos. En la CDMX las bolsas de un solo uso están prohibidas desde 2020, pero las botellas no están en la lista de productos prohibidos.</p>' },
+      { i: 'recycle', t: '¿Y el reciclaje?', b:
+        '<p>El PNUMA, con datos de la OCDE, indica que solo alrededor de 9% del plástico se recicla. Reciclar ayuda, pero no alcanza para absorber la cantidad de envases que se producen: por eso la ONU insiste en reducir primero lo innecesario y reutilizar.</p>' },
+      { i: 'scale', t: 'Las cifras mundiales varían', b:
+        '<p>Las cifras de bolsas son estimaciones: la ONU habla de "hasta" 5 billones al año, y otras fuentes citan entre 500 mil millones y 1 billón. Una publicación del PNUMA llega a decir "500 billones", un aparente error de escritura. Para las botellas, el dato más repetido es "1 millón por minuto".</p>' },
+      { i: 'droplets', t: 'Agua segura primero', b:
+        '<p>Dejar la botella desechable solo es realista si hay agua potable accesible para rellenar la reutilizable: bebederos, garrafones o estaciones de llenado. Es una pregunta para la universidad, no solo para cada persona.</p>' }
+    ].forEach((a, i) => {
+      const d = document.createElement('details');
+      d.className = 'acc reveal';
+      if (i === 0) d.open = true;
+      d.innerHTML = '<summary class="flex items-center gap-3 p-4"><span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-400/10 text-green-300">' + icon(a.i) + '</span>' +
+        '<span class="flex-1 font-bold text-green-100">' + a.t + '</span><span class="chev text-green-300"><i data-lucide="chevron-down" class="h-5 w-5"></i></span></summary>' +
+        '<div class="px-5 pb-5 text-sm leading-relaxed text-gray-300">' + a.b + '</div>';
+      $('accordion').appendChild(d);
+    });
+
+    // ===== Juego 1: explorador de piezas =====
+    const SV = (c) => '<svg class="exp-svg" viewBox="0 0 160 210" xmlns="http://www.w3.org/2000/svg">' + c + '</svg>';
+    const P = (id, dx, dy, label, inner) => '<g class="part" data-p="' + id + '" style="--dx:' + dx + ';--dy:' + dy + '" tabindex="0" role="button" aria-label="' + label + '">' + inner + '</g>';
+    const ART = {
+      bottleDis: SV(
+        P('cuerpo', 0, 0, 'Cuerpo y cuello', '<path d="M66 22h28v16c0 8 22 14 22 34v110a12 12 0 0 1-12 12H56a12 12 0 0 1-12-12V72c0-20 22-26 22-34z" fill="rgba(147,197,253,.4)" stroke="#93c5fd" stroke-width="2"/><path d="M54 84v90" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>') +
+        P('etiqueta', 52, 0, 'Etiqueta', '<rect x="44" y="104" width="72" height="46" fill="#f97316" opacity=".92"/><path d="M54 118h52M54 130h36" stroke="#fff" stroke-opacity=".8" stroke-width="3"/>') +
+        P('tapa', 0, -34, 'Tapa', '<rect x="62" y="6" width="36" height="16" rx="3" fill="#e5e7eb"/><path d="M68 10v8M74 10v8M80 10v8M86 10v8M92 10v8" stroke="#9ca3af" stroke-width="1.5"/>')),
+      bottleReu: SV(
+        P('cuerpo', 0, 6, 'Cuerpo', '<rect x="46" y="34" width="68" height="164" rx="16" fill="#94a3b8"/><rect x="56" y="48" width="8" height="132" rx="4" fill="#fff" opacity=".35"/><rect x="46" y="112" width="68" height="14" fill="#38bdf8" opacity=".9"/>') +
+        P('tapa', 0, -34, 'Tapa con sello', '<rect x="58" y="8" width="44" height="26" rx="8" fill="#1f2937"/><rect x="58" y="26" width="44" height="6" fill="#4ade80"/>')),
+      bagDis: SV(
+        P('cuerpo', 0, 0, 'Cuerpo', '<path d="M30 64h100l-10 118H40z" fill="rgba(255,255,255,.16)" stroke="#e5e7eb" stroke-width="2"/><path d="M60 80l-4 90M100 80l4 90" stroke="#fff" stroke-opacity=".25" stroke-width="3"/>') +
+        P('asas', 0, -30, 'Asas', '<path d="M52 64C52 16 78 10 80 10s28 6 28 54" fill="none" stroke="#e5e7eb" stroke-width="5" stroke-linecap="round"/>') +
+        P('sello', 0, 24, 'Sello inferior', '<rect x="40" y="176" width="80" height="12" fill="#cbd5e1" opacity=".9"/>')),
+      bagReu: SV(
+        P('cuerpo', 0, 0, 'Cuerpo', '<rect x="26" y="70" width="108" height="118" rx="6" fill="#84cc16"/><circle cx="80" cy="130" r="18" fill="#fff" opacity=".35"/>') +
+        P('asas', 0, -30, 'Asas reforzadas', '<path d="M50 70V40c0-26 60-26 60 0V70" fill="none" stroke="#65a30d" stroke-width="9" stroke-linecap="round"/>') +
+        P('costuras', 0, 26, 'Costuras', '<rect x="34" y="78" width="92" height="102" rx="4" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-dasharray="5 4"/>'))
+    };
+    const EXP = {
+      bottle: {
+        label: 'Botella', icon: 'cup-soda',
+        dis: { name: 'Botella desechable', tag: '1 uso', art: ART.bottleDis, end: 'Según el PNUMA, 85% de los envases de comida y bebida de un solo uso termina en rellenos o como residuo mal gestionado.', parts: {
+          tapa: ['Tapa', 'Polipropileno (PP)', 'El PNUMA incluye las tapas de botella entre los productos de polipropileno. Es un plástico distinto al del cuerpo: dos materiales en una sola pieza.'],
+          cuerpo: ['Cuerpo y cuello', 'PET (tereftalato de polietileno)', 'El PNUMA cita la botella de PET como ejemplo típico de plástico de un solo uso, y el PNUD recuerda que se extraen petróleo y gas para fabricar plásticos que muchas veces se usan una sola vez.'],
+          etiqueta: ['Etiqueta', 'Película plástica o papel con adhesivo (varía por marca)', 'Suma otro material y un pegamento a la botella. Cada marca la hace distinto.'] } },
+        reu: { name: 'Botella reutilizable', tag: 'Muchos usos', art: ART.bottleReu, end: 'Su ventaja solo aparece si se usa muchas veces. No encontré una cifra oficial de cuántos usos necesita una botella para compensar su fabricación.', parts: {
+          tapa: ['Tapa con sello', 'Plástico duro y silicón (varía)', 'Pieza más robusta, pensada para abrirse y cerrarse muchas veces.'],
+          cuerpo: ['Cuerpo', 'Acero inoxidable, vidrio o plástico duro', 'El PNUMA menciona las botellas reutilizables de plástico y de acero inoxidable entre las alternativas a las desechables.'] } },
+        facts: [['Material del cuerpo', 'PET', 'Acero, vidrio o plástico duro'], ['Materiales en una pieza', 'Cuerpo, tapa y etiqueta', 'Cuerpo y tapa'], ['Pensada para', '1 uso', 'Muchos usos'], ['Dato clave', '85% de estos envases acaba en relleno o mal gestionado (PNUMA)', 'La ventaja depende de reutilizarla']]
+      },
+      bag: {
+        label: 'Bolsa', icon: 'shopping-bag',
+        dis: { name: 'Bolsa desechable', tag: '1 uso', art: ART.bagDis, end: 'La CDMX prohíbe las bolsas de plástico de un solo uso desde 2020. La ONU estima que casi un tercio del empaque plástico usado escapa de los sistemas de recolección.', parts: {
+          cuerpo: ['Cuerpo', 'Película de polietileno (PE)', 'El PNUMA ubica las bolsas entre los productos de polietileno de baja densidad. Un estudio del Reino Unido (2006) calculó unos 8 g de material por bolsa.'],
+          asas: ['Asas', 'Polietileno (PE)', 'Forman parte de la misma película: la bolsa es de un solo material.'],
+          sello: ['Sello inferior', 'Polietileno soldado con calor', 'Es la unión del fondo, hecha con calor, sin otros materiales.'] } },
+        reu: { name: 'Bolsa reutilizable', tag: 'Muchos usos', art: ART.bagReu, end: 'Necesita muchos usos para compensar: según el PNUMA, 5 a 10 si es de polietileno delgado, 10 a 20 si es de polipropileno grueso y 50 a 150 si es de algodón.', parts: {
+          cuerpo: ['Cuerpo', 'Algodón o polipropileno no tejido', 'El PNUMA menciona las bolsas de algodón y de polipropileno no tejido como alternativas comunes. Una bolsa reutilizable de polietileno del estudio británico pesaba unos 35 g, más de cuatro veces la desechable.'],
+          asas: ['Asas reforzadas', 'Tela o cinta de polipropileno', 'Más gruesas y cosidas, para cargar más peso muchas veces.'],
+          costuras: ['Costuras', 'Hilo', 'Unen las piezas y alargan la vida de la bolsa.'] } },
+        facts: [['Material', 'Polietileno (≈ 8 g)', 'Algodón o PP (la de PE del estudio: ≈ 35 g)'], ['Pensada para', '1 uso', 'Muchos usos'], ['Usos para compensar su impacto', '—', 'PE: 5–10 · PP: 10–20 · algodón: 50–150'], ['Dato clave', 'Prohibida en la CDMX desde 2020', 'Mejor solo si se reutiliza']]
+      }
+    };
+    let expKind = 'bottle', expSel = null;
+
+    function showPart(kindKey, side, id) {
+      const part = EXP[kindKey][side].parts[id];
+      $('exp-info').innerHTML = '<p class="mb-1 text-xs font-semibold uppercase tracking-wider ' + (side === 'dis' ? 'text-red-300' : 'text-green-300') + '">' + EXP[kindKey][side].name + '</p>' +
+        '<p class="font-bold text-green-100">' + part[0] + ' · <span class="text-gray-300">' + part[1] + '</span></p><p class="mt-1">' + part[2] + '</p>';
+      annotate($('exp-info'));
+    }
+    function renderExplorer() {
+      const e = EXP[expKind];
+      $('exp-tabs').querySelectorAll('.chip').forEach(b => { const on = b.dataset.k === expKind; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+      const box = $('exp-cards');
+      box.innerHTML = '';
+      ['dis', 'reu'].forEach(side => {
+        const it = e[side], d = document.createElement('div');
+        d.className = 'card rounded-2xl bg-black p-5';
+        d.innerHTML = '<div class="mb-2 flex items-center justify-between"><h3 class="font-bold text-green-100">' + it.name + '</h3><span class="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ' + (side === 'dis' ? 'bg-red-500/15 text-red-300' : 'bg-green-500/15 text-green-300') + '">' + it.tag + '</span></div>' +
+          '<div class="mx-auto h-[260px] w-full max-w-[220px]">' + it.art + '</div>' +
+          '<p class="mt-3 text-xs leading-relaxed text-gray-400">' + it.end + '</p>';
+        const svg = d.querySelector('svg');
+        svg.style.setProperty('--ex', $('exp-slider').value / 100);
+        svg.querySelectorAll('.part').forEach(p => {
+          const pick = () => { box.querySelectorAll('.part.sel').forEach(x => x.classList.remove('sel')); p.classList.add('sel'); showPart(expKind, side, p.dataset.p); };
+          p.addEventListener('click', pick);
+          p.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); } });
+        });
+        box.appendChild(d);
+      });
+      let t = '<table class="w-full text-left text-sm"><thead><tr class="border-b border-white/10 text-xs uppercase tracking-wider text-gray-400"><th class="py-2 pr-3"></th><th class="py-2 pr-3 text-red-300">Desechable</th><th class="py-2 text-green-300">Reutilizable</th></tr></thead><tbody>';
+      e.facts.forEach(f => { t += '<tr class="border-b border-white/5 align-top"><td class="py-2 pr-3 text-gray-400">' + f[0] + '</td><td class="py-2 pr-3 text-gray-200">' + f[1] + '</td><td class="py-2 text-gray-200">' + f[2] + '</td></tr>'; });
+      $('exp-table').innerHTML = t + '</tbody></table>';
+      $('exp-info').textContent = 'Toca una pieza para ver su material.';
+      annotate($('exp-cards')); annotate($('exp-table'));
+    }
+    Object.keys(EXP).forEach(k => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.dataset.k = k;
+      b.className = 'chip flex items-center gap-2 rounded-full px-5 py-2 text-sm text-gray-300';
+      b.innerHTML = icon(EXP[k].icon, 'h-4 w-4') + '<span>' + EXP[k].label + '</span>';
+      b.addEventListener('click', () => { expKind = k; renderExplorer(); lucide.createIcons(); });
+      $('exp-tabs').appendChild(b);
+    });
+    $('exp-slider').addEventListener('input', () => {
+      $('exp-cards').querySelectorAll('svg').forEach(s => s.style.setProperty('--ex', $('exp-slider').value / 100));
+    });
+
+    // ===== Juego 2: el planeta =====
+    const OPTS = [{ l: 'Ninguna', w: 0 }, { l: 'De 1 a 3', w: 2 }, { l: 'De 4 a 7', w: 5.5 }, { l: 'Más de 7', w: 10 }];
+    const WORLD = 8.2e9, BOTTLES_REAL = 525.6e9, BAGS_REAL = 5e12, UNIT = 1e10;
+    const plState = { kind: 'bottle', scale: 'world', opt: null };
+    const planet = $('planet'), pctx = planet.getContext('2d');
+    const LAND = [[-0.35, -0.2, 0.35, 0.22, 0.5], [0.3, 0.25, 0.3, 0.2, -0.4], [0.05, -0.62, 0.22, 0.1, 0], [-0.1, 0.55, 0.2, 0.12, 0.3], [0.55, -0.3, 0.14, 0.1, 0.8]];
+    const STARS = Array.from({ length: 60 }, (_, i) => ({ x: ((i * 73) % 100) / 100, y: ((i * 41 + 17) % 100) / 100, a: 0.25 + ((i * 7) % 5) / 10 }));
+    let PW = 0, items = [], hazeNow = 0, hazeTo = 0, raf = 0;
+
+    function sizePlanet() {
+      const w = Math.max(240, Math.min(planet.parentElement.clientWidth, 520)), d = window.devicePixelRatio || 1;
+      planet.style.width = w + 'px'; planet.style.height = w + 'px';
+      planet.width = Math.round(w * d); planet.height = Math.round(w * d);
+      pctx.setTransform(d, 0, 0, d, 0, 0); PW = w;
+    }
+    function drawBottle(x, y, s, r) {
+      pctx.save(); pctx.translate(x, y); pctx.rotate(r);
+      pctx.fillStyle = 'rgba(191,219,254,.95)'; pctx.strokeStyle = 'rgba(255,255,255,.9)'; pctx.lineWidth = 0.8;
+      pctx.fillRect(-s * 0.32, -s * 0.15, s * 0.64, s * 1.05); pctx.strokeRect(-s * 0.32, -s * 0.15, s * 0.64, s * 1.05);
+      pctx.fillRect(-s * 0.14, -s * 0.55, s * 0.28, s * 0.42);
+      pctx.fillStyle = '#e5e7eb'; pctx.fillRect(-s * 0.16, -s * 0.72, s * 0.32, s * 0.2);
+      pctx.fillStyle = 'rgba(249,115,22,.9)'; pctx.fillRect(-s * 0.32, s * 0.2, s * 0.64, s * 0.3);
+      pctx.restore();
+    }
+    function drawBag(x, y, s, r) {
+      pctx.save(); pctx.translate(x, y); pctx.rotate(r);
+      pctx.fillStyle = 'rgba(255,255,255,.88)'; pctx.strokeStyle = 'rgba(148,163,184,.95)'; pctx.lineWidth = 0.8;
+      pctx.beginPath(); pctx.moveTo(-s * 0.5, -s * 0.3); pctx.lineTo(s * 0.5, -s * 0.3); pctx.lineTo(s * 0.38, s * 0.7); pctx.lineTo(-s * 0.38, s * 0.7); pctx.closePath(); pctx.fill(); pctx.stroke();
+      pctx.beginPath(); pctx.arc(0, -s * 0.3, s * 0.28, Math.PI, 0); pctx.stroke();
+      pctx.restore();
+    }
+    function drawBase() {
+      const c = PW / 2, R = PW * 0.34, TAU = Math.PI * 2;
+      pctx.fillStyle = '#02040a'; pctx.fillRect(0, 0, PW, PW);
+      STARS.forEach(s => { pctx.fillStyle = 'rgba(255,255,255,' + s.a + ')'; pctx.fillRect(s.x * PW, s.y * PW, 1.5, 1.5); });
+      const g = pctx.createRadialGradient(c, c, R * 0.9, c, c, R * 1.18);
+      g.addColorStop(0, 'rgba(96,165,250,.35)'); g.addColorStop(1, 'rgba(96,165,250,0)');
+      pctx.fillStyle = g; pctx.beginPath(); pctx.arc(c, c, R * 1.18, 0, TAU); pctx.fill();
+      const o = pctx.createRadialGradient(c - R * 0.3, c - R * 0.3, R * 0.1, c, c, R);
+      o.addColorStop(0, '#3b82f6'); o.addColorStop(1, '#0b2a6b');
+      pctx.save(); pctx.beginPath(); pctx.arc(c, c, R, 0, TAU); pctx.clip();
+      pctx.fillStyle = o; pctx.fillRect(0, 0, PW, PW);
+      pctx.fillStyle = '#22c55e';
+      LAND.forEach(l => { pctx.beginPath(); pctx.ellipse(c + l[0] * R, c + l[1] * R, l[2] * R, l[3] * R, l[4], 0, TAU); pctx.fill(); });
+      if (hazeNow > 0.01) { pctx.fillStyle = 'rgba(120,98,70,' + hazeNow.toFixed(3) + ')'; pctx.fillRect(0, 0, PW, PW); }
+      pctx.restore();
+    }
+    function frame(now) {
+      drawBase();
+      let busy = false;
+      items.forEach(it => {
+        const k = Math.min(Math.max((now - it.t0 - it.delay) / 900, 0), 1);
+        if (k < 1) busy = true;
+        if (k <= 0) return;
+        const e = 1 - Math.pow(1 - k, 3), x = it.sx + (it.tx - it.sx) * e, y = it.sy + (it.ty - it.sy) * e;
+        (plState.kind === 'bottle' ? drawBottle : drawBag)(x * PW, y * PW, PW * 0.028, it.rot + (1 - e) * 3);
+      });
+      hazeNow += (hazeTo - hazeNow) * 0.06;
+      if (Math.abs(hazeTo - hazeNow) > 0.005) busy = true; else hazeNow = hazeTo;
+      raf = busy ? requestAnimationFrame(frame) : 0;
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+
+    const fmtBig = n => n >= 1e12 ? (n / 1e12).toFixed(1) + ' billones' : n >= 1e9 ? (n / 1e9).toFixed(1) + ' mil millones' : Math.round(n).toLocaleString('es-MX');
+    function buildItems(count) {
+      const rnd = mulberry(777), t0 = reduceMotion ? -1e7 : performance.now();
+      items = [];
+      for (let i = 0; i < count; i++) {
+        const a = rnd() * 6.2832, rad = 0.34 * 1.15 * Math.sqrt(rnd()), sa = rnd() * 6.2832;
+        items.push({ tx: 0.5 + rad * Math.cos(a), ty: 0.5 + rad * Math.sin(a), sx: 0.5 + 0.85 * Math.cos(sa), sy: 0.5 + 0.85 * Math.sin(sa), rot: rnd() * 6.28, delay: (i / count) * 1800 + rnd() * 300, t0 });
+      }
+    }
+    function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+    const FX = [
+      { i: 'waves', t: 'Océanos', p: 'Cada año entran unos 8 millones de toneladas de plástico al océano (PNUMA).' },
+      { i: 'fish', t: 'Vida marina', p: 'Según el PNUD, el plástico afecta a 88% de las especies marinas.' },
+      { i: 'thermometer-sun', t: 'Clima', p: 'El plástico generó 3.4% de los gases de efecto invernadero del mundo en 2019 (PNUMA).' },
+      { i: 'heart-pulse', t: 'Salud', p: 'A lo largo de su ciclo de vida, el plástico puede liberar sustancias que afectan los sistemas inmune y hormonal (PNUD).' }
+    ];
+    FX.forEach(f => {
+      const d = document.createElement('div');
+      d.className = 'fx reveal rounded-xl p-4';
+      d.innerHTML = '<div class="mb-2 flex items-center gap-2 text-green-200">' + icon(f.i) + '<span class="font-bold">' + f.t + '</span></div><p class="text-xs leading-relaxed text-gray-400">' + f.p + '</p>';
+      $('pl-fx').appendChild(d);
+    });
+
+    function updatePlanet() {
+      const o = plState.opt;
+      if (o === null) { items = []; hazeTo = 0; kick(); return; }
+      const w = OPTS[o].w, yr = w * 52, N = yr * WORLD, bottle = plState.kind === 'bottle', noun = bottle ? 'botellas' : 'bolsas';
+      const count = plState.scale === 'me' ? Math.min(520, Math.round(yr)) : Math.min(520, Math.round(N / UNIT));
+      buildItems(count);
+      hazeTo = Math.min(0.5, count / 700);
+      kick();
+      $('pl-yr').textContent = w === 0 ? '0 ' + noun : Math.round(yr).toLocaleString('es-MX') + ' ' + noun;
+      $('pl-world').textContent = w === 0 ? '0' : fmtBig(N) + ' ' + noun;
+      $('pl-real').textContent = w === 0 ? 'Cero. El planeta respira.' : bottle
+        ? 'Son ' + (N / BOTTLES_REAL).toFixed(1) + ' veces las botellas que se compran hoy en el mundo (≈ 525 mil millones al año, ONU).'
+        : 'Es ' + Math.round(N / BAGS_REAL * 100) + '% de las bolsas que la ONU estima que se usan hoy (hasta 5 billones al año).';
+      $('pl-end').textContent = w === 0 ? '—' : bottle
+        ? 'Según el PNUMA, 85% de los envases de comida y bebida de un solo uso termina en rellenos o mal gestionado: unas ' + fmtBig(N * 0.85) + ' botellas.'
+        : 'La ONU estima que casi un tercio del empaque plástico usado escapa de los sistemas de recolección: unas ' + fmtBig(N / 3) + ' bolsas.';
+      $('pl-legend').textContent = plState.scale === 'me' ? 'Cada dibujo es 1 ' + (bottle ? 'botella' : 'bolsa') + '.' : 'Cada dibujo es ' + fmtBig(UNIT) + ' de ' + noun + '. Los dibujos se detienen en 520.';
+      $('pl-msg').textContent = w === 0 ? '¡Tu planeta se ve limpio!' : w <= 2 ? 'Parece poco por persona... hasta que se multiplica.' : w <= 5.5 ? 'El planeta empieza a llenarse de plástico.' : 'El planeta se está cubriendo de desechables.';
+      planet.setAttribute('aria-label', 'Planeta con ' + count + ' dibujos de ' + noun + ': ' + $('pl-world').textContent + ' en un año si todos hicieran lo mismo.');
+      document.querySelectorAll('#pl-fx .fx').forEach(f => f.classList.toggle('on', w > 0));
+    }
+    function chipRow(id, list, get, set) {
+      list.forEach((o, i) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.dataset.i = i;
+        b.className = 'chip rounded-full px-4 py-2 text-sm text-gray-300';
+        b.textContent = o.l;
+        b.addEventListener('click', () => { set(o, i); $(id).querySelectorAll('.chip').forEach(x => x.classList.toggle('active', get(list[Number(x.dataset.i)], Number(x.dataset.i)))); updatePlanet(); });
+        $(id).appendChild(b);
+      });
+      $(id).querySelectorAll('.chip').forEach(x => x.classList.toggle('active', get(list[Number(x.dataset.i)], Number(x.dataset.i))));
+    }
+    chipRow('pl-kind', [{ l: 'Botellas', v: 'bottle' }, { l: 'Bolsas', v: 'bag' }], o => o.v === plState.kind, o => { plState.kind = o.v; });
+    chipRow('pl-scale', [{ l: 'Solo yo, en un año', v: 'me' }, { l: 'Toda la humanidad, en un año', v: 'world' }], o => o.v === plState.scale, o => { plState.scale = o.v; });
+    chipRow('pl-opts', OPTS, (o, i) => i === plState.opt, (o, i) => { plState.opt = i; });
+
+    sizePlanet(); drawBase();
+    let rz = 0;
+    window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { sizePlanet(); kick(); }, 150); });
+
+    // ===== Siglas y glosario =====
+    const GLOSS = [
+      ['UC', 'Universidad de la Comunicación, donde se aplicó la encuesta.'],
+      ['CDMX', 'Ciudad de México.'],
+      ['ONU', 'Organización de las Naciones Unidas.'],
+      ['PNUMA', 'Programa de las Naciones Unidas para el Medio Ambiente (en inglés, UNEP).'],
+      ['PNUD', 'Programa de las Naciones Unidas para el Desarrollo (en inglés, UNDP).'],
+      ['SEMARNAT', 'Secretaría de Medio Ambiente y Recursos Naturales del gobierno de México.'],
+      ['OCDE', 'Organización para la Cooperación y el Desarrollo Económicos.'],
+      ['PET', 'Tereftalato de polietileno: el plástico de las botellas desechables de bebidas.'],
+      ['PE', 'Polietileno: el plástico de las bolsas desechables.'],
+      ['PP', 'Polipropileno: el plástico de las tapas de botella y de las bolsas gruesas reutilizables.']
+    ];
+    const SIGLAS = {};
+    GLOSS.forEach(([k, v]) => { SIGLAS[k] = v; });
+    const sigGuard = '(?<![\\p{L}\\p{N}_])(' + Object.keys(SIGLAS).sort((x, y) => y.length - x.length).join('|') + ')(?![\\p{L}\\p{N}_])';
+    function annotate(root) {
+      if (!root) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode: n => n.parentElement && n.parentElement.closest('abbr,a,script,style,#glosario,button,canvas,svg,th') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n => {
+        const txt = n.nodeValue, rx = new RegExp(sigGuard, 'gu');
+        let last = 0, m, frag = null;
+        while ((m = rx.exec(txt))) {
+          frag = frag || document.createDocumentFragment();
+          frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+          const ab = document.createElement('abbr');
+          ab.title = SIGLAS[m[1]]; ab.textContent = m[1];
+          frag.appendChild(ab);
+          last = m.index + m[1].length;
+        }
+        if (frag) { frag.appendChild(document.createTextNode(txt.slice(last))); n.parentNode.replaceChild(frag, n); }
+      });
+    }
+    GLOSS.forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'reveal rounded-xl border border-white/10 bg-black p-4';
+      d.innerHTML = '<p class="font-bold text-green-300"></p><p class="mt-1 text-sm leading-relaxed text-gray-300"></p>';
+      d.children[0].textContent = k; d.children[1].textContent = v;
+      $('glossary').appendChild(d);
+    });
+
+    // ===== Fuentes =====
+    [
+      ['PNUD: Día Mundial del Medio Ambiente 2018 (cifras de botellas y bolsas)', 'https://www.undp.org/node/61351'],
+      ['PNUMA: #BeatPlasticPollution (500 mil millones de botellas de PET)', 'https://unep.org/beatplasticpollution'],
+      ['PNUMA: Nuestro planeta se ahoga en plástico', 'https://www.unep.org/news-and-stories/story/our-planet-drowning-plastic-pollution'],
+      ['ONU: la mitad del plástico es de un solo uso', 'https://www.un.org/sustainabledevelopment/?p=49813'],
+      ['Vatican News: mensaje de la ONU, Día del Medio Ambiente 2018', 'https://vaticannews.va/en/world/news/2018-06/environment-world-day-un-plastic-guterres.html'],
+      ['PNUMA: todo sobre la contaminación por plásticos', 'https://www.unep.org/news-and-stories/story/everything-you-need-know-about-plastic-pollution?lctg=255204127'],
+      ['PNUMA: 10 preguntas sobre la contaminación por plásticos', 'https://www.unep.org/news-and-stories/story/answering-10-pressing-questions-about-plastic-pollution'],
+      ['PNUD: contaminación por plásticos', 'https://www.undp.org/index%2Ephp/node/444346'],
+      ['Cámara de Diputados: botellas de PET en México (cita a SEMARNAT)', 'https://cronica.diputados.gob.mx/PDF/66/2025/nov/251126-5.pdf'],
+      ['PNUMA: bolsas de plástico y sus alternativas (ACV)', 'https://wedocs.unep.org/20.500.11822/31932'],
+      ['CTC-N: conclusiones del informe sobre bolsas', 'https://www.ctc-n.org/resources/single-use-plastic-bags-and-their-alternatives-recommendations-life-cycle-assessments'],
+      ['Royal Society of Chemistry: datos del estudio británico de bolsas', 'https://edu.rsc.org/download?ac=531823'],
+      ['Gaceta Oficial de la CDMX, 25 de junio de 2019', 'https://www.sedema.cdmx.gob.mx/storage/app/media/DGEIRA/GacetaDel25DeJunio2019.pdf'],
+      ['Expansión: la CDMX dice adiós a los plásticos desechables', 'https://politica.expansion.mx/cdmx/2021/01/01/la-cdmx-dice-adios-a-los-plasticos-desechables'],
+      ['Telemundo / EFE: 650 bolsas por familia', 'https://www.telemundo51.com/noticias/mexico/ciudad-de-mexico-inicia-2021-con-prohibicion-de-plasticos-de-un-solo-uso/2149701/']
+    ].forEach(([t, u]) => {
+      const li = document.createElement('li'), a = document.createElement('a');
+      a.href = u; a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-gray-300 transition hover:border-green-400/40 hover:text-green-300';
+      a.innerHTML = '<i data-lucide="external-link" class="h-4 w-4 shrink-0"></i>';
+      a.appendChild(document.createTextNode(t));
+      li.appendChild(a); $('sources').appendChild(li);
+    });
+
+    // ===== Contadores y aparición =====
+    function countUp(el) {
+      const target = Number(el.dataset.target), suf = el.dataset.suffix || '';
+      if (reduceMotion) { el.textContent = target + suf; return; }
+      const t0 = performance.now();
+      const step = now => {
+        const p = Math.min((now - t0) / 1400, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suf;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    const heroC = $('counter');
+    if (!reduceMotion) { heroC.textContent = '0'; countUp(heroC); }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('visible');
+        el.querySelectorAll('[data-w]').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        el.querySelectorAll('[data-target]').forEach(countUp);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12 });
+
+    renderExplorer();
+    annotate(document.querySelector('main'));
+    annotate(document.querySelector('footer'));
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    lucide.createIcons();
+  </script>
 </body>
 </html>
